@@ -4,7 +4,7 @@
     "company": "Oraczen India",
     "location": "Hyderabad, India",
     "role": "AI Product Manager and Acting Director of Product Management",
-    "period": "May 2025 \u2014 Present",
+    "period": "May 2025 to Present",
     "active": true,
     "metrics": [
       {
@@ -13,7 +13,7 @@
       },
       {
         "label": "Accuracy",
-        "value": "92\u201395%"
+        "value": "92-95%"
       },
       {
         "label": "P95 Latency",
@@ -54,14 +54,14 @@
       "Azure OpenAI",
       "Voice Agents"
     ],
-    "lesson": "Enterprise AI wins on evaluation discipline and governance, not model novelty \u2014 measurable accuracy, latency and compliance are the product."
+    "lesson": "Enterprise AI wins on evaluation discipline and governance, not model novelty - measurable accuracy, latency and compliance are the product."
   },
   {
     "id": "emb",
     "company": "EMB Global",
     "location": "Gurugram, India",
-    "role": "Category Head \u2013 Enterprise SaaS, Consumer Tech and Fintech",
-    "period": "Sep 2022 \u2014 Apr 2025",
+    "role": "Category Head - Enterprise SaaS, Consumer Tech and Fintech",
+    "period": "Sep 2022 to Apr 2025",
     "active": false,
     "metrics": [
       {
@@ -70,7 +70,7 @@
       },
       {
         "label": "Revenue",
-        "value": "\u20b97.78 Cr"
+        "value": "₹7.78 Cr"
       },
       {
         "label": "Retention",
@@ -101,8 +101,8 @@
     "id": "filmboard",
     "company": "Filmboard Movies Technologies Inc.",
     "location": "Mumbai, India",
-    "role": "Senior Product Manager \u2013 Fintech and Martech",
-    "period": "Jun 2020 \u2014 Aug 2022",
+    "role": "Senior Product Manager - Fintech and Martech",
+    "period": "Jun 2020 to Aug 2022",
     "active": false,
     "metrics": [
       {
@@ -130,14 +130,14 @@
       "Martech",
       "GTM"
     ],
-    "lesson": "Explaining a bad flow is not the same as fixing it \u2014 resequencing onboarding moved the numbers."
+    "lesson": "Explaining a bad flow is not the same as fixing it - resequencing onboarding moved the numbers."
   },
   {
     "id": "ibm",
     "company": "IBM",
     "location": "Vizag and Gurugram, India",
-    "role": "Data Analyst and Product Associate \u2013 Credit and Risk Analytics",
-    "period": "May 2019 \u2014 Jun 2020",
+    "role": "Data Analyst and Product Associate - Credit and Risk Analytics",
+    "period": "May 2019 to Jun 2020",
     "active": false,
     "metrics": [
       {
@@ -172,7 +172,7 @@
     "company": "Extra marks Education",
     "location": "Noida, India",
     "role": "Hybrid: Product and Sales Manager",
-    "period": "Aug 2018 \u2014 Dec 2018",
+    "period": "Aug 2018 to Dec 2018",
     "active": false,
     "metrics": [
       {
@@ -202,7 +202,7 @@
     "company": "Byju's Think and Learn",
     "location": "Bangalore and Noida, India",
     "role": "Front End Developer",
-    "period": "Jun 2016 \u2014 Aug 2018",
+    "period": "Jun 2016 to Aug 2018",
     "active": false,
     "metrics": [
       {

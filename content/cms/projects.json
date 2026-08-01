@@ -27,7 +27,7 @@
       }
     ],
     "overview": "A diagnostics and healthcare services platform delivered across web and Android, with a compliant enterprise payment solution at its core. Listed in the delivered-projects portfolio as a healthcare SaaS build with both a live site and a Play Store application.",
-    "problem": "Diagnostic bookings and patient payments were fragmented across offline collection, manual reconciliation and non-compliant payment handling \u2014 blocking scale and creating regulatory exposure.",
+    "problem": "Diagnostic bookings and patient payments were fragmented across offline collection, manual reconciliation and non-compliant payment handling - blocking scale and creating regulatory exposure.",
     "businessContext": "Healthcare payments carry HIPAA obligations alongside Indian payment-gateway constraints. The platform had to serve both a consumer app audience and lab-side operations without splitting the data model.",
     "users": [
       "Patients booking diagnostic tests",
@@ -40,7 +40,7 @@
     "prd": [
       "Unified catalogue of tests, packages and pricing across web and app",
       "Compliant payment capture with retry, refund and reconciliation states",
-      "Booking lifecycle: slot \u2192 collection \u2192 processing \u2192 report",
+      "Booking lifecycle: slot → collection → processing → report",
       "Role-based operations console for lab staff",
       "Consent and data-handling flows aligned to HIPAA expectations"
     ],
@@ -77,7 +77,7 @@
     "outcome": "Delivered a HIPAA-compliant enterprise payment solution that improved patient transactions by 22%, shipped live on the web and the Google Play Store.",
     "learnings": [
       "In regulated healthcare, the compliance model has to be designed into the checkout, not layered on after",
-      "Operations staff are the real power users \u2014 their console determines whether the consumer funnel works"
+      "Operations staff are the real power users - their console determines whether the consumer funnel works"
     ],
     "roadmap": [
       "Deeper partner-lab onboarding self-service",
@@ -113,7 +113,7 @@
         "value": "Live"
       }
     ],
-    "overview": "From the Notion project page: comprehensive financial services across India, empowering online retailers with solutions for daily challenges. From online transactions to bank transfers and insurance services \u2014 efficient and innovative payment solutions that streamline transactions.",
+    "overview": "From the Notion project page: comprehensive financial services across India, empowering online retailers with solutions for daily challenges. From online transactions to bank transfers and insurance services - efficient and innovative payment solutions that streamline transactions.",
     "problem": "Small and mid-sized online retailers were stitching together separate providers for collections, payouts and insurance, with no single view of money movement.",
     "businessContext": "India's payments landscape is provider-fragmented and compliance-heavy. A retailer-facing aggregator only wins if onboarding is fast and settlement is transparent.",
     "users": [
@@ -121,7 +121,7 @@
       "Merchant finance / accounts teams",
       "Support and onboarding operations"
     ],
-    "discovery": "Catalogued the daily money-movement tasks a retailer performs and where each one breaks \u2014 failed collections, delayed transfers, opaque settlement.",
+    "discovery": "Catalogued the daily money-movement tasks a retailer performs and where each one breaks - failed collections, delayed transfers, opaque settlement.",
     "research": "Merchant workflow reviews and provider-capability mapping across transaction, bank transfer and insurance rails.",
     "prd": [
       "Unified merchant dashboard for collections, transfers and settlements",
@@ -150,7 +150,7 @@
       "Keeping KYC friction low without weakening compliance"
     ],
     "tradeoffs": [
-      "Orchestration across multiple providers instead of a single-provider integration \u2014 slower to build, far more resilient",
+      "Orchestration across multiple providers instead of a single-provider integration - slower to build, far more resilient",
       "Prioritised transaction transparency over advanced analytics in v1"
     ],
     "metrics": [],
@@ -456,7 +456,7 @@
     ],
     "overview": "A digital platform for a defence-exam coaching brand, covering programme discovery, credibility and lead capture at scale.",
     "problem": "A growing coaching brand needed a digital surface that could convert aspirants without relying solely on offline counselling.",
-    "businessContext": "Defence exam aspirants research intensely before enrolling \u2014 credibility and clarity convert.",
+    "businessContext": "Defence exam aspirants research intensely before enrolling - credibility and clarity convert.",
     "users": [
       "Defence exam aspirants",
       "Counsellors",
@@ -504,7 +504,7 @@
     "title": "Modulars 4 You",
     "status": "IN PROGRESS",
     "category": "Consumer Tech / 3D",
-    "tagline": "WebGL kitchen planner \u2014 configure in 3D",
+    "tagline": "WebGL kitchen planner - configure in 3D",
     "image": "/projects/Modulars4You.png",
     "liveUrl": "http://142.93.207.50/development/kitchen-planner/admin/public/webgl-files/beta_build_modulars_for_you/",
     "tech": [
@@ -524,7 +524,7 @@
     ],
     "overview": "A browser-based WebGL kitchen planner letting customers configure modular kitchen layouts in real-time 3D before they buy. Currently in progress in the delivered-projects portfolio.",
     "problem": "Modular kitchen buyers can't visualise a configuration from a catalogue, so the sales cycle depends on showroom visits and manual quotations.",
-    "businessContext": "High-consideration purchase with long sales cycles \u2014 visualisation collapses the gap between interest and quotation.",
+    "businessContext": "High-consideration purchase with long sales cycles - visualisation collapses the gap between interest and quotation.",
     "users": [
       "Homeowners configuring a kitchen",
       "Sales and design consultants",
@@ -591,11 +591,11 @@
         "value": "In progress"
       }
     ],
-    "overview": "A design-led commerce experience for wall art and d\u00e9cor, focused on visual merchandising and conversion.",
-    "problem": "Visual products sell on imagery and inspiration \u2014 a generic catalogue kills conversion.",
+    "overview": "A design-led commerce experience for wall art and décor, focused on visual merchandising and conversion.",
+    "problem": "Visual products sell on imagery and inspiration - a generic catalogue kills conversion.",
     "businessContext": "Design-led commerce where the browse experience is the product.",
     "users": [
-      "Home d\u00e9cor shoppers",
+      "Home décor shoppers",
       "Merchandising team"
     ],
     "discovery": "Mapped inspiration-to-purchase journeys for wall art shoppers.",
@@ -725,7 +725,7 @@
     ],
     "overview": "A studio showcase and client portal for presenting projects and managing client-facing delivery artefacts.",
     "problem": "Studio work lived in scattered folders and email threads with no owned presentation surface.",
-    "businessContext": "Creative studios win on presentation quality \u2014 the portfolio is the sales asset.",
+    "businessContext": "Creative studios win on presentation quality - the portfolio is the sales asset.",
     "users": [
       "Prospective clients",
       "Existing clients",
@@ -785,7 +785,7 @@
     ],
     "overview": "A fintech product delivery covering onboarding, KYC and payment surfaces.",
     "problem": "Financial product users needed a compliant path from signup to funded activity without manual back-office loops.",
-    "businessContext": "Fintech conversion dies in KYC friction \u2014 the product has to make compliance feel invisible.",
+    "businessContext": "Fintech conversion dies in KYC friction - the product has to make compliance feel invisible.",
     "users": [
       "End customers",
       "Ops / compliance",

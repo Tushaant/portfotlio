@@ -3,7 +3,7 @@
     "id": "agentic",
     "name": "Agentic AI",
     "tier": "CORE",
-    "experience": "Current focus at Oraczen (2025 \u2014 Present)",
+    "experience": "Current focus at Oraczen (2025 to Present)",
     "projects": [
       "Chat Agents",
       "Voice Agents",
@@ -22,7 +22,7 @@
     "id": "rag",
     "name": "RAG Architecture",
     "tier": "CORE",
-    "experience": "Oraczen \u2014 enterprise RAG pipelines",
+    "experience": "Oraczen - enterprise RAG pipelines",
     "projects": [
       "Semantic retrieval",
       "Hybrid / Self / Memory / Graph RAG"
@@ -48,7 +48,7 @@
       "Grafana",
       "Promptfoo"
     ],
-    "example": "Achieved 92\u201395% accuracy, P95 <1.5s, error rate <0.75%, 99%+ uptime SLA."
+    "example": "Achieved 92-95% accuracy, P95 <1.5s, error rate <0.75%, 99%+ uptime SLA."
   },
   {
     "id": "enterprise",
@@ -57,7 +57,7 @@
     "experience": "10+ years across IBM, Filmboard, EMB, Oraczen",
     "projects": [
       "Category ownership",
-      "0\u21921 and 1\u2192N platforms"
+      "0→1 and 1→N platforms"
     ],
     "tools": [
       "RICE",

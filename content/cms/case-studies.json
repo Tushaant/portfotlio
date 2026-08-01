@@ -2,13 +2,13 @@
   {
     "slug": "agentic-ai-banking-platform",
     "company": "Oraczen India",
-    "period": "May 2025 \u2014 Present",
+    "period": "May 2025 to Present",
     "title": "Agentic AI for a $12.4B Banking Enterprise",
-    "summary": "Owning a $6.4M Agentic AI portfolio and building a multi-product AI platform \u2014 Chat Agents, Voice Agents, Lending AI, Requirement Gathering, Spend Intelligence and Risk Intelligence \u2014 for a $12.4 billion U.S. banking enterprise.",
+    "summary": "Owning a $6.4M Agentic AI portfolio and building a multi-product AI platform - Chat Agents, Voice Agents, Lending AI, Requirement Gathering, Spend Intelligence and Risk Intelligence - for a $12.4 billion U.S. banking enterprise.",
     "metrics": [
       {
         "label": "Accuracy",
-        "value": "92\u201395%"
+        "value": "92-95%"
       },
       {
         "label": "P95 Latency",
@@ -31,7 +31,7 @@
         "value": "+30%"
       }
     ],
-    "challenge": "A banking enterprise ran high-volume, low-efficiency manual processes that couldn't be automated with rules. The work required judgement, document context and conversational handling \u2014 but under HIPAA, PCI-DSS and GDPR obligations, with executive scrutiny on accuracy and latency.",
+    "challenge": "A banking enterprise ran high-volume, low-efficiency manual processes that couldn't be automated with rules. The work required judgement, document context and conversational handling - but under HIPAA, PCI-DSS and GDPR obligations, with executive scrutiny on accuracy and latency.",
     "research": "4+ process discovery workshops with business stakeholders documented current-state workflows, surfaced operational bottlenecks and defined optimisation opportunities before any model decision was made.",
     "discovery": "Discovery separated processes into three buckets: deterministic (automate conventionally), context-heavy (RAG), and conversation-driven (agentic). That segmentation set the platform architecture and the product roadmap.",
     "stakeholders": [
@@ -43,12 +43,12 @@
     ],
     "prioritization": "Sequenced by risk-adjusted value: highest-volume manual processes with the clearest evaluation criteria shipped first, so accuracy could be proven before expanding surface area.",
     "roadmap": [
-      "0\u21921 Chat Agents on the highest-volume support surface",
+      "0→1 Chat Agents on the highest-volume support surface",
       "Enterprise RAG pipelines with Model Context Protocol integration",
       "Knowledge graph layer for cross-document reasoning",
       "Voice Agents for realtime workflows",
       "Lending AI, Spend Intelligence and Risk Intelligence expansion",
-      "1\u2192N scaling across business units"
+      "1→N scaling across business units"
     ],
     "userStories": [
       "As an operations analyst, I need the agent to resolve routine requests end to end so my queue holds only exceptions.",
@@ -57,7 +57,7 @@
       "As a risk analyst, I need spend and risk signals surfaced from documents I would otherwise read manually."
     ],
     "architecture": [
-      "Enterprise-grade RAG pipelines \u2014 semantic, hybrid, self, memory and graph retrieval",
+      "Enterprise-grade RAG pipelines - semantic, hybrid, self, memory and graph retrieval",
       "Model Context Protocol platform and servers connecting agents to enterprise systems",
       "Knowledge graph introduced for cross-source reasoning",
       "LLM evaluation and observability with Langfuse, Grafana and Promptfoo red-teaming",
@@ -65,14 +65,14 @@
     ],
     "launch": "Released under ARB-compliant governance at 95% adherence, with compliance sign-off across HIPAA, PCI-DSS and GDPR for every AI deployment.",
     "kpis": [
-      "92\u201395% accuracy",
+      "92-95% accuracy",
       "P95 latency under 1.5s",
       "Error rate under 0.75%",
       "99%+ uptime SLA",
       "95% governance adherence",
       "+30% release velocity"
     ],
-    "failures": "Early iterations proved that model quality alone doesn't survive enterprise scrutiny \u2014 without a formal evaluation harness, accuracy claims couldn't be defended to the ARB. Red-teaming with Promptfoo exposed failure modes that hadn't appeared in happy-path testing.",
+    "failures": "Early iterations proved that model quality alone doesn't survive enterprise scrutiny - without a formal evaluation harness, accuracy claims couldn't be defended to the ARB. Red-teaming with Promptfoo exposed failure modes that hadn't appeared in happy-path testing.",
     "lessons": [
       "Evaluation infrastructure is a launch requirement, not a post-launch nicety",
       "Governance participation early converts the ARB from a gate into an accelerator",
@@ -83,9 +83,9 @@
   {
     "slug": "enterprise-saas-category-turnaround",
     "company": "EMB Global",
-    "period": "Sep 2022 \u2014 Apr 2025",
-    "title": "26 Products, \u20b97.78 Cr: Building an Enterprise SaaS Category",
-    "summary": "Category ownership across Enterprise SaaS, Consumer Tech and Fintech \u2014 26 products, \u20b97.78 Cr revenue, and an 82% enterprise retention improvement.",
+    "period": "Sep 2022 to Apr 2025",
+    "title": "26 Products, ₹7.78 Cr: Building an Enterprise SaaS Category",
+    "summary": "Category ownership across Enterprise SaaS, Consumer Tech and Fintech - 26 products, ₹7.78 Cr revenue, and an 82% enterprise retention improvement.",
     "metrics": [
       {
         "label": "Products",
@@ -93,7 +93,7 @@
       },
       {
         "label": "Revenue",
-        "value": "\u20b97.78 Cr"
+        "value": "₹7.78 Cr"
       },
       {
         "label": "Enterprise Retention",
@@ -106,7 +106,7 @@
     ],
     "challenge": "A broad portfolio of fintech and SaaS products competed for the same delivery capacity, with enterprise customers churning after onboarding friction and no shared roadmap discipline across the category.",
     "research": "Analysed retention cohorts against onboarding duration and integration complexity to locate where enterprise accounts actually disengaged.",
-    "discovery": "Onboarding \u2014 not features \u2014 was the churn driver. Enterprise accounts that cleared integration quickly retained; those that stalled during API setup never recovered.",
+    "discovery": "Onboarding - not features - was the churn driver. Enterprise accounts that cleared integration quickly retained; those that stalled during API setup never recovered.",
     "stakeholders": [
       "Enterprise customers and their technical teams",
       "5 cross-functional delivery teams",
@@ -134,7 +134,7 @@
     "launch": "Rolled out through sprint ceremonies across 5 cross-functional teams, with Agile mentoring to sustain the change after launch.",
     "kpis": [
       "26 products",
-      "\u20b97.78 Cr revenue",
+      "₹7.78 Cr revenue",
       "+82% enterprise retention",
       "-35% onboarding time"
     ],
@@ -144,12 +144,12 @@
       "Category ownership means saying no across products, not optimising within one",
       "Agile mentoring outlasts Agile mandates"
     ],
-    "retrospective": "Consolidating prioritisation and attacking onboarding produced an 82% retention improvement and a 35% reduction in onboarding time \u2014 outcomes no individual feature roadmap would have delivered."
+    "retrospective": "Consolidating prioritisation and attacking onboarding produced an 82% retention improvement and a 35% reduction in onboarding time - outcomes no individual feature roadmap would have delivered."
   },
   {
     "slug": "b2b-marketplace-churn-reduction",
     "company": "Filmboard Movies Technologies Inc.",
-    "period": "Jun 2020 \u2014 Aug 2022",
+    "period": "Jun 2020 to Aug 2022",
     "title": "Cutting B2B Churn 22% Through UX-Led Redesign",
     "summary": "Launching an enterprise B2B eCommerce platform, improving vendor onboarding 29% and cutting churn 22% through UX-led design improvements, while lifting lead conversion 18% via CRM integration.",
     "metrics": [
@@ -168,7 +168,7 @@
     ],
     "challenge": "Vendors abandoned onboarding partway through, and enterprise accounts churned after the first cycle. Sales and product were also working from disconnected lead data.",
     "research": "Onboarding drop-off analysis by step, paired with vendor interviews on where the process lost them.",
-    "discovery": "Vendor onboarding failed on comprehension, not capability \u2014 the steps existed but the sequence and language didn't match how vendors think about listing.",
+    "discovery": "Vendor onboarding failed on comprehension, not capability - the steps existed but the sequence and language didn't match how vendors think about listing.",
     "stakeholders": [
       "Enterprise vendors",
       "Sales team",
@@ -198,19 +198,19 @@
       "-22% churn",
       "+18% lead conversion"
     ],
-    "failures": "The first onboarding revision added explanatory content without changing the sequence \u2014 it barely moved the numbers. The resequencing did.",
+    "failures": "The first onboarding revision added explanatory content without changing the sequence - it barely moved the numbers. The resequencing did.",
     "lessons": [
       "Explaining a bad flow is not the same as fixing it",
       "CRM integration is a product feature when sales is part of the funnel"
     ],
-    "retrospective": "UX-led design work \u2014 not incentives or feature additions \u2014 delivered the 22% churn reduction, which reset how the team scoped retention work afterwards."
+    "retrospective": "UX-led design work - not incentives or feature additions - delivered the 22% churn reduction, which reset how the team scoped retention work afterwards."
   },
   {
     "slug": "credit-risk-analytics",
     "company": "IBM",
-    "period": "May 2019 \u2014 Jun 2020",
+    "period": "May 2019 to Jun 2020",
     "title": "Predictive Credit Risk at Enterprise Scale",
-    "summary": "Building predictive credit risk models for enterprise financial services \u2014 15% accuracy improvement \u2014 and the real-time dashboards that made them actionable across 25+ KPIs.",
+    "summary": "Building predictive credit risk models for enterprise financial services - 15% accuracy improvement - and the real-time dashboards that made them actionable across 25+ KPIs.",
     "metrics": [
       {
         "label": "Model Accuracy",
@@ -233,7 +233,7 @@
       "Risk and portfolio executives",
       "Cross-functional analytics stakeholders"
     ],
-    "prioritization": "Model accuracy and dashboard delivery advanced in parallel \u2014 accuracy alone would not have changed a single decision.",
+    "prioritization": "Model accuracy and dashboard delivery advanced in parallel - accuracy alone would not have changed a single decision.",
     "roadmap": [
       "Predictive credit risk model development",
       "Accuracy improvement iterations",
@@ -254,7 +254,7 @@
       "25+ KPIs tracked",
       "+11% strategy support"
     ],
-    "failures": "Early dashboards mirrored the model's internal structure rather than the executive decision \u2014 they were accurate and unused until reframed around decisions.",
+    "failures": "Early dashboards mirrored the model's internal structure rather than the executive decision - they were accurate and unused until reframed around decisions.",
     "lessons": [
       "A model that doesn't reach a decision-maker has zero accuracy in practice",
       "Dashboard structure should mirror decisions, not data models"

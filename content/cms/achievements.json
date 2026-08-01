@@ -42,7 +42,7 @@
     "image": null,
     "link": null,
     "metrics": {
-      "Accuracy": "92\u201395%",
+      "Accuracy": "92-95%",
       "P95": "<1.5s",
       "Uptime": "99%+"
     }
@@ -50,14 +50,14 @@
   {
     "id": "revenue",
     "type": "milestone",
-    "title": "\u20b97.78 Cr Category Revenue",
+    "title": "₹7.78 Cr Category Revenue",
     "org": "EMB Global",
-    "year": "2022\u20132025",
+    "year": "2022 to 2025",
     "image": null,
     "link": null,
     "metrics": {
       "Products": "26",
-      "Revenue": "\u20b97.78 Cr"
+      "Revenue": "₹7.78 Cr"
     }
   },
   {
@@ -100,7 +100,7 @@
   {
     "id": "btech",
     "type": "education",
-    "title": "B.Tech \u2014 Electronics and Communication Engineering",
+    "title": "B.Tech - Electronics and Communication Engineering",
     "org": "DCE",
     "year": "2016",
     "image": null,
@@ -121,7 +121,7 @@
   {
     "id": "arb",
     "type": "speaking",
-    "title": "Architecture Review Board \u2014 AI Release Governance",
+    "title": "Architecture Review Board - AI Release Governance",
     "org": "Oraczen",
     "year": "2025",
     "image": null,
