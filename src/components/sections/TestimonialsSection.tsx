@@ -1,79 +1,97 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cms } from "@/lib/cms";
 import { cn } from "@/lib/utils";
 
 type Testimonial = (typeof cms.testimonials)[number];
 
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .map((p) => p[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-}
-
 function TestimonialCard({
   item,
   active,
+  expanded,
   onSelect,
+  onToggleMore,
 }: {
   item: Testimonial;
   active: boolean;
+  expanded: boolean;
   onSelect: () => void;
+  onToggleMore: () => void;
 }) {
+  const highlight =
+    "highlight" in item && item.highlight ? item.highlight : item.quote;
+  const roleLine = `${item.role}${item.company ? ` at ${item.company}` : ""}`;
+
   return (
-    <button
-      type="button"
-      onClick={onSelect}
+    <article
+      role="button"
+      tabIndex={0}
       aria-pressed={active}
+      onClick={onSelect}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onSelect();
+        }
+      }}
       className={cn(
-        "testimonial-uiverse group relative flex h-full min-h-[280px] w-full flex-col justify-end overflow-visible rounded-xl text-left outline-none",
-        active && "z-[1]",
+        "testimonial-termite group relative flex h-full min-h-[340px] w-full cursor-pointer flex-col overflow-hidden rounded-3xl border p-7 text-left outline-none md:min-h-[360px] md:p-8",
+        active && "testimonial-termite--active",
       )}
-      title={item.quote}
     >
-      <span className="testimonial-uiverse__border" aria-hidden />
-      <span className="testimonial-uiverse__glow" aria-hidden />
-
-      <div className="relative z-[1] flex h-full min-h-[280px] flex-col justify-end gap-3 rounded-[10px] bg-black p-5 md:min-h-[320px] md:p-6">
-        {/* Part 1 — highlight quote */}
-        <div className="space-y-3">
-          <Quote
-            className="h-7 w-7 text-[rgb(var(--accent-rgb))] opacity-70"
-            aria-hidden
-          />
-          <p className="display text-[17px] font-bold leading-snug tracking-tight text-white md:text-[19px]">
-            “{"highlight" in item && item.highlight ? item.highlight : item.quote}”
-          </p>
-        </div>
-
-        {/* Part 2 — role / company */}
-        <p className="text-sm leading-snug text-white/70">
-          {item.role}
-          {item.company ? ` · ${item.company}` : ""}
-          {"date" in item && item.date ? (
-            <span className="mt-1 block font-mono text-[10px] tracking-wider text-white/40">
-              {String(item.date)}
-            </span>
-          ) : null}
-        </p>
-
-        {/* Part 3 — name (accent) */}
-        <div className="flex items-center gap-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[rgb(var(--accent-rgb))] bg-[rgba(var(--accent-rgb),0.12)] text-[11px] font-bold text-[rgb(var(--accent-rgb))]">
-            {initials(item.name)}
-          </span>
-          <p className="text-sm font-semibold text-[rgb(var(--accent-rgb))]">
+      <div className="flex h-full flex-col justify-between gap-2">
+        {/* Header — name + role */}
+        <header>
+          <strong className="display block text-lg font-bold tracking-tight text-[var(--text)] md:text-xl">
             {item.name}
-          </p>
+          </strong>
+          <p className="mt-1 text-sm text-[var(--muted)] opacity-80">{roleLine}</p>
+          {"date" in item && item.date ? (
+            <p className="mt-1 font-mono text-[10px] tracking-wider text-[rgba(var(--accent-rgb),0.7)]">
+              {String(item.date)}
+            </p>
+          ) : null}
+        </header>
+
+        {/* Footer — quotes, body, view more */}
+        <div className="flex flex-col items-start gap-4">
+          <svg
+            viewBox="0 0 24 24"
+            className="h-10 w-10 fill-[var(--text)] opacity-90 md:h-12 md:w-12"
+            aria-hidden
+          >
+            <path d="M4.58341 17.3211C3.55316 16.2274 3 15 3 13.0103C3 9.51086 5.45651 6.37366 9.03059 4.82318L9.92328 6.20079C6.58804 8.00539 5.93618 10.346 5.67564 11.822C6.21263 11.5443 6.91558 11.4466 7.60471 11.5105C9.40908 11.6778 10.8312 13.159 10.8312 15C10.8312 16.933 9.26416 18.5 7.33116 18.5C6.2581 18.5 5.23196 18.0095 4.58341 17.3211ZM14.5834 17.3211C13.5532 16.2274 13 15 13 13.0103C13 9.51086 15.4565 6.37366 19.0306 4.82318L19.9233 6.20079C16.588 8.00539 15.9362 10.346 15.6756 11.822C16.2126 11.5443 16.9156 11.4466 17.6047 11.5105C19.4091 11.6778 20.8312 13.159 20.8312 15C20.8312 16.933 19.2642 18.5 17.3312 18.5C16.2581 18.5 15.232 18.0095 14.5834 17.3211Z" />
+          </svg>
+
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.p
+              key={expanded ? "full" : "short"}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.28, ease: [0.23, 1, 0.32, 1] }}
+              className="z-[1] text-[15px] leading-relaxed text-[var(--text)] opacity-80 md:text-base"
+            >
+              {expanded ? item.quote : highlight}
+            </motion.p>
+          </AnimatePresence>
+
+          <button
+            type="button"
+            className="testimonial-termite__more"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleMore();
+            }}
+          >
+            <span>{expanded ? "View less" : "View more"}</span>
+          </button>
         </div>
       </div>
-    </button>
+    </article>
   );
 }
 
@@ -81,6 +99,7 @@ export function TestimonialsSection() {
   const items = cms.testimonials as Testimonial[];
   const count = items.length;
   const [index, setIndex] = useState(0);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [paused, setPaused] = useState(false);
   const scrollerRef = useRef<HTMLDivElement>(null);
 
@@ -92,10 +111,10 @@ export function TestimonialsSection() {
   );
 
   useEffect(() => {
-    if (paused || count <= 1) return;
+    if (paused || count <= 1 || expandedId) return;
     const id = window.setInterval(() => go(1), 5500);
     return () => window.clearInterval(id);
-  }, [paused, count, go]);
+  }, [paused, count, go, expandedId]);
 
   useEffect(() => {
     const el = scrollerRef.current;
@@ -131,32 +150,31 @@ export function TestimonialsSection() {
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          {/* Mobile / tablet: snap carousel · Desktop: 3-up grid */}
           <div
             ref={scrollerRef}
-            className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 [-ms-overflow-style:none] [scrollbar-width:none] md:grid md:grid-cols-3 md:overflow-visible md:pb-2 [&::-webkit-scrollbar]:hidden"
+            className="flex snap-x snap-mandatory gap-6 overflow-x-auto overflow-y-visible px-1 py-3 [-ms-overflow-style:none] [scrollbar-width:none] md:grid md:grid-cols-3 md:gap-7 md:overflow-visible md:px-2 md:py-4 [&::-webkit-scrollbar]:hidden"
           >
             {items.map((item, i) => (
               <motion.div
                 key={item.id}
-                initial={{ opacity: 0, y: 28 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.25 }}
                 transition={{
-                  duration: 0.5,
-                  delay: i * 0.12,
-                  ease: [0.22, 1, 0.36, 1],
+                  duration: 0.48,
+                  delay: i * 0.1,
+                  ease: [0.23, 1, 0.32, 1],
                 }}
-                className={cn(
-                  "w-[min(100%,320px)] shrink-0 snap-center md:w-auto",
-                  index === i ? "scale-[1.02]" : "scale-100 opacity-90 md:opacity-100",
-                )}
-                style={{ transition: "transform 0.4s ease, opacity 0.4s ease" }}
+                className="w-[min(100%,300px)] shrink-0 snap-center md:w-auto"
               >
                 <TestimonialCard
                   item={item}
                   active={index === i}
+                  expanded={expandedId === item.id}
                   onSelect={() => setIndex(i)}
+                  onToggleMore={() =>
+                    setExpandedId((id) => (id === item.id ? null : item.id))
+                  }
                 />
               </motion.div>
             ))}
