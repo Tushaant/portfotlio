@@ -611,54 +611,68 @@ body:not(.hologram-light) .to-orange-600 {
  --tw-gradient-stops: var(--tw-gradient-from), #00d95a, var(--tw-gradient-to) !important;
 }
 
-/* Uiverse-inspired testimonial cards (3-part content + rotating gradient rim) */
-.testimonial-uiverse {
- isolation: isolate;
- color: #fff;
+/* Uiverse tidy-termite-70 testimonial cards — offset shadow jump */
+.testimonial-termite {
+ background: var(--surface);
+ border-color: color-mix(in srgb, var(--muted) 55%, transparent);
+ line-height: 1.6;
+ transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
 }
-.testimonial-uiverse__border {
+.testimonial-termite:hover,
+.testimonial-termite--active {
+ border-color: rgb(var(--accent-rgb));
+ box-shadow: 8px 8px rgb(var(--accent-rgb));
+ transform: translate(-8px, -8px);
+}
+.testimonial-termite__more {
+ position: relative;
+ border: none;
+ background: transparent;
+ padding: 4px 0;
+ font-family: inherit;
+ font-size: 15px;
+ font-weight: 700;
+ line-height: 1.6;
+ color: var(--text);
+ cursor: pointer;
+ overflow: hidden;
+ z-index: 1;
+ transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.testimonial-termite__more span {
+ position: relative;
+ z-index: 1;
+ transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.testimonial-termite__more::before {
  position: absolute;
- inset: -5px;
- border-radius: 14px;
- background: linear-gradient(
-  -45deg,
-  rgb(var(--accent-rgb)) 0%,
-  color-mix(in srgb, rgb(var(--accent-rgb)) 35%, #40c9ff) 100%
- );
+ content: "";
+ width: 112%;
+ height: 1px;
+ left: 0;
+ bottom: 0;
+ background: rgb(var(--accent-rgb));
+ pointer-events: none;
  z-index: 0;
- pointer-events: none;
- transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+ transform: scaleX(0);
+ transform-origin: right;
+ transition: transform 0.64s cubic-bezier(0.23, 1, 0.32, 1);
 }
-.testimonial-uiverse__glow {
- position: absolute;
- inset: 0;
- border-radius: 12px;
- background: linear-gradient(
-  -45deg,
-  rgba(var(--accent-rgb), 0.95) 0%,
-  color-mix(in srgb, rgb(var(--accent-rgb)) 40%, #00dbde) 100%
- );
- transform: scale(0.95);
- filter: blur(18px);
- z-index: -1;
- pointer-events: none;
- opacity: 0.85;
- transition: filter 0.6s ease, opacity 0.6s ease;
+.testimonial-termite__more:hover::before {
+ transform: scaleX(1);
+ transform-origin: left;
 }
-.testimonial-uiverse:hover .testimonial-uiverse__border,
-.testimonial-uiverse[aria-pressed="true"] .testimonial-uiverse__border {
- transform: rotate(-90deg) scaleX(1.34) scaleY(0.77);
+.testimonial-termite__more:active {
+ scale: 0.95;
 }
-.testimonial-uiverse:hover .testimonial-uiverse__glow,
-.testimonial-uiverse[aria-pressed="true"] .testimonial-uiverse__glow {
- filter: blur(28px);
- opacity: 1;
+body.hologram-light .testimonial-termite {
+ background: #ffffff;
+ border-color: #cccccc;
 }
-body.hologram-light .testimonial-uiverse__border {
- background: linear-gradient(-45deg, #8a6014 0%, #c9a227 55%, #6b4e08 100%);
-}
-body.hologram-light .testimonial-uiverse__glow {
- background: linear-gradient(-45deg, #8a6014 0%, #d4af37 100%);
+body.hologram-light .testimonial-termite:hover,
+body.hologram-light .testimonial-termite--active {
+ border-color: #6b4e08;
+ box-shadow: 8px 8px #6b4e08;
 }
 
 @media (max-width: 768px) {
