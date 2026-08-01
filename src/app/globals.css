@@ -1,27 +1,25 @@
 @import "tailwindcss";
 
-/* Dark neural-brain palette from reference:
- bg #000000 · hot #FFF8E1 · glow #FFB300 · amber #E65100 · facet #BF360C
- Light circuit palette:
- bg #FFFFFF · pale #F9E498 · metal #C5A059 · deep #B8860B
+/* Dark: matte black + classic gold
+ Light: white + metallic gold circuit
 */
 :root {
- --bg: #000000;
- --navy: #0a0602;
- --cyan: #ffb300;
- --blue: #ffb300;
- --purple: #e65100;
- --magenta: #bf360c;
- --green: #ffb300;
- --gold: #ffb300;
- --champagne: #fff8e1;
- --ember: #e65100;
- --glass: rgba(255, 179, 0, 0.06);
- --glass-border: rgba(255, 179, 0, 0.28);
- --text: #fff8e1;
- --muted: #c49a6c;
- --glow: 0 0 40px rgba(255, 179, 0, 0.4);
- --surface-soft: rgba(10, 6, 2, 0.55);
+ --bg: #0b0b0b;
+ --navy: #121212;
+ --cyan: #d4af37;
+ --blue: #c9a227;
+ --purple: #b8860b;
+ --magenta: #a67c00;
+ --green: #c9a227;
+ --gold: #d4af37;
+ --champagne: #f3ebd8;
+ --ember: #b8860b;
+ --glass: rgba(18, 18, 18, 0.72);
+ --glass-border: rgba(212, 175, 55, 0.32);
+ --text: #f3ebd8;
+ --muted: #a8946b;
+ --glow: 0 0 36px rgba(212, 175, 55, 0.28);
+ --surface-soft: rgba(11, 11, 11, 0.72);
  --font-display: var(--font-orbitron);
  --font-body: var(--font-space);
  --font-mono: var(--font-jetbrains);
@@ -96,8 +94,8 @@ body.hologram-light ::selection {
 }
 
 ::selection {
- background: rgba(255, 179, 0, 0.4);
- color: #000;
+ background: rgba(212, 175, 55, 0.35);
+ color: #0b0b0b;
 }
 
 a {
@@ -135,8 +133,8 @@ button:active,
 body:not(.hologram-light) a:active,
 body:not(.hologram-light) button:active,
 body:not(.hologram-light) [role="button"]:active {
- color: #fff8e1;
- box-shadow: 0 0 22px rgba(255, 179, 0, 0.35);
+ color: #f3ebd8;
+ box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
 }
 
 body.hologram-light a:active,
@@ -149,10 +147,13 @@ body.hologram-light [role="button"]:active {
 .glass {
  background: linear-gradient(
  135deg,
- rgba(255, 179, 0, 0.1),
- rgba(255, 255, 255, 0.03)
+ rgba(18, 18, 18, 0.88),
+ rgba(14, 14, 14, 0.78)
  );
- border: 1px solid var(--glass-border);
+ border: 1px solid rgba(212, 175, 55, 0.28);
+ box-shadow:
+  0 12px 28px rgba(0, 0, 0, 0.45),
+  inset 0 1px 0 rgba(212, 175, 55, 0.08);
  backdrop-filter: blur(18px);
  -webkit-backdrop-filter: blur(18px);
  transition: var(--transition-theme);
@@ -160,10 +161,10 @@ body.hologram-light [role="button"]:active {
 
 /* Solid header / modal surface - low transparency so text never merges */
 .header-solid {
- background: rgba(0, 0, 0, 0.92);
- border: 1px solid rgba(255, 179, 0, 0.28);
- backdrop-filter: blur(22px) saturate(1.2);
- -webkit-backdrop-filter: blur(22px) saturate(1.2);
+ background: rgba(11, 11, 11, 0.94);
+ border: 1px solid rgba(212, 175, 55, 0.3);
+ backdrop-filter: blur(22px) saturate(1.1);
+ -webkit-backdrop-filter: blur(22px) saturate(1.1);
 }
 
 body.hologram-light .header-solid {
@@ -180,27 +181,28 @@ body.scroll-locked {
 body.hologram-light .glass {
  background: linear-gradient(
  135deg,
- rgba(255, 255, 255, 0.85),
- rgba(249, 228, 152, 0.35)
+ rgba(255, 255, 255, 0.9),
+ rgba(249, 228, 152, 0.32)
  );
- box-shadow: 0 8px 32px rgba(197, 160, 89, 0.14);
+ border: 1px solid rgba(107, 78, 8, 0.28);
+ box-shadow: 0 8px 28px rgba(197, 160, 89, 0.12);
 }
 
-/* Opaque skill / metric panels - keep text readable on brain backdrop */
+/* Opaque skill / metric panels - matte black + gold */
 .skill-card {
- background: rgba(8, 5, 2, 0.94);
- border: 1px solid rgba(255, 179, 0, 0.42);
+ background: rgba(16, 16, 16, 0.96);
+ border: 1px solid rgba(212, 175, 55, 0.38);
  box-shadow:
   0 18px 42px rgba(0, 0, 0, 0.55),
-  inset 0 1px 0 rgba(255, 179, 0, 0.14);
+  inset 0 1px 0 rgba(212, 175, 55, 0.12);
  color: var(--text);
 }
 
 .metric-chip {
- background: rgba(18, 12, 4, 0.96);
- border: 1px solid rgba(255, 179, 0, 0.38);
+ background: rgba(22, 22, 22, 0.96);
+ border: 1px solid rgba(212, 175, 55, 0.32);
  color: var(--text);
- box-shadow: inset 0 1px 0 rgba(255, 179, 0, 0.1);
+ box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.08);
 }
 
 body.hologram-light .skill-card {
@@ -224,7 +226,7 @@ body.hologram-light .metric-chip {
 }
 
 .neon-text {
- background: linear-gradient(120deg, #fff8e1, #ffb300, #e65100);
+ background: linear-gradient(120deg, #f3ebd8, #d4af37, #b8860b);
  -webkit-background-clip: text;
  background-clip: text;
  color: transparent;
@@ -245,16 +247,16 @@ body.hologram-light .neon-text {
 
 .grid-bg {
  background-image:
- linear-gradient(rgba(255, 179, 0, 0.05) 1px, transparent 1px),
- linear-gradient(90deg, rgba(255, 179, 0, 0.05) 1px, transparent 1px);
+ linear-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 1px),
+ linear-gradient(90deg, rgba(212, 175, 55, 0.05) 1px, transparent 1px);
  background-size: 64px 64px;
  mask-image: radial-gradient(ellipse at center, black 15%, transparent 78%);
 }
 
 .grid-bg.grid-amber {
  background-image:
- linear-gradient(rgba(255, 179, 0, 0.07) 1px, transparent 1px),
- linear-gradient(90deg, rgba(255, 179, 0, 0.07) 1px, transparent 1px);
+ linear-gradient(rgba(212, 175, 55, 0.07) 1px, transparent 1px),
+ linear-gradient(90deg, rgba(212, 175, 55, 0.07) 1px, transparent 1px);
 }
 
 .grid-bg.grid-gold {
@@ -289,11 +291,11 @@ body.hologram-light .neon-text {
 .aurora-amber {
  background: linear-gradient(
  125deg,
- rgba(255, 179, 0, 0.22),
+ rgba(212, 175, 55, 0.16),
  transparent 35%,
- rgba(230, 81, 0, 0.18),
+ rgba(184, 134, 11, 0.12),
  transparent 65%,
- rgba(255, 248, 225, 0.1)
+ rgba(243, 235, 216, 0.08)
  );
 }
 
@@ -340,13 +342,13 @@ body.hologram-light .neon-text {
 }
 
 .orb-amber {
- background: radial-gradient(circle, rgba(255, 179, 0, 0.55), transparent 70%);
+ background: radial-gradient(circle, rgba(212, 175, 55, 0.4), transparent 70%);
 }
 .orb-ember {
- background: radial-gradient(circle, rgba(230, 81, 0, 0.45), transparent 70%);
+ background: radial-gradient(circle, rgba(184, 134, 11, 0.32), transparent 70%);
 }
 .orb-hot {
- background: radial-gradient(circle, rgba(255, 248, 225, 0.35), transparent 70%);
+ background: radial-gradient(circle, rgba(243, 235, 216, 0.22), transparent 70%);
 }
 .orb-gold {
  background: radial-gradient(circle, rgba(197, 160, 89, 0.5), transparent 70%);
@@ -558,30 +560,49 @@ body.hologram-light .font-mono.text-green-300\/90 {
  color: #3d4a12 !important;
 }
 
-/* Dark-mode: map leftover cyan utilities toward amber */
+/* Dark-mode: map leftover cyan/amber/orange utilities toward classic gold */
 body:not(.hologram-light) .text-cyan-300,
 body:not(.hologram-light) .text-cyan-200,
 body:not(.hologram-light) .text-cyan-100 {
- color: #ffb300 !important;
+ color: #d4af37 !important;
+}
+body:not(.hologram-light) .text-amber-100,
+body:not(.hologram-light) .text-amber-200,
+body:not(.hologram-light) .text-amber-300,
+body:not(.hologram-light) .text-amber-400,
+body:not(.hologram-light) [class*="text-amber-"] {
+ color: #d4af37 !important;
+}
+body:not(.hologram-light) .text-orange-300,
+body:not(.hologram-light) .text-orange-400,
+body:not(.hologram-light) .text-yellow-300,
+body:not(.hologram-light) .text-yellow-400 {
+ color: #c9a227 !important;
 }
 body:not(.hologram-light) .border-cyan-400\/40,
 body:not(.hologram-light) .border-cyan-400\/30,
-body:not(.hologram-light) .border-cyan-400\/25 {
- border-color: rgba(255, 179, 0, 0.35) !important;
+body:not(.hologram-light) .border-cyan-400\/25,
+body:not(.hologram-light) [class*="border-amber-"],
+body:not(.hologram-light) [class*="border-orange-"] {
+ border-color: rgba(212, 175, 55, 0.35) !important;
 }
 body:not(.hologram-light) .bg-cyan-400\/10,
 body:not(.hologram-light) .bg-cyan-400\/15,
-body:not(.hologram-light) .bg-cyan-400\/20 {
- background-color: rgba(255, 179, 0, 0.12) !important;
+body:not(.hologram-light) .bg-cyan-400\/20,
+body:not(.hologram-light) [class*="bg-amber-400/"],
+body:not(.hologram-light) [class*="bg-orange-"] {
+ background-color: rgba(212, 175, 55, 0.12) !important;
 }
-body:not(.hologram-light) .from-cyan-400 {
- --tw-gradient-from: #ffb300 !important;
+body:not(.hologram-light) .from-cyan-400,
+body:not(.hologram-light) .from-amber-300 {
+ --tw-gradient-from: #d4af37 !important;
 }
 body:not(.hologram-light) .to-blue-600,
 body:not(.hologram-light) .to-purple-500,
-body:not(.hologram-light) .via-blue-500 {
- --tw-gradient-to: #e65100 !important;
- --tw-gradient-stops: var(--tw-gradient-from), #ffb300, var(--tw-gradient-to) !important;
+body:not(.hologram-light) .via-blue-500,
+body:not(.hologram-light) .to-orange-600 {
+ --tw-gradient-to: #b8860b !important;
+ --tw-gradient-stops: var(--tw-gradient-from), #d4af37, var(--tw-gradient-to) !important;
 }
 
 @media (max-width: 768px) {

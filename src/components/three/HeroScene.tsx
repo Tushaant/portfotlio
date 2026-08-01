@@ -7,19 +7,19 @@ import { useUIStore } from "@/store/ui-store";
 
 type Theme = "dark" | "light";
 
-/** Palette extracted from the shared neural-brain reference images */
+/** Palette: dark = matte black + gold · light = white + metallic gold */
 const PALETTE = {
   dark: {
-    bg: "#000000",
-    fog: "#000000",
-    nodeCore: "#FFF8E1",
-    nodeMid: "#FFB300",
-    nodeDeep: "#E65100",
-    link: "#FFB300",
-    facet: "#BF360C",
-    lightA: "#FFB300",
-    lightB: "#E65100",
-    ambient: 0.25,
+    bg: "#0B0B0B",
+    fog: "#0B0B0B",
+    nodeCore: "#F3EBD8",
+    nodeMid: "#D4AF37",
+    nodeDeep: "#B8860B",
+    link: "#D4AF37",
+    facet: "#A67C00",
+    lightA: "#D4AF37",
+    lightB: "#B8860B",
+    ambient: 0.28,
   },
   light: {
     bg: "#FFFFFF",

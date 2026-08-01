@@ -70,7 +70,7 @@ export function AchievementsSection() {
         </div>
 
         <div className="mt-12 grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="relative min-h-[360px] rounded-3xl border border-white/10 bg-[radial-gradient(ellipse_at_center,#08111F_0%,#05060B_70%)] p-6">
+          <div className="relative min-h-[360px] rounded-3xl border border-[#D4AF37]/20 bg-[radial-gradient(ellipse_at_center,#161616_0%,#0B0B0B_70%)] p-6">
             <div className="absolute inset-0 grid-bg opacity-40" />
             <div className="relative flex flex-wrap items-center justify-center gap-4 py-8">
               {cms.achievements.map((a, i) => (
@@ -86,7 +86,7 @@ export function AchievementsSection() {
                   <div
                     className={`flex h-20 w-20 flex-col items-center justify-center overflow-hidden rounded-full border ${
                       active === a.id
-                        ? "border-amber-300 bg-amber-400/20 shadow-[0_0_40px_rgba(255,179,0,0.45)]"
+                        ? "border-[#D4AF37] bg-[#D4AF37]/20 shadow-[0_0_40px_rgba(212,175,55,0.35)]"
                         : "border-white/15 bg-black/50"
                     }`}
                   >

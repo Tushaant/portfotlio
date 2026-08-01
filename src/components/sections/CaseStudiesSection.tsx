@@ -46,7 +46,7 @@ export function CaseStudiesSection() {
  <h3 className="display mt-2 max-w-2xl text-2xl md:text-3xl">
  {c.title}
  </h3>
- <p className="mt-3 max-w-3xl text-sm text-slate-400 md:text-base">
+ <p className="mt-3 max-w-3xl text-sm text-slate-300 md:text-base">
  {c.summary}
  </p>
  </div>
@@ -59,11 +59,14 @@ export function CaseStudiesSection() {
  </div>
  <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
  {c.metrics.map((m) => (
- <div key={m.label}>
+ <div
+ key={m.label}
+ className="rounded-xl border border-white/12 bg-black/30 p-3"
+ >
  <p className="display text-lg text-cyan-300 md:text-xl">
  {m.value}
  </p>
- <p className="text-[11px] text-slate-500">{m.label}</p>
+ <p className="text-[11px] text-slate-400">{m.label}</p>
  </div>
  ))}
  </div>
