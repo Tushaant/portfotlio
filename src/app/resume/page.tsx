@@ -16,6 +16,7 @@ export default function ResumePage() {
  eyebrow="RESUME · PDF SOURCE ONLY"
  title={r.name}
  subtitle={r.title}
+ avatarSrc="/profile/tushant-circle.png"
  actions={
  <>
  <a
