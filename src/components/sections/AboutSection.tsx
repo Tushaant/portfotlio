@@ -120,14 +120,14 @@ export function AboutSection() {
  </motion.div>
 
  <div className="mt-8">
- <p className="mb-3 font-mono text-[11px] tracking-[0.2em] text-slate-500">
+ <p className="mb-3 font-mono text-[11px] tracking-[0.2em] text-[var(--gold)]">
  CORE COMPETENCY MATRIX
  </p>
  <div className="flex flex-wrap gap-2">
  {r.coreCompetencies.map((c) => (
  <span
  key={c}
- className="rounded-lg border border-white/8 bg-white/[0.03] px-2.5 py-1 text-[11px] text-slate-400 transition hover:border-cyan-400/40 hover:text-cyan-200"
+ className="rounded-lg border border-[#D4AF37]/45 bg-[#121212] px-2.5 py-1.5 text-[11px] font-medium text-[#F3EBD8] shadow-[inset_0_1px_0_rgba(212,175,55,0.1)] transition hover:border-[#D4AF37] hover:bg-[#1A1A1A] hover:text-[#F3EBD8]"
  >
  {c}
  </span>
