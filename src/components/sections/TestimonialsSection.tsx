@@ -43,7 +43,7 @@ function TestimonialCard({
       )}
     >
       <div className="flex h-full flex-col justify-between gap-2">
-        {/* Header — name + role */}
+        {/* Header, name + role */}
         <header>
           <strong className="display block text-lg font-bold tracking-tight text-[var(--text)] md:text-xl">
             {item.name}
@@ -56,7 +56,7 @@ function TestimonialCard({
           ) : null}
         </header>
 
-        {/* Footer — quotes, body, view more */}
+        {/* Footer, quotes, body, view more */}
         <div className="flex flex-col items-start gap-4">
           <svg
             viewBox="0 0 24 24"
@@ -141,7 +141,7 @@ export function TestimonialsSection() {
           Client <span className="neon-text">testimonials</span>
         </h2>
         <p className="mt-4 max-w-2xl text-[var(--muted)]">
-          Three signals from the Notion portfolio — founders and product leaders
+          Three signals from the Notion portfolio, founders and product leaders
           on shipping with Tushant.
         </p>
 

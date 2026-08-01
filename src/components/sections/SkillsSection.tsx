@@ -30,7 +30,7 @@ const PLANET_THEMES: PlanetTheme[] = [
 ];
 
 function shortName(name: string) {
-  // Prefer readable 1–2 word labels for the badge under the planet
+  // Prefer readable 1-2 word labels for the badge under the planet
   const cleaned = name.replace(/\s*&\s*/g, " & ").trim();
   if (cleaned.length <= 18) return cleaned;
   const parts = cleaned.split(/\s+/);
@@ -161,7 +161,7 @@ export function SkillsSection() {
         </p>
 
         <div className="mt-12 grid gap-8 lg:grid-cols-2">
-          {/* Solar system stage — desktop/tablet */}
+          {/* Solar system stage, desktop/tablet */}
           <div className="relative mx-auto hidden aspect-square w-full max-w-lg sm:block">
             <div className="absolute inset-0 overflow-hidden rounded-3xl border border-[color:rgba(var(--accent-rgb),0.25)] bg-[radial-gradient(ellipse_at_center,var(--surface)_0%,var(--bg)_72%)]">
               <div

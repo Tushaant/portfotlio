@@ -8,6 +8,7 @@ import { cms } from "@/lib/cms";
 import { useUIStore } from "@/store/ui-store";
 import { cn } from "@/lib/utils";
 import { Menu, X, Command } from "lucide-react";
+import { ThemeSwitch } from "@/components/ui/ThemeSwitch";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -108,7 +109,7 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             type="button"
             onClick={() => setPaletteOpen(true)}
@@ -126,6 +127,7 @@ export function Header() {
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
+          <ThemeSwitch />
         </div>
       </div>
 
