@@ -125,6 +125,25 @@ a {
   transition: var(--transition-theme);
 }
 
+/* Solid header / modal surface — low transparency so text never merges */
+.header-solid {
+  background: rgba(0, 0, 0, 0.92);
+  border: 1px solid rgba(255, 179, 0, 0.28);
+  backdrop-filter: blur(22px) saturate(1.2);
+  -webkit-backdrop-filter: blur(22px) saturate(1.2);
+}
+
+body.hologram-light .header-solid {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(197, 160, 89, 0.4);
+  box-shadow: 0 8px 32px rgba(197, 160, 89, 0.14);
+}
+
+body.scroll-locked {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
 body.hologram-light .glass {
   background: linear-gradient(
     135deg,

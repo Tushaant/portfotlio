@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { cms } from "@/lib/cms";
 import { useUIStore } from "@/store/ui-store";
 import { cn } from "@/lib/utils";
@@ -10,39 +10,75 @@ import { Menu, X, Command } from "lucide-react";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const setPaletteOpen = useUIStore((s) => s.setPaletteOpen);
+  const agentOpen = useUIStore((s) => s.agentOpen);
+  const lastY = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    lastY.current = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const delta = y - lastY.current;
+      setScrolled(y > 16);
+
+      // Hide when scrolling down past hero; show when scrolling up
+      if (y < 80) {
+        setHidden(false);
+      } else if (delta > 6) {
+        setHidden(true);
+        setOpen(false);
+      } else if (delta < -6) {
+        setHidden(false);
+      }
+      lastY.current = y;
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Keep header out of the way while agent is open
+  const shouldHide = hidden || agentOpen;
+
   return (
-    <header
+    <motion.header
       className={cn(
-        "fixed top-0 inset-x-0 z-50 transition-all duration-500",
+        "fixed top-0 inset-x-0 z-50 transition-[padding] duration-300",
         scrolled ? "py-2" : "py-4",
       )}
+      initial={false}
+      animate={{
+        y: shouldHide ? "-110%" : "0%",
+        opacity: shouldHide ? 0 : 1,
+      }}
+      transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
     >
       <div
         className={cn(
-          "mx-auto flex max-w-7xl items-center justify-between px-4 md:px-6 rounded-2xl transition-all",
-          scrolled && "glass mx-3 md:mx-auto shadow-[0_0_40px_rgba(56,248,255,0.08)]",
+          "mx-auto flex max-w-7xl items-center justify-between px-4 md:px-6 rounded-2xl transition-all duration-300",
+          scrolled
+            ? "header-solid mx-3 md:mx-auto shadow-[0_8px_40px_rgba(0,0,0,0.45)]"
+            : "bg-transparent",
         )}
       >
         <Link href="/#top" className="group flex items-center gap-2 py-2">
           <motion.span
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/40 bg-cyan-400/10 display text-sm text-cyan-300"
-            animate={{ boxShadow: ["0 0 0 rgba(56,248,255,0)", "0 0 24px rgba(56,248,255,0.45)", "0 0 0 rgba(56,248,255,0)"] }}
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-amber-400/40 bg-amber-400/10 display text-sm text-amber-300"
+            animate={{
+              boxShadow: [
+                "0 0 0 rgba(255,179,0,0)",
+                "0 0 24px rgba(255,179,0,0.45)",
+                "0 0 0 rgba(255,179,0,0)",
+              ],
+            }}
             transition={{ duration: 3, repeat: Infinity }}
           >
             TS
           </motion.span>
           <span className="display text-sm tracking-wider">
-            <span className="text-white">Tushant</span>
-            <span className="text-cyan-300">.AI</span>
+            <span className="text-[var(--text)]">Tushant</span>
+            <span className="text-amber-300">.AI</span>
           </span>
         </Link>
 
@@ -56,7 +92,7 @@ export function Header() {
             >
               <Link
                 href={item.href}
-                className="px-2.5 py-1.5 text-[11px] uppercase tracking-[0.14em] text-slate-300/80 transition hover:text-cyan-300"
+                className="px-2.5 py-1.5 text-[11px] uppercase tracking-[0.14em] text-[var(--muted)] transition hover:text-amber-300"
               >
                 {item.label}
               </Link>
@@ -68,7 +104,7 @@ export function Header() {
           <button
             type="button"
             onClick={() => setPaletteOpen(true)}
-            className="glass hidden sm:flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs text-slate-300 hover:text-cyan-300"
+            className="header-solid hidden sm:flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs text-[var(--muted)] hover:text-amber-300"
             aria-label="Open command palette"
           >
             <Command className="h-3.5 w-3.5" />
@@ -76,7 +112,7 @@ export function Header() {
           </button>
           <button
             type="button"
-            className="lg:hidden glass rounded-lg p-2"
+            className="lg:hidden header-solid rounded-lg p-2"
             onClick={() => setOpen((v) => !v)}
             aria-label="Toggle menu"
           >
@@ -85,20 +121,27 @@ export function Header() {
         </div>
       </div>
 
-      {open && (
-        <div className="lg:hidden glass mx-3 mt-2 rounded-2xl p-4 flex flex-col gap-2">
-          {cms.site.nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setOpen(false)}
-              className="rounded-lg px-3 py-2 text-sm text-slate-200 hover:bg-white/5 hover:text-cyan-300"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-      )}
-    </header>
+      <AnimatePresence>
+        {open && !shouldHide && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="lg:hidden header-solid mx-3 mt-2 rounded-2xl p-4 flex flex-col gap-2"
+          >
+            {cms.site.nav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className="rounded-lg px-3 py-2 text-sm text-[var(--text)] hover:bg-amber-400/10 hover:text-amber-300"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
   );
 }
