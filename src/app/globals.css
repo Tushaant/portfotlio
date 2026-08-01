@@ -60,7 +60,7 @@ body {
   color: var(--text);
   font-family: var(--font-body), system-ui, sans-serif;
   overflow-x: hidden;
-  cursor: none;
+  cursor: auto;
   transition: var(--transition-theme);
 }
 
@@ -72,35 +72,27 @@ body.terminal-mode {
 body.hologram-light {
   --bg: #ffffff;
   --navy: #fffaf0;
-  --cyan: #c5a059;
-  --blue: #b8860b;
-  --purple: #c5a059;
-  --magenta: #b8860b;
-  --green: #c5a059;
-  --gold: #c5a059;
+  /* Deep bronze accents — readable on white (not pale gold) */
+  --cyan: #6b4e08;
+  --blue: #5c4108;
+  --purple: #7a5510;
+  --magenta: #8a6014;
+  --green: #5a4a12;
+  --gold: #8a6412;
   --champagne: #f9e498;
-  --ember: #b8860b;
-  --glass: rgba(255, 255, 255, 0.72);
-  --glass-border: rgba(197, 160, 89, 0.4);
+  --ember: #6b4e08;
+  --glass: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(107, 78, 8, 0.28);
   --text: #1a1408;
-  --muted: #6b5a3e;
-  --glow: 0 0 40px rgba(197, 160, 89, 0.35);
-  --surface-soft: rgba(255, 255, 255, 0.7);
+  --muted: #4a3c22;
+  --glow: 0 0 28px rgba(138, 100, 18, 0.25);
+  --surface-soft: rgba(255, 255, 255, 0.78);
   color-scheme: light;
 }
 
 body.hologram-light ::selection {
-  background: rgba(197, 160, 89, 0.35);
+  background: rgba(138, 100, 18, 0.3);
   color: #1a1408;
-}
-
-body.hologram-light .custom-cursor {
-  border-color: #c5a059;
-  mix-blend-mode: multiply;
-}
-
-body.hologram-light .custom-cursor.hovering {
-  background: rgba(197, 160, 89, 0.18);
 }
 
 ::selection {
@@ -111,6 +103,47 @@ body.hologram-light .custom-cursor.hovering {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* Click / hover feedback instead of a custom cursor */
+a,
+button,
+[role="button"],
+summary {
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease,
+    filter 0.2s ease;
+}
+
+a:hover,
+button:hover,
+[role="button"]:hover {
+  filter: brightness(1.08);
+}
+
+a:active,
+button:active,
+[role="button"]:active {
+  transform: scale(0.97);
+  filter: brightness(1.18) saturate(1.15);
+}
+
+body:not(.hologram-light) a:active,
+body:not(.hologram-light) button:active,
+body:not(.hologram-light) [role="button"]:active {
+  color: #fff8e1;
+  box-shadow: 0 0 22px rgba(255, 179, 0, 0.35);
+}
+
+body.hologram-light a:active,
+body.hologram-light button:active,
+body.hologram-light [role="button"]:active {
+  color: #3d2a05;
+  box-shadow: 0 0 18px rgba(107, 78, 8, 0.28);
 }
 
 .glass {
@@ -401,67 +434,95 @@ body.hologram-light .neon-text {
   animation: pulse-glow 3s ease-in-out infinite;
 }
 
-.custom-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 18px;
-  height: 18px;
-  border: 1.5px solid var(--cyan);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: screen;
-  transform: translate(-50%, -50%);
-  transition:
-    width 0.2s,
-    height 0.2s,
-    background 0.2s,
-    border-color 0.4s;
+/* —— Light-mode contrast: force readable text (no pale cyan/gold washout) —— */
+body.hologram-light {
+  color: #1a1408;
 }
 
-.custom-cursor.hovering {
-  width: 42px;
-  height: 42px;
-  background: rgba(255, 179, 0, 0.15);
-}
-
-/* Light-mode readable overrides */
+body.hologram-light .text-slate-100,
 body.hologram-light .text-slate-200,
-body.hologram-light .text-slate-300 {
-  color: #3d3220 !important;
+body.hologram-light .text-slate-300,
+body.hologram-light .text-white {
+  color: #1f1608 !important;
 }
 body.hologram-light .text-slate-400,
-body.hologram-light .text-slate-500 {
-  color: #6b5a3e !important;
+body.hologram-light .text-slate-500,
+body.hologram-light .text-slate-600 {
+  color: #4a3c22 !important;
 }
-body.hologram-light .text-cyan-300,
+
+/* Former cyan accents → deep bronze for WCAG-friendly contrast on white */
+body.hologram-light .text-cyan-50,
+body.hologram-light .text-cyan-100,
 body.hologram-light .text-cyan-200,
-body.hologram-light .text-cyan-100 {
-  color: #b8860b !important;
+body.hologram-light .text-cyan-300,
+body.hologram-light .text-cyan-400,
+body.hologram-light [class*="text-cyan-"] {
+  color: #5c4108 !important;
 }
+
+body.hologram-light .text-amber-100,
+body.hologram-light .text-amber-200,
+body.hologram-light .text-amber-300,
+body.hologram-light .text-amber-400,
+body.hologram-light [class*="text-amber-"] {
+  color: #6b4e08 !important;
+}
+
 body.hologram-light .text-purple-300,
 body.hologram-light .text-fuchsia-300,
 body.hologram-light .text-blue-200,
-body.hologram-light .text-green-300 {
-  color: #c5a059 !important;
+body.hologram-light .text-blue-300,
+body.hologram-light .text-green-200,
+body.hologram-light .text-green-300,
+body.hologram-light .text-orange-300,
+body.hologram-light .text-yellow-300,
+body.hologram-light [class*="text-purple-"],
+body.hologram-light [class*="text-fuchsia-"],
+body.hologram-light [class*="text-blue-"],
+body.hologram-light [class*="text-green-"] {
+  color: #5a4a12 !important;
 }
+
+body.hologram-light .neon-text {
+  background: linear-gradient(120deg, #3d2a05, #6b4e08, #8a6412, #5c4108);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gold-shimmer 6s ease infinite;
+}
+
 body.hologram-light .border-white\/10,
-body.hologram-light .border-white\/8 {
-  border-color: rgba(197, 160, 89, 0.28) !important;
+body.hologram-light .border-white\/8,
+body.hologram-light [class*="border-cyan-"],
+body.hologram-light [class*="border-amber-"] {
+  border-color: rgba(92, 65, 8, 0.35) !important;
 }
+
 body.hologram-light .bg-black\/20,
 body.hologram-light .bg-black\/30,
 body.hologram-light .bg-black\/40,
 body.hologram-light .bg-black\/60,
 body.hologram-light .bg-white\/5,
 body.hologram-light .bg-white\/\[0\.03\] {
-  background-color: rgba(255, 255, 255, 0.6) !important;
+  background-color: rgba(255, 250, 240, 0.85) !important;
+  color: #1a1408;
 }
+
 body.hologram-light .bg-cyan-400\/10,
 body.hologram-light .bg-cyan-400\/15,
-body.hologram-light .bg-cyan-400\/20 {
-  background-color: rgba(197, 160, 89, 0.16) !important;
+body.hologram-light .bg-cyan-400\/20,
+body.hologram-light [class*="bg-cyan-"],
+body.hologram-light [class*="bg-amber-400/"] {
+  background-color: rgba(107, 78, 8, 0.12) !important;
+}
+
+/* Contact terminal green on light */
+body.hologram-light .text-green-200,
+body.hologram-light .text-green-300\/90,
+body.hologram-light .font-mono.text-green-300\/90 {
+  color: #3d4a12 !important;
 }
 
 /* Dark-mode: map leftover cyan utilities toward amber */
@@ -491,12 +552,6 @@ body:not(.hologram-light) .via-blue-500 {
 }
 
 @media (max-width: 768px) {
-  body {
-    cursor: auto;
-  }
-  .custom-cursor {
-    display: none;
-  }
   .orb {
     filter: blur(40px);
     opacity: 0.28;

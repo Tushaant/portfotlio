@@ -5,7 +5,6 @@ import Lenis from "lenis";
 import { useUIStore } from "@/store/ui-store";
 import { Preloader } from "@/components/layout/Preloader";
 import { Header } from "@/components/layout/Header";
-import { CustomCursor } from "@/components/effects/CustomCursor";
 import { GlobalMotionBackground } from "@/components/effects/GlobalMotionBackground";
 import { CommandPalette } from "@/components/layout/CommandPalette";
 import { ChatAgent } from "@/components/agent/ChatAgent";
@@ -109,7 +108,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <>
       <GlobalMotionBackground />
       <Preloader />
-      <CustomCursor />
       <Header />
       <main className="relative z-10">{children}</main>
       <CommandPalette />
