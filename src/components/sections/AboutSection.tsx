@@ -98,29 +98,29 @@ export function AboutSection() {
  className="relative shrink-0"
  >
  <div
- className="absolute -inset-3 rounded-full opacity-70 blur-2xl"
+ className="absolute inset-0 rounded-full opacity-80 blur-2xl"
  style={{
  background:
- "radial-gradient(circle, rgba(var(--accent-rgb),0.35) 0%, transparent 70%)",
+ "radial-gradient(circle, rgba(var(--accent-rgb),0.4) 0%, transparent 68%)",
  }}
  />
  <motion.div
- className="relative h-36 w-36 overflow-hidden rounded-full border border-[color:rgba(var(--accent-rgb),0.5)] md:h-44 md:w-44"
+ className="relative flex h-40 w-40 items-end justify-center overflow-hidden rounded-full border border-[color:rgba(var(--accent-rgb),0.45)] bg-[#050505] md:h-48 md:w-48"
  animate={{
  boxShadow: [
  "0 0 0 0 rgba(var(--accent-rgb),0)",
- "0 0 28px 4px rgba(var(--accent-rgb),0.35)",
+ "0 0 32px 4px rgba(var(--accent-rgb),0.38)",
  "0 0 0 0 rgba(var(--accent-rgb),0)",
  ],
  }}
  transition={{ duration: 3.6, repeat: Infinity }}
  >
  <Image
- src="/profile/tushant-circle.png"
+ src="/profile/tushant.png"
  alt="Tushant Sharma — Director of Product Management"
- width={176}
- height={176}
- className="h-full w-full object-cover"
+ width={192}
+ height={192}
+ className="h-[108%] w-[108%] object-contain object-bottom"
  priority
  />
  </motion.div>
