@@ -358,6 +358,22 @@ function synthesizeFromDocs(docs: KnowledgeDoc[], question: string): string {
   return parts.join("\n");
 }
 
+function gentleFail(): { answer: string; sources: string[] } {
+  const r = cms.resume;
+  return {
+    answer: [
+      "I don't have an answer to that question from the data on this website,",
+      "but I'll send this request to Tushant so he can clear the doubt.",
+      "",
+      "In the meantime, until the next update, you can connect with him directly:",
+      `• Email: ${r.email}`,
+      `• LinkedIn: ${r.linkedin}`,
+      `• Phone: ${r.phone}`,
+    ].join("\n"),
+    sources: ["resume.contact", "agent-fallback"],
+  };
+}
+
 /** Portfolio site agent - answers from all CMS / website content. */
 export function answerFromPortfolio(question: string): {
   answer: string;
@@ -369,7 +385,7 @@ export function answerFromPortfolio(question: string): {
   if (!q) {
     return {
       answer:
-        "Ask me anything about Tushant's profile, experience, projects, case studies, skills, tech stack, achievements, testimonials, or contact details - I answer from the data on this website.",
+        "Ask me anything about Tushant's profile, experience, projects, case studies, skills, tech stack, achievements, testimonials, or contact details. I answer from the data on this website.",
       sources: [],
     };
   }
@@ -517,14 +533,7 @@ export function answerFromPortfolio(question: string): {
   const usable = ranked.filter((h) => h.score >= Math.max(4, top * 0.35));
 
   if (!usable.length || top < 4) {
-    return {
-      answer: [
-        "I couldn't match that to a specific page section, but I can answer from anything on this website.",
-        "Try asking about: experience (Oraczen, EMB, Filmboard, IBM), a project by name (Bharatlabs, Finixpe, Modulars 4 You), case studies (Lenskart, Gumroad, Amazon miniTV), skills, tech stack, achievements, testimonials, or contact.",
-        `Or say "list projects" / "list case studies" / "summarize Tushant".`,
-      ].join("\n\n"),
-      sources: [],
-    };
+    return gentleFail();
   }
 
   const docs = usable.map((h) => h.doc);
