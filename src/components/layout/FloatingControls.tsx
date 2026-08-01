@@ -1,7 +1,7 @@
 "use client";
 
 import { useUIStore } from "@/store/ui-store";
-import { Bot, Music, Volume2, Terminal, Sparkles } from "lucide-react";
+import { Bot, Music, Volume2, Terminal, Sun, Moon } from "lucide-react";
 
 export function FloatingControls() {
   const {
@@ -16,8 +16,12 @@ export function FloatingControls() {
     terminalMode,
   } = useUIStore();
 
+  const light = hologramMode === "light";
   const btn =
-    "glass flex h-10 w-10 items-center justify-center rounded-full text-cyan-200 transition hover:scale-110 hover:text-cyan-100 hover:shadow-[0_0_24px_rgba(56,248,255,0.35)]";
+    "glass flex h-10 w-10 items-center justify-center rounded-full transition hover:scale-110 " +
+    (light
+      ? "text-amber-800 hover:text-amber-950 hover:shadow-[0_0_24px_rgba(212,175,55,0.45)]"
+      : "text-cyan-200 hover:text-cyan-100 hover:shadow-[0_0_24px_rgba(56,248,255,0.35)]");
 
   return (
     <div className="fixed bottom-5 right-5 z-40 flex flex-col gap-2">
@@ -32,12 +36,16 @@ export function FloatingControls() {
       </button>
       <button
         type="button"
-        className={btn}
+        className={`${btn} ${light ? "ring-1 ring-amber-400/50" : ""}`}
         onClick={toggleHologram}
-        title={`Hologram: ${hologramMode}`}
-        aria-label="Toggle hologram mode"
+        title={
+          light
+            ? "Switch to cyber dark mode (⌘T)"
+            : "Switch to white / gold hologram mode (⌘T)"
+        }
+        aria-label="Toggle white gold theme"
       >
-        <Sparkles className="h-4 w-4" />
+        {light ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
       </button>
       <button
         type="button"

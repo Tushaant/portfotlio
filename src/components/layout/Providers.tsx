@@ -6,6 +6,7 @@ import { useUIStore } from "@/store/ui-store";
 import { Preloader } from "@/components/layout/Preloader";
 import { Header } from "@/components/layout/Header";
 import { CustomCursor } from "@/components/effects/CustomCursor";
+import { GlobalMotionBackground } from "@/components/effects/GlobalMotionBackground";
 import { CommandPalette } from "@/components/layout/CommandPalette";
 import { ChatAgent } from "@/components/agent/ChatAgent";
 import { FloatingControls } from "@/components/layout/FloatingControls";
@@ -35,6 +36,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     document.body.classList.toggle("hologram-light", hologramMode === "light");
     document.body.classList.toggle("terminal-mode", terminalMode);
+    document.documentElement.style.colorScheme =
+      hologramMode === "light" ? "light" : "dark";
   }, [hologramMode, terminalMode]);
 
   useEffect(() => {
@@ -47,6 +50,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
         e.preventDefault();
         useUIStore.getState().setAgentOpen(true);
       }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "t") {
+        e.preventDefault();
+        useUIStore.getState().toggleHologram();
+      }
       if (e.key === "Escape") {
         useUIStore.getState().setPaletteOpen(false);
         useUIStore.getState().setAgentOpen(false);
@@ -58,10 +65,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <>
+      <GlobalMotionBackground />
       <Preloader />
       <CustomCursor />
       <Header />
-      <main>{children}</main>
+      <main className="relative z-10">{children}</main>
       <CommandPalette />
       <ChatAgent />
       <FloatingControls />

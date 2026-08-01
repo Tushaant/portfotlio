@@ -43,7 +43,7 @@ export function AboutSection() {
   const r = cms.resume;
   return (
     <section id="about" className="relative scroll-mt-24 py-24 md:py-32">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#08111F]/60 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--surface-soft)] to-transparent" />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6">
         <p className="font-mono text-xs tracking-[0.3em] text-cyan-300/70">
           01 · PROFILE DASHBOARD

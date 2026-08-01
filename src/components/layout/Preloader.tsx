@@ -29,10 +29,11 @@ export function Preloader() {
     <AnimatePresence>
       {!done && (
         <motion.div
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#05060B]"
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[var(--bg)]"
           exit={{ opacity: 0, scale: 1.04 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
+          <div className="absolute inset-0 aurora-layer aurora-cyber opacity-40" />
           <div className="absolute inset-0 grid-bg opacity-60" />
           <motion.div
             initial={{ opacity: 0, y: 12 }}

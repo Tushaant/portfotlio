@@ -8,14 +8,19 @@
   --purple: #8a5cff;
   --magenta: #f23fff;
   --green: #00f5a0;
+  --gold: #d4af37;
+  --champagne: #f5e6c8;
   --glass: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(56, 248, 255, 0.18);
   --text: #e8f1ff;
   --muted: #8ba0bf;
   --glow: 0 0 40px rgba(56, 248, 255, 0.35);
+  --surface-soft: rgba(8, 17, 31, 0.55);
   --font-display: var(--font-orbitron);
   --font-body: var(--font-space);
   --font-mono: var(--font-jetbrains);
+  --transition-theme: background 0.6s ease, color 0.6s ease, border-color 0.6s ease,
+    box-shadow 0.6s ease;
 }
 
 @theme inline {
@@ -26,6 +31,7 @@
   --color-purple: var(--purple);
   --color-magenta: var(--magenta);
   --color-green: var(--green);
+  --color-gold: var(--gold);
   --color-glass: var(--glass);
   --color-text: var(--text);
   --color-muted: var(--muted);
@@ -49,17 +55,43 @@ body {
   font-family: var(--font-body), system-ui, sans-serif;
   overflow-x: hidden;
   cursor: none;
+  transition: var(--transition-theme);
 }
 
 body.terminal-mode {
   font-family: var(--font-mono), monospace;
 }
 
+/* White / shiny gold hologram mode */
 body.hologram-light {
-  --bg: #0b1424;
-  --navy: #122038;
-  --text: #f4fbff;
-  --muted: #a8bdd8;
+  --bg: #fff9f0;
+  --navy: #fff4e0;
+  --cyan: #c9a227;
+  --blue: #d4af37;
+  --purple: #b8860b;
+  --magenta: #daa520;
+  --green: #a67c00;
+  --glass: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(212, 175, 55, 0.35);
+  --text: #1a1408;
+  --muted: #6b5a3e;
+  --glow: 0 0 40px rgba(212, 175, 55, 0.35);
+  --surface-soft: rgba(255, 255, 255, 0.65);
+  color-scheme: light;
+}
+
+body.hologram-light ::selection {
+  background: rgba(212, 175, 55, 0.35);
+  color: #1a1408;
+}
+
+body.hologram-light .custom-cursor {
+  border-color: var(--gold);
+  mix-blend-mode: multiply;
+}
+
+body.hologram-light .custom-cursor.hovering {
+  background: rgba(212, 175, 55, 0.18);
 }
 
 ::selection {
@@ -81,6 +113,16 @@ a {
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+  transition: var(--transition-theme);
+}
+
+body.hologram-light .glass {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.78),
+    rgba(255, 248, 220, 0.55)
+  );
+  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.12);
 }
 
 .glow-cyan {
@@ -94,6 +136,14 @@ a {
   color: transparent;
 }
 
+body.hologram-light .neon-text {
+  background: linear-gradient(120deg, #8b6914, #d4af37, #fff4c2, #c9a227);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: gold-shimmer 6s ease infinite;
+}
+
 .display {
   font-family: var(--font-display), sans-serif;
   letter-spacing: 0.04em;
@@ -101,10 +151,16 @@ a {
 
 .grid-bg {
   background-image:
-    linear-gradient(rgba(56, 248, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(56, 248, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(56, 248, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 248, 255, 0.05) 1px, transparent 1px);
   background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse at center, black 15%, transparent 78%);
+}
+
+.grid-bg.grid-gold {
+  background-image:
+    linear-gradient(rgba(212, 175, 55, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 175, 55, 0.12) 1px, transparent 1px);
 }
 
 .scanlines::after {
@@ -119,6 +175,113 @@ a {
     rgba(0, 0, 0, 0.12) 3px
   );
   opacity: 0.25;
+}
+
+/* —— Motion layers —— */
+.aurora-layer {
+  position: absolute;
+  inset: -20%;
+  background-size: 200% 200%;
+  animation: aurora-drift 18s ease-in-out infinite;
+  opacity: 0.55;
+  mix-blend-mode: screen;
+}
+
+.aurora-cyber {
+  background: linear-gradient(
+    125deg,
+    rgba(56, 248, 255, 0.18),
+    transparent 35%,
+    rgba(138, 92, 255, 0.22),
+    transparent 65%,
+    rgba(79, 139, 255, 0.16)
+  );
+}
+
+.aurora-gold {
+  mix-blend-mode: soft-light;
+  opacity: 0.7;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0.85),
+    rgba(255, 215, 0, 0.35) 30%,
+    rgba(255, 248, 220, 0.7) 50%,
+    rgba(218, 165, 32, 0.4) 70%,
+    rgba(255, 255, 255, 0.9)
+  );
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  animation: orb-float 14s ease-in-out infinite;
+  opacity: 0.45;
+}
+
+.orb-a {
+  width: 42vw;
+  height: 42vw;
+  top: -10%;
+  left: -8%;
+}
+.orb-b {
+  width: 36vw;
+  height: 36vw;
+  bottom: 5%;
+  right: -10%;
+  animation-delay: -4s;
+}
+.orb-c {
+  width: 28vw;
+  height: 28vw;
+  top: 40%;
+  left: 35%;
+  animation-delay: -8s;
+}
+
+.orb-cyan {
+  background: radial-gradient(circle, rgba(56, 248, 255, 0.55), transparent 70%);
+}
+.orb-purple {
+  background: radial-gradient(circle, rgba(138, 92, 255, 0.5), transparent 70%);
+}
+.orb-blue {
+  background: radial-gradient(circle, rgba(79, 139, 255, 0.45), transparent 70%);
+}
+.orb-gold {
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.55), transparent 70%);
+}
+.orb-champagne {
+  background: radial-gradient(circle, rgba(255, 248, 220, 0.85), transparent 70%);
+}
+.orb-shine {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(212, 175, 55, 0.25) 50%, transparent 70%);
+}
+
+.data-veil {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0,
+    transparent 18px,
+    rgba(56, 248, 255, 0.035) 19px,
+    transparent 20px
+  );
+  background-size: 100% 200%;
+  animation: data-stream 12s linear infinite;
+  opacity: 0.6;
+}
+
+.data-veil-gold {
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0,
+    transparent 18px,
+    rgba(212, 175, 55, 0.06) 19px,
+    transparent 20px
+  );
 }
 
 @keyframes pulse-glow {
@@ -150,6 +313,38 @@ a {
   }
 }
 
+@keyframes aurora-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    background-position: 0% 40%;
+  }
+  50% {
+    transform: translate3d(-3%, 2%, 0) rotate(2deg);
+    background-position: 100% 60%;
+  }
+}
+
+@keyframes orb-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, -6%, 0) scale(1.08);
+  }
+}
+
+@keyframes gold-shimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
 .animate-float {
   animation: float-y 6s ease-in-out infinite;
 }
@@ -173,7 +368,8 @@ a {
   transition:
     width 0.2s,
     height 0.2s,
-    background 0.2s;
+    background 0.2s,
+    border-color 0.4s;
 }
 
 .custom-cursor.hovering {
@@ -182,12 +378,60 @@ a {
   background: rgba(56, 248, 255, 0.12);
 }
 
+/* Light-mode readable slate overrides on utility-heavy sections */
+body.hologram-light .text-slate-200,
+body.hologram-light .text-slate-300 {
+  color: #3d3220 !important;
+}
+body.hologram-light .text-slate-400,
+body.hologram-light .text-slate-500 {
+  color: #6b5a3e !important;
+}
+body.hologram-light .text-cyan-300,
+body.hologram-light .text-cyan-200,
+body.hologram-light .text-cyan-100 {
+  color: #9a7b1a !important;
+}
+body.hologram-light .text-purple-300,
+body.hologram-light .text-fuchsia-300,
+body.hologram-light .text-blue-200,
+body.hologram-light .text-green-300 {
+  color: #b8860b !important;
+}
+body.hologram-light .border-white\/10,
+body.hologram-light .border-white\/8 {
+  border-color: rgba(212, 175, 55, 0.25) !important;
+}
+body.hologram-light .bg-black\/20,
+body.hologram-light .bg-black\/30,
+body.hologram-light .bg-black\/40,
+body.hologram-light .bg-black\/60,
+body.hologram-light .bg-white\/5,
+body.hologram-light .bg-white\/\[0\.03\] {
+  background-color: rgba(255, 255, 255, 0.55) !important;
+}
+body.hologram-light .bg-cyan-400\/10,
+body.hologram-light .bg-cyan-400\/15,
+body.hologram-light .bg-cyan-400\/20 {
+  background-color: rgba(212, 175, 55, 0.15) !important;
+}
+body.hologram-light .from-\[\#05060B\],
+body.hologram-light .via-\[\#08111F\]\/60,
+body.hologram-light .to-\[\#05060B\] {
+  --tw-gradient-from: transparent !important;
+  --tw-gradient-to: transparent !important;
+}
+
 @media (max-width: 768px) {
   body {
     cursor: auto;
   }
   .custom-cursor {
     display: none;
+  }
+  .orb {
+    filter: blur(40px);
+    opacity: 0.3;
   }
 }
 

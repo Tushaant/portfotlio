@@ -1,13 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
-const HeroScene = dynamic(
-  () => import("@/components/three/HeroScene").then((m) => m.HeroScene),
-  { ssr: false },
-);
-
-/** 3D-rendered atmospheric template wrapped around every information surface. */
+/** 3D atmosphere is global — this template focuses content with glass panels. */
 export function InfoTemplate3D({
   eyebrow,
   title,
@@ -23,10 +16,6 @@ export function InfoTemplate3D({
 }) {
   return (
     <div className="relative min-h-screen">
-      <div className="pointer-events-none absolute inset-0 h-[70vh] opacity-50">
-        <HeroScene />
-      </div>
-      <div className="pointer-events-none absolute inset-0 grid-bg opacity-40" />
       <div className="relative z-10 mx-auto max-w-5xl px-4 pb-24 pt-28 md:px-6">
         {eyebrow && (
           <p className="font-mono text-xs tracking-[0.28em] text-cyan-300/80">
@@ -52,7 +41,7 @@ export function InfoBlock({
   children: React.ReactNode;
 }) {
   return (
-    <section className="glass rounded-3xl p-6 md:p-8">
+    <section className="glass rounded-3xl p-6 md:p-8 transition hover:shadow-[0_0_40px_rgba(56,248,255,0.12)]">
       <h2 className="font-mono text-[11px] tracking-[0.22em] text-cyan-300/80">
         {label}
       </h2>
