@@ -43,12 +43,12 @@
     ],
     "prioritization": "Sequenced by risk-adjusted value: highest-volume manual processes with the clearest evaluation criteria shipped first, so accuracy could be proven before expanding surface area.",
     "roadmap": [
-      "0→1 Chat Agents on the highest-volume support surface",
+      "0\u21921 Chat Agents on the highest-volume support surface",
       "Enterprise RAG pipelines with Model Context Protocol integration",
       "Knowledge graph layer for cross-document reasoning",
       "Voice Agents for realtime workflows",
       "Lending AI, Spend Intelligence and Risk Intelligence expansion",
-      "1→N scaling across business units"
+      "1\u2192N scaling across business units"
     ],
     "userStories": [
       "As an operations analyst, I need the agent to resolve routine requests end to end so my queue holds only exceptions.",
@@ -84,8 +84,8 @@
     "slug": "enterprise-saas-category-turnaround",
     "company": "EMB Global",
     "period": "Sep 2022 to Apr 2025",
-    "title": "26 Products, ₹7.78 Cr: Building an Enterprise SaaS Category",
-    "summary": "Category ownership across Enterprise SaaS, Consumer Tech and Fintech - 26 products, ₹7.78 Cr revenue, and an 82% enterprise retention improvement.",
+    "title": "26 Products, \u20b97.78 Cr: Building an Enterprise SaaS Category",
+    "summary": "Category ownership across Enterprise SaaS, Consumer Tech and Fintech - 26 products, \u20b97.78 Cr revenue, and an 82% enterprise retention improvement.",
     "metrics": [
       {
         "label": "Products",
@@ -93,7 +93,7 @@
       },
       {
         "label": "Revenue",
-        "value": "₹7.78 Cr"
+        "value": "\u20b97.78 Cr"
       },
       {
         "label": "Enterprise Retention",
@@ -134,7 +134,7 @@
     "launch": "Rolled out through sprint ceremonies across 5 cross-functional teams, with Agile mentoring to sustain the change after launch.",
     "kpis": [
       "26 products",
-      "₹7.78 Cr revenue",
+      "\u20b97.78 Cr revenue",
       "+82% enterprise retention",
       "-35% onboarding time"
     ],
@@ -260,5 +260,319 @@
       "Dashboard structure should mirror decisions, not data models"
     ],
     "retrospective": "This engagement set the data-driven decision-making pattern carried into every later product role: instrument the decision, then improve the model."
+  },
+  {
+    "slug": "lenskart-virtual-try-on",
+    "company": "Lenskart",
+    "period": "May 2024",
+    "title": "Lenskart: Virtual Try-On and AI Personalization",
+    "summary": "Research case study on how Lenskart improved online eyewear shopping with AR virtual try-on, AI recommendations and a streamlined returns experience to lift conversion, reduce returns and grow loyalty.",
+    "source": "notion",
+    "notionUrl": "https://woolly-saga-8e5.notion.site/1b03ea24d9c2801f9d22ddacb88087ea",
+    "metrics": [
+      {
+        "label": "Conversion",
+        "value": "8%\u219215%"
+      },
+      {
+        "label": "Return Rate",
+        "value": "20%\u219212%"
+      },
+      {
+        "label": "Sign-ups",
+        "value": "+25%"
+      },
+      {
+        "label": "Session Duration",
+        "value": "+40%"
+      },
+      {
+        "label": "Try-on Usage",
+        "value": "60%"
+      },
+      {
+        "label": "NPS",
+        "value": "50\u219270"
+      }
+    ],
+    "challenge": "Traditional eyewear shopping was limited by store selection and time-consuming store visits, while online buyers faced uncertainty without trying frames on. Lenskart saw ~30% churn among new users, ~20% online return rates, and an estimated $2M annual revenue loss from dissatisfied customers.",
+    "research": "Surveyed 10,000+ customers, ran focus groups, and conducted one-on-one interviews with frequent eyewear buyers. Research showed 65% struggled to pick frames online, 45% disliked the return process, and 55% wanted personalization they were not getting.",
+    "discovery": "Discovery framed the problem as an experience gap: buyers needed confidence before purchase. Competitive analysis of Warby Parker and Zenni Optical plus market growth in AR try-on pointed to virtual try-on, AI recommendations and simpler returns as the highest-leverage bets.",
+    "stakeholders": [
+      "Product managers",
+      "Designers",
+      "Engineers",
+      "Customer service representatives",
+      "End customers across age and style segments"
+    ],
+    "prioritization": "Used MoSCoW and an impact-vs-effort matrix. Must-haves: virtual try-on, AI personalized recommendations, and a streamlined return process. Supporting catalog and UX improvements followed.",
+    "roadmap": [
+      "Ship AR virtual try-on for frame confidence",
+      "Launch AI-driven personalized frame recommendations",
+      "Simplify the returns and exchange flow",
+      "Expand catalog and mobile experience",
+      "Iterate on retention loops using engagement and NPS signals"
+    ],
+    "userStories": [
+      "As an online shopper, I want to virtually try frames on my face so I can buy with confidence.",
+      "As a returning customer, I want personalized suggestions so I do not browse endlessly.",
+      "As a dissatisfied buyer, I want a simple return flow so a wrong fit does not end the relationship."
+    ],
+    "architecture": [
+      "AR virtual try-on experience",
+      "AI recommendation layer using preferences and facial cues",
+      "Catalog and mobile commerce surface",
+      "Returns workflow redesign"
+    ],
+    "launch": "Rolled out as a research-backed product narrative covering try-on, personalization and returns as one coherent shopping journey rather than isolated features.",
+    "kpis": [
+      "Conversion 8% to 15%",
+      "Return rate 20% to 12%",
+      "+25% sign-ups in 3 months",
+      "+40% session duration",
+      "60% of users use try-on",
+      "+20% repeat purchases",
+      "+30% monthly revenue in 6 months",
+      "NPS 50 to 70",
+      "70% of purchases AI-influenced"
+    ],
+    "failures": "Without try-on and personalization, online acquisition leaked into returns and churn. Treating returns as an ops afterthought amplified cost and dissatisfaction.",
+    "lessons": [
+      "Confidence features can outperform pure catalog expansion for conversion",
+      "Personalization only compounds after the try-before-you-buy friction is removed",
+      "Return experience is a growth lever, not just a cost center"
+    ],
+    "retrospective": "This Notion research case study shows how AR + AI personalization can turn a high-uncertainty category into a measurable retention and revenue engine."
+  },
+  {
+    "slug": "amazon-minitv-growth",
+    "company": "Amazon miniTV",
+    "period": "April 2024",
+    "title": "Amazon miniTV: Free, Snackable OTT Growth in India",
+    "summary": "Research case study on Amazon miniTV's growth strategy in India's OTT market - using a free ad-supported model, Amazon ecosystem distribution, snackable content and creator partnerships to reach 60M+ MAUs.",
+    "source": "notion",
+    "notionUrl": "https://woolly-saga-8e5.notion.site/1b03ea24d9c2807a9c04c63e0c6135e5",
+    "metrics": [
+      {
+        "label": "MAUs",
+        "value": "60M+"
+      },
+      {
+        "label": "Avg Watch / Session",
+        "value": "~45 min"
+      },
+      {
+        "label": "Model",
+        "value": "Free AVOD"
+      },
+      {
+        "label": "Top Formats",
+        "value": "Short-form"
+      },
+      {
+        "label": "Distribution",
+        "value": "Amazon app"
+      },
+      {
+        "label": "Market",
+        "value": "India OTT"
+      }
+    ],
+    "challenge": "India's OTT market was dominated by paid giants like Netflix, Hotstar and Prime Video. Price-sensitive and first-time streamers were blocked by subscriptions, leaving an underserved audience Amazon could capture with a free offering.",
+    "research": "Analyzed value propositions of miniTV vs Prime Video, price sensitivity in India, and the role of short-form consumption habits. Focused on how free access could act as a gateway into the broader Amazon ecosystem.",
+    "discovery": "Discovery centered on a new audience segment rather than competing head-on for paying subscribers: remove the paywall, distribute inside Amazon, and win attention with snackable creator-led content.",
+    "stakeholders": [
+      "Amazon miniTV product managers",
+      "Content partnerships / digital creators",
+      "Amazon app distribution teams",
+      "Price-sensitive and first-time streamers in India"
+    ],
+    "prioritization": "Prioritized free access, in-app Amazon distribution, short-form formats, data-led curation and creator partnerships over big-budget prestige originals.",
+    "roadmap": [
+      "Launch free AVOD experience inside Amazon",
+      "Seed snackable short-form series and comedy",
+      "Partner with digital creators for cost-efficient supply",
+      "Use viewing data to curate retention loops",
+      "Convert engaged free users toward Amazon ecosystem depth"
+    ],
+    "userStories": [
+      "As a price-sensitive viewer, I want free on-demand shows so entertainment is not gated by a subscription.",
+      "As a busy user, I want short episodes I can finish in a commute or break.",
+      "As Amazon, I want miniTV discovery inside shopping flows so acquisition stays cheap."
+    ],
+    "architecture": [
+      "Free ad-supported streaming surface",
+      "Amazon app ecosystem distribution",
+      "Data-driven content curation",
+      "Creator partnership supply model"
+    ],
+    "launch": "Positioned as a free growth wedge in a paid OTT market, with comedy, short thrillers and light drama as early engagement formats.",
+    "kpis": [
+      "60M+ monthly active users",
+      "~45 minutes average watch time per session",
+      "Strong engagement in comedy / short thrillers / light drama"
+    ],
+    "failures": "Competing only with premium subscriptions would have excluded the largest incremental audience. Ignoring snackable formats would have missed mobile-first attention windows.",
+    "lessons": [
+      "Free can be a deliberate acquisition and funnel strategy, not just a giveaway",
+      "Distribution inside an existing super-app beats cold-start marketing",
+      "Format-market fit matters as much as catalogue size"
+    ],
+    "retrospective": "This Notion research case study frames miniTV as a product-growth play: remove payment friction, ride Amazon distribution, and win with short-form relevance."
+  },
+  {
+    "slug": "gumroad-creator-commerce",
+    "company": "Gumroad",
+    "period": "May 2024",
+    "title": "Gumroad: Why Creators Choose Direct Digital Commerce",
+    "summary": "Research case study on Gumroad's product and growth strategy - simple creator tools, direct storefronts and flexible monetization that helped the platform scale to $200M+ GMV and profitability.",
+    "source": "notion",
+    "notionUrl": "https://woolly-saga-8e5.notion.site/1b03ea24d9c280faae35dcc50ef02864",
+    "metrics": [
+      {
+        "label": "GMV by 2016",
+        "value": "$200M+"
+      },
+      {
+        "label": "Fees",
+        "value": "3.5\u20138.5%"
+      },
+      {
+        "label": "Public Launch",
+        "value": "2012"
+      },
+      {
+        "label": "Profitability",
+        "value": "2020"
+      },
+      {
+        "label": "Focus",
+        "value": "Creators"
+      },
+      {
+        "label": "Model",
+        "value": "Direct sales"
+      }
+    ],
+    "challenge": "Creators struggled to sell digital goods directly without the complexity of Shopify-like setups or the marketplace dilution of Etsy. Acquisition, feature bloat, compliance and scale pressure made simple monetization hard.",
+    "research": "Studied Gumroad's founding thesis, fee model, creator tooling, and competitive alternatives. Mapped why creators preferred a lightweight direct-sales path over heavy e-commerce stacks.",
+    "discovery": "The winning wedge was simplicity and creator empowerment: custom storefronts, analytics, flexible pricing and low operational overhead, grown through content and social channels.",
+    "stakeholders": [
+      "Independent creators and digital sellers",
+      "Gumroad product and growth teams",
+      "Paying audiences buying digital goods"
+    ],
+    "prioritization": "Prioritized simplicity, flexible monetization and creator analytics over feature parity with full e-commerce platforms. Growth goals included GMV, fee revenue, premium MRR and MAU expansion.",
+    "roadmap": [
+      "Ship a frictionless creator storefront",
+      "Add analytics and flexible pricing",
+      "Grow via content and social distribution",
+      "Introduce subscriptions / premium layers",
+      "Optimize load time, mobile usability and satisfaction"
+    ],
+    "userStories": [
+      "As a creator, I want to sell digital products quickly without building a full store.",
+      "As a seller, I want clear analytics so I know what converts.",
+      "As Gumroad, I want fee and subscription revenue that scales with creator success."
+    ],
+    "architecture": [
+      "Creator storefront and checkout",
+      "Flexible pricing and fee model (3.5\u20138.5%)",
+      "Creator analytics",
+      "Subscription / premium add-ons"
+    ],
+    "launch": "Public in 2012, scaled through creator word-of-mouth and tooling depth, reaching $200M+ GMV by 2016 and profitability by 2020.",
+    "kpis": [
+      "$200M+ GMV by 2016",
+      "Target +25% GMV",
+      "Target +15% fee revenue",
+      "Target +$10k MRR premiums",
+      "Target +10% MAUs",
+      "Reduce storefront load time by ~2s"
+    ],
+    "failures": "Chasing full Shopify/Etsy feature parity would have destroyed the simplicity wedge. Ignoring mobile and load performance would have capped creator conversion.",
+    "lessons": [
+      "For creators, time-to-first-sale beats platform richness",
+      "Fee models should stay aligned with creator success",
+      "Growth goals only work when tied to UX and performance work"
+    ],
+    "retrospective": "This Notion research case study highlights Gumroad as a product of restraint: win creators with simplicity, then compound with analytics and monetization layers."
+  },
+  {
+    "slug": "astrotalk-india-traction",
+    "company": "Astrotalk",
+    "period": "May 2024",
+    "title": "Astrotalk: Why Astrology Commerce Is Winning in India",
+    "summary": "Research case study on Astrotalk's traction in India - cultural affinity, vetted experts, mobile convenience, freemium first-chat and focus on marriage, relationships and career for 25-35 year olds.",
+    "source": "notion",
+    "notionUrl": "https://woolly-saga-8e5.notion.site/1b03ea24d9c280b3b18cc767831ad9e4",
+    "metrics": [
+      {
+        "label": "Core Age",
+        "value": "25\u201334"
+      },
+      {
+        "label": "Gender Mix",
+        "value": "~51.5% M"
+      },
+      {
+        "label": "Countries",
+        "value": "60+"
+      },
+      {
+        "label": "Model",
+        "value": "Freemium"
+      },
+      {
+        "label": "Access",
+        "value": "24/7 app"
+      },
+      {
+        "label": "Focus",
+        "value": "Life decisions"
+      }
+    ],
+    "challenge": "Online astrology and tarot were not new, yet trust, skepticism and timing still blocked mass adoption. The question was why Astrotalk was gaining traction now, not whether the category existed.",
+    "research": "Analyzed founding narrative, cultural context in India, audience demographics (Similarweb), freemium conversion mechanics, and category resurgence among millennials and Gen Z amid uncertainty and social influence.",
+    "discovery": "Success came from packaging a traditional behavior for modern mobile life: credible astrologers, privacy, 24/7 access, freemium first chat, and high-intent topics like marriage, relationships and career.",
+    "stakeholders": [
+      "Founder Puneet Gupta",
+      "Vetted astrologers on platform",
+      "25\u201335 urban users seeking guidance",
+      "Privacy-conscious first-time digital consulters"
+    ],
+    "prioritization": "Prioritized trust (astrologer vetting + privacy), convenience (mobile 24/7), freemium onboarding, and category focus on high-stakes life decisions over generic horoscope content.",
+    "roadmap": [
+      "Build trusted astrologer marketplace with privacy controls",
+      "Ship mobile-first 24/7 consultation experience",
+      "Use freemium first chat to convert skeptics",
+      "Concentrate supply on marriage, relationships and career",
+      "Expand internationally while deepening India cultural fit"
+    ],
+    "userStories": [
+      "As a busy urban user, I want astrological guidance on my phone without booking an in-person visit.",
+      "As a skeptic, I want a free first chat so I can judge value before paying.",
+      "As a privacy-conscious user, I want my birth details protected."
+    ],
+    "architecture": [
+      "Mobile consultation marketplace",
+      "Astrologer vetting and quality controls",
+      "Privacy-preserving profile / birth-chart handling",
+      "Freemium first-chat conversion funnel"
+    ],
+    "launch": "Grew from a culturally resonant India thesis into a multi-country mobile marketplace, with renewed traction as interest in astrology rose among younger users.",
+    "kpis": [
+      "Primary audience 25\u201334",
+      "Balanced gender mix (~51.5% male / 48.5% female)",
+      "Presence across 60+ countries",
+      "Strong demand in marriage / relationships / career consultations"
+    ],
+    "failures": "Generic horoscope content and weak trust signals fail in a skepticism-heavy category. Without freemium, first-time conversion stays blocked.",
+    "lessons": [
+      "Cultural affinity is a distribution advantage when paired with modern UX",
+      "Trust and privacy are product features in sensitive categories",
+      "Freemium is especially powerful when belief and willingness-to-pay are uncertain"
+    ],
+    "retrospective": "This Notion research case study shows Astrotalk winning by modernizing a trusted cultural behavior rather than inventing a new one."
   }
 ]

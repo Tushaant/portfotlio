@@ -104,6 +104,18 @@ export default async function CaseStudyPage({ params }: Props) {
         </ul>
       </InfoBlock>
       <InfoBlock label="RETROSPECTIVE">{c.retrospective}</InfoBlock>
+      {"notionUrl" in c && c.notionUrl ? (
+        <InfoBlock label="NOTION SOURCE">
+          <a
+            href={String(c.notionUrl)}
+            target="_blank"
+            rel="noreferrer"
+            className="text-[#D4AF37] underline-offset-4 hover:underline"
+          >
+            Open original Notion case study →
+          </a>
+        </InfoBlock>
+      ) : null}
     </InfoTemplate3D>
   );
 }
