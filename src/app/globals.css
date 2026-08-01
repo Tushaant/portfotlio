@@ -611,6 +611,56 @@ body:not(.hologram-light) .to-orange-600 {
  --tw-gradient-stops: var(--tw-gradient-from), #00d95a, var(--tw-gradient-to) !important;
 }
 
+/* Uiverse-inspired testimonial cards (3-part content + rotating gradient rim) */
+.testimonial-uiverse {
+ isolation: isolate;
+ color: #fff;
+}
+.testimonial-uiverse__border {
+ position: absolute;
+ inset: -5px;
+ border-radius: 14px;
+ background: linear-gradient(
+  -45deg,
+  rgb(var(--accent-rgb)) 0%,
+  color-mix(in srgb, rgb(var(--accent-rgb)) 35%, #40c9ff) 100%
+ );
+ z-index: 0;
+ pointer-events: none;
+ transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.testimonial-uiverse__glow {
+ position: absolute;
+ inset: 0;
+ border-radius: 12px;
+ background: linear-gradient(
+  -45deg,
+  rgba(var(--accent-rgb), 0.95) 0%,
+  color-mix(in srgb, rgb(var(--accent-rgb)) 40%, #00dbde) 100%
+ );
+ transform: scale(0.95);
+ filter: blur(18px);
+ z-index: -1;
+ pointer-events: none;
+ opacity: 0.85;
+ transition: filter 0.6s ease, opacity 0.6s ease;
+}
+.testimonial-uiverse:hover .testimonial-uiverse__border,
+.testimonial-uiverse[aria-pressed="true"] .testimonial-uiverse__border {
+ transform: rotate(-90deg) scaleX(1.34) scaleY(0.77);
+}
+.testimonial-uiverse:hover .testimonial-uiverse__glow,
+.testimonial-uiverse[aria-pressed="true"] .testimonial-uiverse__glow {
+ filter: blur(28px);
+ opacity: 1;
+}
+body.hologram-light .testimonial-uiverse__border {
+ background: linear-gradient(-45deg, #8a6014 0%, #c9a227 55%, #6b4e08 100%);
+}
+body.hologram-light .testimonial-uiverse__glow {
+ background: linear-gradient(-45deg, #8a6014 0%, #d4af37 100%);
+}
+
 @media (max-width: 768px) {
  .orb {
  filter: blur(40px);
