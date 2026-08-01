@@ -75,7 +75,18 @@ export function buildKnowledgeBase(): string {
  }
  lines.push("ACHIEVEMENTS:");
  for (const a of achievements) {
-    lines.push(`${a.title} · ${a.org} (${a.year})`);
+  const metrics =
+   a.metrics && Object.keys(a.metrics).length
+    ? ` Metrics: ${Object.entries(a.metrics)
+       .map(([k, v]) => `${k}=${v}`)
+       .join(", ")}.`
+    : "";
+  const desc =
+   "description" in a && a.description ? ` ${a.description}` : "";
+  lines.push(`${a.title} · ${a.org} (${a.year}).${desc}${metrics}`);
  }
+ lines.push(
+  "APP SCALE HIGHLIGHTS: Veda Academy Learning App has 1L+ Google Play downloads (4.6★). Major Kalshi Classes (MKC) Learning App has 1M+ downloads listed as 10L+ on Google Play (4.3★).",
+ );
  return lines.join("\n");
 }

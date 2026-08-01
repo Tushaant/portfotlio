@@ -20,6 +20,38 @@
     "metrics": {}
   },
   {
+    "id": "mkc-downloads",
+    "type": "milestone",
+    "title": "Major Kalshi Classes: 1M+ App Downloads",
+    "org": "Major Kalshi Classes Pvt Ltd · Google Play",
+    "year": "Live",
+    "image": "/achievements/major-kalshi-classes.png",
+    "icon": "/achievements/mkc-icon.png",
+    "link": "https://play.google.com/store/apps/details?id=eduapplet.mkclearning",
+    "metrics": {
+      "Downloads": "1M+",
+      "Play metric": "10L+",
+      "Rating": "4.3★"
+    },
+    "description": "MKC Learning App crossed 1M+ (10L+) Google Play downloads for defence aspirants, with 3.62K+ reviews at 4.3★."
+  },
+  {
+    "id": "veda-downloads",
+    "type": "milestone",
+    "title": "Veda Academy: 1L+ App Downloads",
+    "org": "Veda Academy Learning App · Google Play",
+    "year": "Live",
+    "image": "/achievements/veda-academy.png",
+    "icon": "/achievements/veda-icon.webp",
+    "link": "https://play.google.com/store/apps/details?id=co.amy.fdxcr",
+    "metrics": {
+      "Downloads": "1L+",
+      "Rating": "4.6★",
+      "Reviews": "1.86K+"
+    },
+    "description": "Veda Academy Learning App reached 1L+ Google Play downloads with a 4.6★ rating across 1.86K+ reviews."
+  },
+  {
     "id": "portfolio",
     "type": "milestone",
     "title": "Director-Level Portfolio Ownership",

@@ -38,6 +38,7 @@ function smartSummary(): string {
  `${r.name} is an ${r.title} based in ${r.location}.`,
  `He owns a $6.4M Agentic AI portfolio at Oraczen for a $12.4B U.S. banking client, leading 40+ cross-functional team members.`,
  `Across his career he shipped 26 Fintech & SaaS products generating ₹7.78 Cr at EMB Global, cut B2B churn 22% at Filmboard, and improved credit-risk model accuracy 15% at IBM.`,
+ `Mobile learning products he shipped include Veda Academy Learning App (1L+ Google Play downloads, 4.6★) and Major Kalshi Classes Learning App (1M+ / 10L+ Google Play downloads, 4.3★).`,
  `Core stack: Agentic AI, RAG, MCP, LLM evaluation (Langfuse/Promptfoo), enterprise compliance (HIPAA, PCI-DSS, GDPR).`,
  `Contact: ${r.email} · ${r.phone} · LinkedIn available in the command center.`,
  ].join(" ");
@@ -68,7 +69,24 @@ export function answerFromPortfolio(question: string): {
  }
 
  if (/(summar|overview|elevator|tell me about|who is tushant|profile)/.test(q)) {
- return { answer: smartSummary(), sources: ["resume.summary", "resume.metrics"] };
+ return {
+ answer: smartSummary(),
+ sources: ["resume.summary", "resume.metrics", "achievements.downloads"],
+ };
+ }
+
+ if (
+ /(veda|mkc|kalshi|play store|app download|1l\+|1m\+|10l\+|downloads)/.test(q)
+ ) {
+ return {
+ answer: [
+ "App download achievements from Google Play:",
+ "• Veda Academy Learning App: 1L+ downloads, 4.6★ (1.86K+ reviews).",
+ "• Major Kalshi Classes (MKC) Learning App: 1M+ downloads (listed as 10L+ on Play), 4.3★ (3.62K+ reviews).",
+ "Both are highlighted in the Trophy Room with Play Store screenshots.",
+ ].join("\n"),
+ sources: ["achievements.veda-downloads", "achievements.mkc-downloads"],
+ };
  }
 
  if (/(contact|email|phone|linkedin|reach)/.test(q)) {
@@ -78,7 +96,7 @@ export function answerFromPortfolio(question: string): {
  };
  }
 
- if (/(resume|download)/.test(q)) {
+ if (/\b(resume|cv)\b/.test(q)) {
  return {
  answer:
  "Resume data is sourced only from the attached PDF (Tushant_Sharma_Resume.pdf). Download: /resume/Tushant_Sharma_Resume.pdf or open /resume.",

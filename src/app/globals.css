@@ -186,6 +186,39 @@ body.hologram-light .glass {
  box-shadow: 0 8px 32px rgba(197, 160, 89, 0.14);
 }
 
+/* Opaque skill / metric panels - keep text readable on brain backdrop */
+.skill-card {
+ background: rgba(8, 5, 2, 0.94);
+ border: 1px solid rgba(255, 179, 0, 0.42);
+ box-shadow:
+  0 18px 42px rgba(0, 0, 0, 0.55),
+  inset 0 1px 0 rgba(255, 179, 0, 0.14);
+ color: var(--text);
+}
+
+.metric-chip {
+ background: rgba(18, 12, 4, 0.96);
+ border: 1px solid rgba(255, 179, 0, 0.38);
+ color: var(--text);
+ box-shadow: inset 0 1px 0 rgba(255, 179, 0, 0.1);
+}
+
+body.hologram-light .skill-card {
+ background: rgba(255, 252, 245, 0.97);
+ border: 1px solid rgba(107, 78, 8, 0.42);
+ box-shadow:
+  0 14px 36px rgba(90, 60, 10, 0.14),
+  inset 0 1px 0 rgba(255, 255, 255, 0.9);
+ color: #1a1408;
+}
+
+body.hologram-light .metric-chip {
+ background: rgba(255, 248, 232, 0.98);
+ border: 1px solid rgba(107, 78, 8, 0.36);
+ color: #1a1408;
+ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
 .glow-cyan {
  box-shadow: var(--glow);
 }

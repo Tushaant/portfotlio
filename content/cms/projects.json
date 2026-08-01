@@ -242,16 +242,22 @@
     "tech": [
       "Web platform",
       "CMS",
-      "Lead capture"
+      "Lead capture",
+      "Google Play",
+      "Android"
     ],
     "highlights": [
       {
-        "label": "Status",
-        "value": "Live"
+        "label": "Google Play downloads",
+        "value": "1L+"
       },
       {
-        "label": "Surface",
-        "value": "Public web"
+        "label": "Play rating",
+        "value": "4.6★"
+      },
+      {
+        "label": "Status",
+        "value": "Live"
       }
     ],
     "overview": "A live education platform delivering course discovery, enrolment and learner engagement for Veda Academy.",
@@ -290,8 +296,17 @@
       "Content-managed pages over bespoke templates per programme",
       "Enquiry-led conversion over full self-serve checkout in v1"
     ],
-    "metrics": [],
-    "outcome": "Launched a live academy platform with a structured digital enrolment funnel.",
+    "metrics": [
+      {
+        "label": "App downloads",
+        "value": "1L+"
+      },
+      {
+        "label": "Play rating",
+        "value": "4.6★"
+      }
+    ],
+    "outcome": "Launched a live academy platform and Android learning app that reached 1L+ Google Play downloads with a 4.6★ rating.",
     "learnings": [
       "In education, credibility content converts harder than feature content",
       "If staff can't edit it, the catalogue goes stale within a quarter"
@@ -300,7 +315,7 @@
       "Self-serve payment and enrolment",
       "Learner progress dashboard"
     ],
-    "businessValue": "Replaced manual enquiry handling with a measurable digital funnel."
+    "businessValue": "Replaced manual enquiry handling with a measurable digital funnel and a scaled mobile learning channel (1L+ downloads)."
   },
   {
     "slug": "doolally",
@@ -438,20 +453,26 @@
     "category": "Ed-tech",
     "tagline": "Defence-exam coaching platform at scale",
     "image": "/projects/MajorKalshiClasses.png",
-    "liveUrl": null,
+    "liveUrl": "https://play.google.com/store/apps/details?id=eduapplet.mkclearning",
     "tech": [
       "Web platform",
       "CMS",
-      "Lead management"
+      "Lead management",
+      "Google Play",
+      "Android"
     ],
     "highlights": [
       {
-        "label": "Status",
-        "value": "Delivered"
+        "label": "Google Play downloads",
+        "value": "1M+"
       },
       {
-        "label": "Domain",
-        "value": "Defence exam coaching"
+        "label": "Play metric",
+        "value": "10L+"
+      },
+      {
+        "label": "Play rating",
+        "value": "4.3★"
       }
     ],
     "overview": "A digital platform for a defence-exam coaching brand, covering programme discovery, credibility and lead capture at scale.",
@@ -488,8 +509,21 @@
     "tradeoffs": [
       "Lead-qualified counselling over full self-serve enrolment in v1"
     ],
-    "metrics": [],
-    "outcome": "Delivered a defence-exam coaching platform with structured digital lead capture.",
+    "metrics": [
+      {
+        "label": "App downloads",
+        "value": "1M+"
+      },
+      {
+        "label": "Play metric",
+        "value": "10L+"
+      },
+      {
+        "label": "Play rating",
+        "value": "4.3★"
+      }
+    ],
+    "outcome": "Delivered a defence-exam coaching platform and MKC Learning App that scaled to 1M+ (10L+) Google Play downloads with a 4.3★ rating.",
     "learnings": [
       "In coaching, result proof outperforms feature lists"
     ],
@@ -497,7 +531,7 @@
       "Self-serve demo classes",
       "Learner progress tracking"
     ],
-    "businessValue": "Gave the academy a scalable digital acquisition channel."
+    "businessValue": "Gave the academy a scalable digital acquisition and learning channel reaching 1M+ mobile learners."
   },
   {
     "slug": "modulars-4-you",

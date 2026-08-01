@@ -53,8 +53,9 @@ export function AboutSection() {
  <span className="neon-text">product operator</span>
  </h2>
  <p className="mt-4 max-w-2xl text-slate-400">
-          Live telemetry from a decade of enterprise AI and SaaS product
-          leadership, sourced strictly from the resume PDF.
+ Live telemetry from a decade of enterprise AI and SaaS product
+ leadership, plus mobile learning products at scale: Veda Academy at 1L+
+ downloads and Major Kalshi Classes at 1M+ (10L+) on Google Play.
  </p>
 
  <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -92,6 +93,13 @@ export function AboutSection() {
  </p>
  <p className="mt-4 text-base leading-relaxed text-slate-300 md:text-lg">
  {r.summary}
+ </p>
+ <p className="mt-4 text-base leading-relaxed text-slate-300 md:text-lg">
+ Highlighted consumer scale: shipped the Veda Academy Learning App to{" "}
+ <span className="font-semibold text-[var(--gold)]">1L+ downloads</span>{" "}
+ and the Major Kalshi Classes Learning App to{" "}
+ <span className="font-semibold text-[var(--gold)]">1M+ (10L+) downloads</span>{" "}
+ on Google Play.
  </p>
  <div className="mt-6 flex flex-wrap gap-2">
  {r.tags.map((t) => (
