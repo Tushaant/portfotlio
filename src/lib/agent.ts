@@ -60,6 +60,41 @@ const STOP = new Set([
   "show",
   "list",
   "explain",
+  "is",
+  "it",
+  "in",
+  "on",
+  "to",
+  "of",
+  "an",
+  "as",
+  "be",
+  "or",
+  "if",
+  "so",
+  "do",
+  "my",
+  "we",
+  "us",
+  "at",
+  "by",
+  "not",
+  "but",
+  "am",
+  "im",
+  "its",
+  "too",
+  "very",
+  "really",
+  "there",
+  "here",
+  "will",
+  "get",
+  "got",
+  "let",
+  "out",
+  "up",
+  "down",
 ]);
 
 const SYNONYMS: Record<string, string[]> = {
@@ -96,15 +131,21 @@ function tokenize(q: string): string[] {
     .toLowerCase()
     .replace(/[^a-z0-9\s$%+.\-/]/g, " ")
     .split(/[\s/]+/)
-    .filter((t) => t.length > 1 && !STOP.has(t));
+    .filter((t) => t.length > 2 && !STOP.has(t));
 
   const expanded = new Set<string>(base);
   for (const t of base) {
     const syns = SYNONYMS[t];
     if (syns) syns.forEach((s) => expanded.add(s));
-    // light stemming: plurals / trailing s
-    if (t.endsWith("ies") && t.length > 4) expanded.add(`${t.slice(0, -3)}y`);
-    if (t.endsWith("s") && !t.endsWith("ss") && t.length > 3) {
+    // Only stem obvious plurals (avoid "mars" -> "mar")
+    if (t.endsWith("ies") && t.length > 5) expanded.add(`${t.slice(0, -3)}y`);
+    if (
+      t.endsWith("s") &&
+      !t.endsWith("ss") &&
+      !t.endsWith("us") &&
+      !t.endsWith("is") &&
+      t.length > 5
+    ) {
       expanded.add(t.slice(0, -1));
     }
   }
@@ -358,6 +399,22 @@ function synthesizeFromDocs(docs: KnowledgeDoc[], question: string): string {
   return parts.join("\n");
 }
 
+function gentleFail(): { answer: string; sources: string[] } {
+  const r = cms.resume;
+  return {
+    answer: [
+      "I don't have an answer to that question from the data on this website,",
+      "but I'll send this request to Tushant so he can clear the doubt.",
+      "",
+      "In the meantime, until the next update, you can connect with him directly:",
+      `• Email: ${r.email}`,
+      `• LinkedIn: ${r.linkedin}`,
+      `• Phone: ${r.phone}`,
+    ].join("\n"),
+    sources: ["resume.contact", "agent-fallback"],
+  };
+}
+
 /** Portfolio site agent - answers from all CMS / website content. */
 export function answerFromPortfolio(question: string): {
   answer: string;
@@ -369,7 +426,7 @@ export function answerFromPortfolio(question: string): {
   if (!q) {
     return {
       answer:
-        "Ask me anything about Tushant's profile, experience, projects, case studies, skills, tech stack, achievements, testimonials, or contact details - I answer from the data on this website.",
+        "Ask me anything about Tushant's profile, experience, projects, case studies, skills, tech stack, achievements, testimonials, or contact details. I answer from the data on this website.",
       sources: [],
     };
   }
@@ -420,7 +477,7 @@ export function answerFromPortfolio(question: string): {
   }
 
   if (
-    /(list|show|all).*(skills?)|(skills?|skill galaxy).*(list|show|have|has)|what (are|is|skills)|(his|tushant.?s?) skills?|skills? does/.test(
+    /(list|show|all).*(skills?)|(his|tushant.?s?) skills?|skills? (list|show|have|has|does)|what (are|is) (his |tushant.?s? )?skills?\b|skill galaxy/.test(
       q,
     )
   ) {
@@ -517,14 +574,7 @@ export function answerFromPortfolio(question: string): {
   const usable = ranked.filter((h) => h.score >= Math.max(4, top * 0.35));
 
   if (!usable.length || top < 4) {
-    return {
-      answer: [
-        "I couldn't match that to a specific page section, but I can answer from anything on this website.",
-        "Try asking about: experience (Oraczen, EMB, Filmboard, IBM), a project by name (Bharatlabs, Finixpe, Modulars 4 You), case studies (Lenskart, Gumroad, Amazon miniTV), skills, tech stack, achievements, testimonials, or contact.",
-        `Or say "list projects" / "list case studies" / "summarize Tushant".`,
-      ].join("\n\n"),
-      sources: [],
-    };
+    return gentleFail();
   }
 
   const docs = usable.map((h) => h.doc);
