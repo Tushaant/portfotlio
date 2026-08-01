@@ -5,6 +5,7 @@ import caseStudies from "../../content/cms/case-studies.json";
 import achievements from "../../content/cms/achievements.json";
 import skills from "../../content/cms/skills.json";
 import techStack from "../../content/cms/tech-stack.json";
+import testimonials from "../../content/cms/testimonials.json";
 import site from "../../content/cms/site.json";
 
 export type Resume = typeof resume;
@@ -13,6 +14,7 @@ export type Project = (typeof projects)[number];
 export type CaseStudy = (typeof caseStudies)[number];
 export type Achievement = (typeof achievements)[number];
 export type Skill = (typeof skills)[number];
+export type Testimonial = (typeof testimonials)[number];
 
 export const cms = {
  resume,
@@ -22,6 +24,7 @@ export const cms = {
  achievements,
  skills,
  techStack,
+ testimonials,
  site,
 };
 
@@ -84,6 +87,12 @@ export function buildKnowledgeBase(): string {
   const desc =
    "description" in a && a.description ? ` ${a.description}` : "";
   lines.push(`${a.title} · ${a.org} (${a.year}).${desc}${metrics}`);
+ }
+ lines.push("TESTIMONIALS:");
+ for (const t of testimonials) {
+  lines.push(
+   `${t.name} (${t.role}${t.company ? `, ${t.company}` : ""}): "${t.quote}"`,
+  );
  }
  lines.push(
   "APP SCALE HIGHLIGHTS: Veda Academy Learning App has 1L+ Google Play downloads (4.6★). Major Kalshi Classes (MKC) Learning App has 1M+ downloads listed as 10L+ on Google Play (4.3★).",

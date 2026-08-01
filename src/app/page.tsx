@@ -2,6 +2,7 @@ import { HeroSection } from "@/components/sections/HeroSection";
 import { AboutSection } from "@/components/sections/AboutSection";
 import { JourneySection } from "@/components/sections/JourneySection";
 import { ProjectsSection } from "@/components/sections/ProjectsSection";
+import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { CaseStudiesSection } from "@/components/sections/CaseStudiesSection";
 import { AchievementsSection } from "@/components/sections/AchievementsSection";
 import { SkillsSection } from "@/components/sections/SkillsSection";
@@ -16,6 +17,7 @@ export default function HomePage() {
       <AboutSection />
       <JourneySection />
       <ProjectsSection />
+      <TestimonialsSection />
       <CaseStudiesSection />
       <AchievementsSection />
       <SkillsSection />
