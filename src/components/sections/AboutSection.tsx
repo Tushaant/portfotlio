@@ -67,17 +67,17 @@ export function AboutSection() {
  viewport={{ once: true }}
  transition={{ delay: i * 0.05 }}
  whileHover={{ y: -6, scale: 1.02 }}
- className="glass rounded-2xl p-5"
+ className="skill-card rounded-2xl p-5"
  >
  <Counter
  value={m.value}
  prefix={"prefix" in m ? String(m.prefix || "") : ""}
  suffix={m.suffix}
  />
- <p className="mt-2 text-sm font-medium text-slate-200">
+ <p className="mt-2 text-sm font-medium text-[var(--text)]">
  {m.label}
  </p>
- <p className="text-xs text-slate-500">{m.hint}</p>
+ <p className="text-xs text-[var(--muted)]">{m.hint}</p>
  </motion.div>
  ))}
  </div>
@@ -86,15 +86,15 @@ export function AboutSection() {
  initial={{ opacity: 0, y: 20 }}
  whileInView={{ opacity: 1, y: 0 }}
  viewport={{ once: true }}
- className="glass mt-8 rounded-3xl p-6 md:p-8"
+ className="skill-card mt-8 rounded-3xl p-6 md:p-8"
  >
- <p className="font-mono text-[11px] tracking-[0.2em] text-purple-300">
+ <p className="font-mono text-[11px] tracking-[0.2em] text-[var(--gold)]">
  PROFESSIONAL SUMMARY
  </p>
- <p className="mt-4 text-base leading-relaxed text-slate-300 md:text-lg">
+ <p className="mt-4 text-base leading-relaxed text-[var(--text)] md:text-lg">
  {r.summary}
  </p>
- <p className="mt-4 text-base leading-relaxed text-slate-300 md:text-lg">
+ <p className="mt-4 text-base leading-relaxed text-[var(--text)] md:text-lg">
  Highlighted consumer scale: shipped the Veda Academy Learning App to{" "}
  <span className="font-semibold text-[var(--gold)]">1L+ downloads</span>{" "}
  and the Major Kalshi Classes Learning App to{" "}
@@ -105,29 +105,29 @@ export function AboutSection() {
  {r.tags.map((t) => (
  <span
  key={t}
- className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-200"
+ className="rounded-full border border-[color-mix(in_srgb,var(--gold)_45%,transparent)] bg-[color-mix(in_srgb,var(--gold)_14%,transparent)] px-3 py-1 text-xs font-medium text-[var(--text)]"
  >
  {t}
  </span>
  ))}
- <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-slate-400">
+ <span className="metric-chip rounded-full px-3 py-1 text-xs text-[var(--muted)]">
  10+ yrs
  </span>
- <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-slate-400">
+ <span className="metric-chip rounded-full px-3 py-1 text-xs text-[var(--muted)]">
  0→1 and 1→N
  </span>
  </div>
  </motion.div>
 
  <div className="mt-8">
- <p className="mb-3 font-mono text-[11px] tracking-[0.2em] text-slate-500">
+ <p className="mb-3 font-mono text-[11px] tracking-[0.2em] text-[var(--muted)]">
  CORE COMPETENCY MATRIX
  </p>
  <div className="flex flex-wrap gap-2">
  {r.coreCompetencies.map((c) => (
  <span
  key={c}
- className="rounded-lg border border-white/8 bg-white/[0.03] px-2.5 py-1 text-[11px] text-slate-400 transition hover:border-cyan-400/40 hover:text-cyan-200"
+ className="metric-chip rounded-lg px-2.5 py-1 text-[11px] font-medium text-[var(--text)] transition hover:border-[var(--gold)]"
  >
  {c}
  </span>

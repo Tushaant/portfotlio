@@ -41,11 +41,11 @@ export function InfoBlock({
  children: React.ReactNode;
 }) {
  return (
- <section className="glass rounded-3xl p-6 md:p-8 transition hover:shadow-[0_0_40px_rgba(56,248,255,0.12)]">
- <h2 className="font-mono text-[11px] tracking-[0.22em] text-cyan-300/80">
+ <section className="skill-card rounded-3xl p-6 md:p-8 transition hover:shadow-[0_0_40px_rgba(255,179,0,0.18)]">
+ <h2 className="font-mono text-[11px] tracking-[0.22em] text-[var(--gold)]">
  {label}
  </h2>
- <div className="mt-4 text-sm leading-relaxed text-slate-300 md:text-base">
+ <div className="mt-4 text-sm leading-relaxed text-[var(--text)] md:text-base">
  {children}
  </div>
  </section>

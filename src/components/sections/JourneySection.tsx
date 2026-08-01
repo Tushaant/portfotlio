@@ -43,23 +43,23 @@ export function JourneySection() {
  className={cn(
  "relative w-full rounded-2xl pl-10 pr-3 py-3 text-left transition",
  active === e.id
- ? "glass shadow-[0_0_30px_rgba(56,248,255,0.15)]"
- : "hover:bg-white/5",
+ ? "skill-card shadow-[0_0_30px_rgba(255,179,0,0.2)]"
+ : "metric-chip hover:border-[var(--gold)]",
  )}
  >
  <span
  className={cn(
  "absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 rounded-full border-2",
  active === e.id
- ? "border-cyan-300 bg-cyan-300 shadow-[0_0_16px_#38F8FF]"
- : "border-slate-600 bg-[#05060B]",
+ ? "border-amber-300 bg-amber-300 shadow-[0_0_16px_#FFB300]"
+ : "border-[var(--muted)] bg-[#05060B]",
  )}
  />
- <p className="font-mono text-[10px] text-slate-500">
+ <p className="font-mono text-[10px] text-[var(--muted)]">
  {e.period}
  {e.active ? " · ACTIVE" : ""}
  </p>
- <p className="text-sm font-medium text-slate-100">
+ <p className="text-sm font-medium text-[var(--text)]">
  {e.company}
  </p>
  </button>
@@ -74,33 +74,34 @@ export function JourneySection() {
  initial={{ opacity: 0, x: 24 }}
  animate={{ opacity: 1, x: 0 }}
  exit={{ opacity: 0, x: -16 }}
- className="glass rounded-3xl p-6 md:p-8"
+ className="skill-card rounded-3xl p-6 md:p-8"
  >
- <p className="font-mono text-xs text-cyan-300/80">{job.period}</p>
- <h3 className="display mt-2 text-2xl md:text-3xl">{job.company}</h3>
- <p className="mt-1 text-slate-300">{job.role}</p>
- <p className="text-sm text-slate-500">{job.location}</p>
+ <p className="font-mono text-xs text-[var(--gold)]">{job.period}</p>
+ <h3 className="display mt-2 text-2xl text-[var(--text)] md:text-3xl">
+ {job.company}
+ </h3>
+ <p className="mt-1 text-[var(--text)]">{job.role}</p>
+ <p className="text-sm text-[var(--muted)]">{job.location}</p>
 
  <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
  {job.metrics.map((m) => (
- <div
- key={m.label}
- className="rounded-xl border border-white/10 bg-black/20 p-3"
- >
- <p className="display text-lg text-cyan-300">{m.value}</p>
- <p className="text-[11px] text-slate-500">{m.label}</p>
+ <div key={m.label} className="metric-chip rounded-xl p-3">
+ <p className="display text-lg text-[var(--gold)]">{m.value}</p>
+ <p className="text-[11px] font-medium text-[var(--muted)]">
+ {m.label}
+ </p>
  </div>
  ))}
  </div>
 
- <p className="mt-8 font-mono text-[11px] tracking-[0.2em] text-purple-300">
+ <p className="mt-8 font-mono text-[11px] tracking-[0.2em] text-[var(--gold)]">
  RESPONSIBILITIES & IMPACT
  </p>
  <ul className="mt-3 space-y-2">
  {job.responsibilities.map((r) => (
  <li
  key={r.slice(0, 40)}
- className="border-l border-cyan-400/30 pl-3 text-sm leading-relaxed text-slate-300"
+ className="border-l border-[color-mix(in_srgb,var(--gold)_40%,transparent)] pl-3 text-sm leading-relaxed text-[var(--text)]"
  >
  {r}
  </li>
@@ -111,18 +112,20 @@ export function JourneySection() {
  {job.technologies.map((t) => (
  <span
  key={t}
- className="rounded-full border border-blue-400/30 bg-blue-400/10 px-3 py-1 text-xs text-blue-200"
+ className="rounded-full border border-[color-mix(in_srgb,var(--gold)_40%,transparent)] bg-[color-mix(in_srgb,var(--gold)_12%,transparent)] px-3 py-1 text-xs font-medium text-[var(--text)]"
  >
  {t}
  </span>
  ))}
  </div>
 
- <div className="mt-6 rounded-2xl border border-green-400/20 bg-green-400/5 p-4">
- <p className="font-mono text-[10px] tracking-widest text-green-300">
+ <div className="metric-chip mt-6 rounded-2xl p-4">
+ <p className="font-mono text-[10px] tracking-widest text-[var(--gold)]">
  LESSON LEARNED
  </p>
- <p className="mt-2 text-sm text-slate-200">{job.lesson}</p>
+ <p className="mt-2 text-sm font-medium text-[var(--text)]">
+ {job.lesson}
+ </p>
  </div>
  </motion.div>
  </AnimatePresence>

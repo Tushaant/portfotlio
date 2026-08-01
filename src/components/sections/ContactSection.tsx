@@ -110,8 +110,8 @@ export function ContactSection() {
  </form>
  </div>
 
- <div className="glass rounded-3xl p-6 md:p-8">
- <p className="font-mono text-[11px] tracking-[0.2em] text-cyan-300">
+ <div className="skill-card rounded-3xl p-6 md:p-8">
+ <p className="font-mono text-[11px] tracking-[0.2em] text-[var(--gold)]">
  DIRECT CHANNELS
  </p>
  <ul className="mt-6 space-y-4">

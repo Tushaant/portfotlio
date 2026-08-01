@@ -171,14 +171,14 @@ export function HeroSection() {
  href={c.href}
  target="_blank"
  rel="noreferrer"
- className="glass inline-flex rounded-full px-5 py-2.5 text-sm tracking-wide text-cyan-100 transition hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(56,248,255,0.35)]"
+ className="skill-card inline-flex rounded-full px-5 py-2.5 text-sm font-medium tracking-wide text-[var(--text)] transition hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(255,179,0,0.35)]"
  >
  {c.label}
  </a>
  ) : (
  <Link
  href={c.href}
- className="glass inline-flex rounded-full px-5 py-2.5 text-sm tracking-wide text-cyan-100 transition hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(56,248,255,0.35)]"
+ className="skill-card inline-flex rounded-full px-5 py-2.5 text-sm font-medium tracking-wide text-[var(--text)] transition hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(255,179,0,0.35)]"
  >
  {c.label}
  </Link>

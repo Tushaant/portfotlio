@@ -36,34 +36,36 @@ export function CaseStudiesSection() {
  whileInView={{ opacity: 1, x: 0 }}
  viewport={{ once: true }}
  whileHover={{ scale: 1.01 }}
- className="glass group rounded-3xl p-6 md:p-8"
+ className="skill-card group rounded-3xl p-6 md:p-8"
  >
  <div className="flex flex-wrap items-start justify-between gap-4">
  <div>
- <p className="font-mono text-xs text-slate-500">
+ <p className="font-mono text-xs text-[var(--muted)]">
  {c.company} · {c.period}
  </p>
- <h3 className="display mt-2 max-w-2xl text-2xl md:text-3xl">
+ <h3 className="display mt-2 max-w-2xl text-2xl text-[var(--text)] md:text-3xl">
  {c.title}
  </h3>
- <p className="mt-3 max-w-3xl text-sm text-slate-400 md:text-base">
+ <p className="mt-3 max-w-3xl text-sm text-[var(--muted)] md:text-base">
  {c.summary}
  </p>
  </div>
  <Link
  href={`/case-studies/${c.slug}`}
- className="shrink-0 rounded-full border border-cyan-400/40 px-4 py-2 text-sm text-cyan-200 transition hover:bg-cyan-400/10"
+ className="metric-chip shrink-0 rounded-full px-4 py-2 text-sm font-semibold text-[var(--text)] transition hover:border-[var(--gold)]"
  >
  Read the full story
  </Link>
  </div>
  <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
  {c.metrics.map((m) => (
- <div key={m.label}>
- <p className="display text-lg text-cyan-300 md:text-xl">
+ <div key={m.label} className="metric-chip rounded-xl p-3">
+ <p className="display text-lg text-[var(--gold)] md:text-xl">
  {m.value}
  </p>
- <p className="text-[11px] text-slate-500">{m.label}</p>
+ <p className="text-[11px] font-medium text-[var(--muted)]">
+ {m.label}
+ </p>
  </div>
  ))}
  </div>
