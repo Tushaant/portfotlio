@@ -39,9 +39,9 @@ export function ProjectsSection() {
  viewport={{ once: true, margin: "-40px" }}
  transition={{ delay: (i % 3) * 0.06 }}
  whileHover={{ y: -8 }}
- className="skill-card group relative overflow-hidden rounded-3xl"
+ className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]"
  >
- <div className="relative aspect-[16/10] overflow-hidden bg-[#0a0602]">
+ <div className="relative aspect-[16/10] overflow-hidden bg-[#08111F]">
  {p.image ? (
  <Image
  src={p.image}
@@ -55,30 +55,30 @@ export function ProjectsSection() {
  {p.title.slice(0, 2)}
  </div>
  )}
- <div className="absolute inset-0 bg-gradient-to-t from-[#080502] via-transparent to-transparent" />
+ <div className="absolute inset-0 bg-gradient-to-t from-[#05060B] via-transparent to-transparent" />
  <span
- className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-medium tracking-wider ${
+ className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[10px] tracking-wider ${
  p.status === "DELIVERED"
- ? "border border-[color-mix(in_srgb,var(--gold)_40%,transparent)] bg-[color-mix(in_srgb,var(--gold)_16%,transparent)] text-[var(--text)]"
- : "metric-chip text-[var(--text)]"
+ ? "bg-green-400/20 text-green-300"
+ : "bg-fuchsia-400/20 text-fuchsia-300"
  }`}
  >
  {p.status}
  </span>
  </div>
  <div className="p-5">
- <p className="text-[11px] uppercase tracking-wider text-[var(--muted)]">
+ <p className="text-[11px] uppercase tracking-wider text-slate-500">
  {p.category}
  </p>
- <h3 className="display mt-1 text-xl text-[var(--text)]">{p.title}</h3>
- <p className="mt-2 line-clamp-2 text-sm text-[var(--muted)]">
+ <h3 className="display mt-1 text-xl">{p.title}</h3>
+ <p className="mt-2 line-clamp-2 text-sm text-slate-400">
  {p.tagline}
  </p>
  <div className="mt-3 flex flex-wrap gap-1.5">
  {p.tech.slice(0, 3).map((t) => (
  <span
  key={t}
- className="metric-chip rounded px-2 py-0.5 text-[10px] font-medium text-[var(--text)]"
+ className="rounded border border-white/10 px-2 py-0.5 text-[10px] text-slate-400"
  >
  {t}
  </span>
@@ -86,7 +86,7 @@ export function ProjectsSection() {
  </div>
  <Link
  href={`/projects/${p.slug}`}
- className="mt-4 inline-flex text-sm font-semibold text-[var(--gold)] transition group-hover:translate-x-1"
+ className="mt-4 inline-flex text-sm text-cyan-300 transition group-hover:translate-x-1"
  >
  Open case file →
  </Link>

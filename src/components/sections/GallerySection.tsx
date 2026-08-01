@@ -33,7 +33,7 @@ export function GallerySection() {
             >
               <Link
                 href={`/projects/${p.slug}`}
-                className="group relative block overflow-hidden rounded-2xl skill-card"
+                className="group relative block overflow-hidden rounded-2xl border border-white/10"
               >
                 <Image
                   src={p.image!}
@@ -42,9 +42,9 @@ export function GallerySection() {
                   height={800}
                   className="h-auto w-full transition duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 to-transparent p-4">
-                  <p className="display text-sm text-[var(--text)]">{p.title}</p>
-                  <p className="text-[11px] text-[var(--muted)]">{p.category}</p>
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-4">
+                  <p className="display text-sm">{p.title}</p>
+                  <p className="text-[11px] text-slate-400">{p.category}</p>
                 </div>
               </Link>
             </motion.div>

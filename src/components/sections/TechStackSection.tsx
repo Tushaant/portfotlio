@@ -34,11 +34,11 @@ export function TechStackSection() {
  transition={{ delay: (gi * 0.02 + i) * 0.02 }}
  whileHover={{
  y: -4,
- boxShadow: "0 0 28px rgba(255,179,0,0.35)",
+ boxShadow: "0 0 28px rgba(56,248,255,0.35)",
  }}
- className="skill-card inline-flex cursor-default items-center rounded-xl px-3.5 py-2 text-sm font-medium text-[var(--text)]"
+ className="glass inline-flex cursor-default items-center rounded-xl px-3.5 py-2 text-sm text-slate-200"
  >
- <span className="mr-2 h-1.5 w-1.5 rounded-full bg-[var(--gold)] shadow-[0_0_8px_#FFB300]" />
+ <span className="mr-2 h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#38F8FF]" />
  {item}
  </motion.span>
  ))}
