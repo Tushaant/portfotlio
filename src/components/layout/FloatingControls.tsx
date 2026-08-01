@@ -20,8 +20,8 @@ export function FloatingControls() {
   const btn =
     "glass flex h-10 w-10 items-center justify-center rounded-full transition hover:scale-110 " +
     (light
-      ? "text-amber-800 hover:text-amber-950 hover:shadow-[0_0_24px_rgba(212,175,55,0.45)]"
-      : "text-cyan-200 hover:text-cyan-100 hover:shadow-[0_0_24px_rgba(56,248,255,0.35)]");
+      ? "text-amber-800 hover:text-amber-950 hover:shadow-[0_0_24px_rgba(197,160,89,0.45)]"
+      : "text-amber-200 hover:text-amber-100 hover:shadow-[0_0_24px_rgba(255,179,0,0.45)]");
 
   return (
     <div className="fixed bottom-5 right-5 z-40 flex flex-col gap-2">
