@@ -1,5 +1,5 @@
 TUSHANT SHARMA 
-Hyderabad, India | +91 8586023101 | Tushant.s4@gmail.com  
+Hyderabad, India | +91 8586023101 | Tushant.s4@gmail.com 
 https://www.linkedin.com/in/tushant-sharma-95303b424/ 
  
 PROFESSIONAL SUMMARY 
@@ -23,7 +23,7 @@ AI Product Manager and Acting Director of Product Management | May 2025 - Presen
 • Director-Level Accountability: Owned strategic roadmap, P&L accountability for a 6.4-million-dollar portfolio, and executive client 
 relationships for a 12.4-billion-dollar U.S. banking enterprise. 
 • AI Platform Strategy: Defined and executed multi-product AI strategy spanning Chat Agents, Voice Agents, Lending AI, Requirement 
-gathering, Spend Intelligence, and Risk Intelligence.  
+gathering, Spend Intelligence, and Risk Intelligence. 
 • AI-powered Enterprise: Built AI products from 0 to 1 and scaled them from 1 to N to transform customer and end user problems 
 and feedback into market-ready SaaS solutions. 
 • RAG and MCP Transformation: Architected enterprise-grade RAG pipelines integrated with Model Context Protocol to replace low-
@@ -39,7 +39,7 @@ HIPAA, PCI-DSS, and GDPR compliance across all AI product deployments.
 • C-Suite Engagement: Directly engaged with client SVP of Product Architecture and COO alongside internal alignment with CTO and 
 COO to lead cross-organization coordination across 8 functional teams. 
 EMB Global | Gurugram, India 
-Category Head – Enterprise SaaS, Consumer Tech and Fintech | Sep 2022 – Apr 2025 
+Category Head - Enterprise SaaS, Consumer Tech and Fintech | Sep 2022 to Apr 2025 
 • Portfolio Leadership: Spearheaded 26 Fintech and SaaS products generating 7.78 Crores in revenue; owned enterprise feature 
 roadmap balancing strategic priorities with customer value. 
 • Enterprise Retention: Implemented GTM strategies for enterprise SaaS adoption, achieving an 82% enterprise retention 
@@ -49,13 +49,13 @@ API-driven integrations and UX improvements.
 • Agile Delivery: Led sprint ceremonies amongst 5 cross-functional teams and executive members; mentored teams in Agile best 
 practices to foster a continuous improvement culture. 
 Filmboard Movies Technologies Inc. | Mumbai, India 
-Senior Product Manager – Fintech and Martech | Jun 2020 – Aug 2022 
+Senior Product Manager - Fintech and Martech | Jun 2020 to Aug 2022 
 • B2B Platform Launch: Developed an enterprise B2B eCommerce platform, improving vendor onboarding by 29% and reducing 
 churn by 22% through UX-led design improvements. 
 • Lead Conversion: Improved CRM integration for enterprise clients, boosting lead conversion by 18%; implemented GTM strategies 
 aligning product marketing with sales execution. 
 IBM | Vizag and Gurugram, India 
-Data Analyst and Product Associate – Credit and Risk Analytics | May 2019 – Jun 2020 
+Data Analyst and Product Associate - Credit and Risk Analytics | May 2019 to Jun 2020 
 • Predictive Modeling: Predictive credit risk models for enterprise financial services, improving model accuracy by 15% and 
 supporting data-driven business decisions. 
 • Dashboard Engineering: Real-time analytics dashboards tracking over 25 business and operational KPIs to enable executive 
@@ -63,7 +63,7 @@ visibility into portfolio enhancement and risk metrics.
 • Stakeholder Collaboration: Worked with cross-functional stakeholders to translate business requirements into analytical solutions 
 supporting product and risk strategy by 11%. 
 Extra marks Education | Noida, India 
-Hybrid: Product and Sales Manager | Aug 2018 – Dec 2018 
+Hybrid: Product and Sales Manager | Aug 2018 to Dec 2018 
 • Customer Engagement: Initiated customer engagement and product adoption initiatives, improving customer retention by 25% 
 through data-informed engagement strategies. 
 • Workflow Optimization: Partnered with product, marketing, and sales teams to optimize CRM workflows, customer segmentation, 
@@ -71,7 +71,7 @@ and lead management across B2B and B2C channels.
 • Feedback Collection: Gathered approximately 28% customer feedback on features to identify product improvement opportunities 
 and enhance the overall user experience. 
 Byju's Think and Learn | Bangalore and Noida, India 
-Front End Developer | Jun 2016 – Aug 2018 
+Front End Developer | Jun 2016 to Aug 2018 
 • Web Application Development: Developed customer-facing web applications while supporting product enhancements and 
 improving user experience by 30% input from using tailwind. 
 • Market Research: Conducted market research with over 500 customers to identify product gaps, contributing to a 20% 
@@ -80,7 +80,7 @@ improvement in product-market fit and more effective onboarding workflows.
 user-centric product features. 
 EDUCATION AND CERTIFICATIONS 
 • Bachelors in Technology - Electronics and Communication Engineering | DCE | 2016 
-• Project Management Professional (PMP) | PMI | Certified  
+• Project Management Professional (PMP) | PMI | Certified 
 • Predictive Business Analytics Certification | Edu Pristine | 2019 
 TECHNICAL TOOLKIT 
 • AI and ML Platforms: OpenAI GPT-4o, GPT-5, Azure OpenAI, Claude Anthropic, Copilot, Langfuse, Promptfoo, RAG, MCP 

@@ -12,7 +12,7 @@ This repository (`portfotlio`) is currently a **greenfield stub**. It contains o
 
 | Service | Required? | Notes |
 |---------|-----------|-------|
-| *(none)* | — | No runnable application or backend exists in the repo today. |
+| *(none)* | - | No runnable application or backend exists in the repo today. |
 
 When application code is added, update this section with how to start each service (dev server, API, database, etc.).
 

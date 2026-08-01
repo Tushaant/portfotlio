@@ -20,6 +20,38 @@
     "metrics": {}
   },
   {
+    "id": "mkc-downloads",
+    "type": "milestone",
+    "title": "Major Kalshi Classes: 1M+ App Downloads",
+    "org": "Major Kalshi Classes Pvt Ltd · Google Play",
+    "year": "Live",
+    "image": "/achievements/major-kalshi-classes.png",
+    "icon": "/achievements/mkc-icon.png",
+    "link": "https://play.google.com/store/apps/details?id=eduapplet.mkclearning",
+    "metrics": {
+      "Downloads": "1M+",
+      "Play metric": "10L+",
+      "Rating": "4.3★"
+    },
+    "description": "MKC Learning App crossed 1M+ (10L+) Google Play downloads for defence aspirants, with 3.62K+ reviews at 4.3★."
+  },
+  {
+    "id": "veda-downloads",
+    "type": "milestone",
+    "title": "Veda Academy: 1L+ App Downloads",
+    "org": "Veda Academy Learning App · Google Play",
+    "year": "Live",
+    "image": "/achievements/veda-academy.png",
+    "icon": "/achievements/veda-icon.webp",
+    "link": "https://play.google.com/store/apps/details?id=co.amy.fdxcr",
+    "metrics": {
+      "Downloads": "1L+",
+      "Rating": "4.6★",
+      "Reviews": "1.86K+"
+    },
+    "description": "Veda Academy Learning App reached 1L+ Google Play downloads with a 4.6★ rating across 1.86K+ reviews."
+  },
+  {
     "id": "portfolio",
     "type": "milestone",
     "title": "Director-Level Portfolio Ownership",
@@ -42,7 +74,7 @@
     "image": null,
     "link": null,
     "metrics": {
-      "Accuracy": "92\u201395%",
+      "Accuracy": "92-95%",
       "P95": "<1.5s",
       "Uptime": "99%+"
     }
@@ -50,14 +82,14 @@
   {
     "id": "revenue",
     "type": "milestone",
-    "title": "\u20b97.78 Cr Category Revenue",
+    "title": "₹7.78 Cr Category Revenue",
     "org": "EMB Global",
-    "year": "2022\u20132025",
+    "year": "2022 to 2025",
     "image": null,
     "link": null,
     "metrics": {
       "Products": "26",
-      "Revenue": "\u20b97.78 Cr"
+      "Revenue": "₹7.78 Cr"
     }
   },
   {
@@ -100,7 +132,7 @@
   {
     "id": "btech",
     "type": "education",
-    "title": "B.Tech \u2014 Electronics and Communication Engineering",
+    "title": "B.Tech - Electronics and Communication Engineering",
     "org": "DCE",
     "year": "2016",
     "image": null,
@@ -121,7 +153,7 @@
   {
     "id": "arb",
     "type": "speaking",
-    "title": "Architecture Review Board \u2014 AI Release Governance",
+    "title": "Architecture Review Board - AI Release Governance",
     "org": "Oraczen",
     "year": "2025",
     "image": null,
