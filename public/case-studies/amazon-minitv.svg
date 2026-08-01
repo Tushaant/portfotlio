@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" fill="none">
+  <rect width="800" height="480" fill="#2A1540"/>
+  <rect x="250" y="120" width="300" height="180" rx="8" fill="#F3EBD8"/>
+  <text x="400" y="210" text-anchor="middle" fill="#111" font-family="Arial, sans-serif" font-size="34" font-weight="700">amazon</text>
+  <text x="400" y="255" text-anchor="middle" fill="#111" font-family="Arial, sans-serif" font-size="28" font-weight="600">miniTV</text>
+  <path d="M210 340h40v-90h-40v90Zm0 0c20 28 52 42 90 42" stroke="#FF9900" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="210" cy="250" r="18" fill="#FF9900"/>
+</svg>

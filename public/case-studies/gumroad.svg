@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" fill="none">
+  <rect width="800" height="480" fill="#FF90E8"/>
+  <circle cx="120" cy="90" r="28" fill="#FFC900"/>
+  <circle cx="700" cy="380" r="36" fill="#23FA4B"/>
+  <path d="M90 360c40-60 90-40 120 10" stroke="#111" stroke-width="8" stroke-linecap="round"/>
+  <rect x="620" y="70" width="70" height="50" rx="8" stroke="#111" stroke-width="8"/>
+  <path d="M635 70v-12h40v12" stroke="#111" stroke-width="8"/>
+  <text x="400" y="265" text-anchor="middle" fill="#111" font-family="Arial Black, Arial, sans-serif" font-size="84" font-weight="900">gumroad</text>
+</svg>

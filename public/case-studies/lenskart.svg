@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" fill="none">
+  <rect width="800" height="480" fill="#0B0B0B"/>
+  <path d="M220 240c0-48 38-86 86-86h48c48 0 86 38 86 86s-38 86-86 86h-48c-48 0-86-38-86-86Z" stroke="#C6D600" stroke-width="28"/>
+  <path d="M360 240c0-48 38-86 86-86h48c48 0 86 38 86 86s-38 86-86 86h-48c-48 0-86-38-86-86Z" stroke="#F5C518" stroke-width="28"/>
+  <circle cx="306" cy="240" r="28" fill="#C6D600"/>
+  <circle cx="494" cy="240" r="28" fill="#F5C518"/>
+  <text x="400" y="360" text-anchor="middle" fill="#F3EBD8" font-family="Arial, sans-serif" font-size="28" font-weight="600">lenskart.com</text>
+</svg>

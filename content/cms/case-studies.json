@@ -1,267 +1,5 @@
 [
   {
-    "slug": "agentic-ai-banking-platform",
-    "company": "Oraczen India",
-    "period": "May 2025 to Present",
-    "title": "Agentic AI for a $12.4B Banking Enterprise",
-    "summary": "Owning a $6.4M Agentic AI portfolio and building a multi-product AI platform - Chat Agents, Voice Agents, Lending AI, Requirement Gathering, Spend Intelligence and Risk Intelligence - for a $12.4 billion U.S. banking enterprise.",
-    "metrics": [
-      {
-        "label": "Accuracy",
-        "value": "92-95%"
-      },
-      {
-        "label": "P95 Latency",
-        "value": "<1.5s"
-      },
-      {
-        "label": "Error Rate",
-        "value": "<0.75%"
-      },
-      {
-        "label": "Uptime SLA",
-        "value": "99%+"
-      },
-      {
-        "label": "Governance Adherence",
-        "value": "95%"
-      },
-      {
-        "label": "Release Velocity",
-        "value": "+30%"
-      }
-    ],
-    "challenge": "A banking enterprise ran high-volume, low-efficiency manual processes that couldn't be automated with rules. The work required judgement, document context and conversational handling - but under HIPAA, PCI-DSS and GDPR obligations, with executive scrutiny on accuracy and latency.",
-    "research": "4+ process discovery workshops with business stakeholders documented current-state workflows, surfaced operational bottlenecks and defined optimisation opportunities before any model decision was made.",
-    "discovery": "Discovery separated processes into three buckets: deterministic (automate conventionally), context-heavy (RAG), and conversation-driven (agentic). That segmentation set the platform architecture and the product roadmap.",
-    "stakeholders": [
-      "Client SVP of Product Architecture",
-      "Client COO",
-      "Internal CTO and COO",
-      "8 functional teams across the organisation",
-      "Architecture Review Board"
-    ],
-    "prioritization": "Sequenced by risk-adjusted value: highest-volume manual processes with the clearest evaluation criteria shipped first, so accuracy could be proven before expanding surface area.",
-    "roadmap": [
-      "0\u21921 Chat Agents on the highest-volume support surface",
-      "Enterprise RAG pipelines with Model Context Protocol integration",
-      "Knowledge graph layer for cross-document reasoning",
-      "Voice Agents for realtime workflows",
-      "Lending AI, Spend Intelligence and Risk Intelligence expansion",
-      "1\u2192N scaling across business units"
-    ],
-    "userStories": [
-      "As an operations analyst, I need the agent to resolve routine requests end to end so my queue holds only exceptions.",
-      "As a compliance officer, I need every AI decision auditable against HIPAA, PCI-DSS and GDPR obligations.",
-      "As an executive sponsor, I need accuracy, latency and uptime reported continuously, not anecdotally.",
-      "As a risk analyst, I need spend and risk signals surfaced from documents I would otherwise read manually."
-    ],
-    "architecture": [
-      "Enterprise-grade RAG pipelines - semantic, hybrid, self, memory and graph retrieval",
-      "Model Context Protocol platform and servers connecting agents to enterprise systems",
-      "Knowledge graph introduced for cross-source reasoning",
-      "LLM evaluation and observability with Langfuse, Grafana and Promptfoo red-teaming",
-      "Architecture Review Board release governance gating every deployment"
-    ],
-    "launch": "Released under ARB-compliant governance at 95% adherence, with compliance sign-off across HIPAA, PCI-DSS and GDPR for every AI deployment.",
-    "kpis": [
-      "92-95% accuracy",
-      "P95 latency under 1.5s",
-      "Error rate under 0.75%",
-      "99%+ uptime SLA",
-      "95% governance adherence",
-      "+30% release velocity"
-    ],
-    "failures": "Early iterations proved that model quality alone doesn't survive enterprise scrutiny - without a formal evaluation harness, accuracy claims couldn't be defended to the ARB. Red-teaming with Promptfoo exposed failure modes that hadn't appeared in happy-path testing.",
-    "lessons": [
-      "Evaluation infrastructure is a launch requirement, not a post-launch nicety",
-      "Governance participation early converts the ARB from a gate into an accelerator",
-      "Agentic scope should expand only after the previous surface holds its accuracy SLA"
-    ],
-    "retrospective": "The portfolio scaled because evaluation, observability and governance were treated as first-class product surfaces. Team structure followed: an 8+ member cross-functional organisation with 3 PMs, 3 developers, 1 QA and 1 designer, restructured on Agile to lift release velocity 30%."
-  },
-  {
-    "slug": "enterprise-saas-category-turnaround",
-    "company": "EMB Global",
-    "period": "Sep 2022 to Apr 2025",
-    "title": "26 Products, \u20b97.78 Cr: Building an Enterprise SaaS Category",
-    "summary": "Category ownership across Enterprise SaaS, Consumer Tech and Fintech - 26 products, \u20b97.78 Cr revenue, and an 82% enterprise retention improvement.",
-    "metrics": [
-      {
-        "label": "Products",
-        "value": "26"
-      },
-      {
-        "label": "Revenue",
-        "value": "\u20b97.78 Cr"
-      },
-      {
-        "label": "Enterprise Retention",
-        "value": "+82%"
-      },
-      {
-        "label": "Onboarding Time",
-        "value": "-35%"
-      }
-    ],
-    "challenge": "A broad portfolio of fintech and SaaS products competed for the same delivery capacity, with enterprise customers churning after onboarding friction and no shared roadmap discipline across the category.",
-    "research": "Analysed retention cohorts against onboarding duration and integration complexity to locate where enterprise accounts actually disengaged.",
-    "discovery": "Onboarding - not features - was the churn driver. Enterprise accounts that cleared integration quickly retained; those that stalled during API setup never recovered.",
-    "stakeholders": [
-      "Enterprise customers and their technical teams",
-      "5 cross-functional delivery teams",
-      "Executive leadership",
-      "Sales, marketing and customer success"
-    ],
-    "prioritization": "Roadmap balanced strategic company priorities against direct customer value, with onboarding-path work protected from feature-request pressure.",
-    "roadmap": [
-      "Instrument the enterprise onboarding funnel",
-      "Optimise API-driven integrations",
-      "UX rework of the onboarding workflow with the UX team",
-      "GTM programme for enterprise SaaS adoption",
-      "Agile restructuring across 5 delivery teams"
-    ],
-    "userStories": [
-      "As an enterprise buyer, I need integration to complete in days so value lands inside the evaluation window.",
-      "As a customer success manager, I need visibility into where an account is stuck in onboarding.",
-      "As a delivery lead, I need one prioritised category backlog rather than 26 competing ones."
-    ],
-    "architecture": [
-      "API-driven integration layer standardised across products",
-      "Shared onboarding instrumentation",
-      "Category-level roadmap and backlog governance"
-    ],
-    "launch": "Rolled out through sprint ceremonies across 5 cross-functional teams, with Agile mentoring to sustain the change after launch.",
-    "kpis": [
-      "26 products",
-      "\u20b97.78 Cr revenue",
-      "+82% enterprise retention",
-      "-35% onboarding time"
-    ],
-    "failures": "Treating each product's roadmap independently early on spread delivery capacity too thin; the category only moved once prioritisation was consolidated.",
-    "lessons": [
-      "Retention is an onboarding metric long before it is a feature metric",
-      "Category ownership means saying no across products, not optimising within one",
-      "Agile mentoring outlasts Agile mandates"
-    ],
-    "retrospective": "Consolidating prioritisation and attacking onboarding produced an 82% retention improvement and a 35% reduction in onboarding time - outcomes no individual feature roadmap would have delivered."
-  },
-  {
-    "slug": "b2b-marketplace-churn-reduction",
-    "company": "Filmboard Movies Technologies Inc.",
-    "period": "Jun 2020 to Aug 2022",
-    "title": "Cutting B2B Churn 22% Through UX-Led Redesign",
-    "summary": "Launching an enterprise B2B eCommerce platform, improving vendor onboarding 29% and cutting churn 22% through UX-led design improvements, while lifting lead conversion 18% via CRM integration.",
-    "metrics": [
-      {
-        "label": "Vendor Onboarding",
-        "value": "+29%"
-      },
-      {
-        "label": "Churn",
-        "value": "-22%"
-      },
-      {
-        "label": "Lead Conversion",
-        "value": "+18%"
-      }
-    ],
-    "challenge": "Vendors abandoned onboarding partway through, and enterprise accounts churned after the first cycle. Sales and product were also working from disconnected lead data.",
-    "research": "Onboarding drop-off analysis by step, paired with vendor interviews on where the process lost them.",
-    "discovery": "Vendor onboarding failed on comprehension, not capability - the steps existed but the sequence and language didn't match how vendors think about listing.",
-    "stakeholders": [
-      "Enterprise vendors",
-      "Sales team",
-      "Marketing",
-      "Engineering",
-      "Design"
-    ],
-    "prioritization": "Onboarding sequence rework first (highest churn leverage), CRM integration second (highest revenue leverage).",
-    "roadmap": [
-      "Instrument onboarding step-level drop-off",
-      "Resequence and rewrite the onboarding flow",
-      "Enterprise CRM integration",
-      "GTM alignment between product marketing and sales execution"
-    ],
-    "userStories": [
-      "As a vendor, I need to understand what each onboarding step requires before I start it.",
-      "As a sales rep, I need enterprise lead activity in the CRM without manual entry.",
-      "As an enterprise buyer, I need the platform to hold my catalogue structure, not flatten it."
-    ],
-    "architecture": [
-      "B2B eCommerce platform with vendor-scoped catalogue management",
-      "CRM integration for enterprise lead flow"
-    ],
-    "launch": "Launched with GTM strategies aligning product marketing to sales execution, so the funnel and the product moved together.",
-    "kpis": [
-      "+29% vendor onboarding",
-      "-22% churn",
-      "+18% lead conversion"
-    ],
-    "failures": "The first onboarding revision added explanatory content without changing the sequence - it barely moved the numbers. The resequencing did.",
-    "lessons": [
-      "Explaining a bad flow is not the same as fixing it",
-      "CRM integration is a product feature when sales is part of the funnel"
-    ],
-    "retrospective": "UX-led design work - not incentives or feature additions - delivered the 22% churn reduction, which reset how the team scoped retention work afterwards."
-  },
-  {
-    "slug": "credit-risk-analytics",
-    "company": "IBM",
-    "period": "May 2019 to Jun 2020",
-    "title": "Predictive Credit Risk at Enterprise Scale",
-    "summary": "Building predictive credit risk models for enterprise financial services - 15% accuracy improvement - and the real-time dashboards that made them actionable across 25+ KPIs.",
-    "metrics": [
-      {
-        "label": "Model Accuracy",
-        "value": "+15%"
-      },
-      {
-        "label": "KPIs Tracked",
-        "value": "25+"
-      },
-      {
-        "label": "Strategy Support",
-        "value": "+11%"
-      }
-    ],
-    "challenge": "Credit risk decisions relied on models whose outputs never reached the executives making portfolio calls, and accuracy plateaued below what the business needed.",
-    "research": "Feature analysis across the credit portfolio alongside stakeholder interviews on which risk signals actually influenced decisions.",
-    "discovery": "The gap was distribution, not modelling: risk signals existed but had no executive-facing surface, so decisions ran on stale reporting.",
-    "stakeholders": [
-      "Enterprise financial services client",
-      "Risk and portfolio executives",
-      "Cross-functional analytics stakeholders"
-    ],
-    "prioritization": "Model accuracy and dashboard delivery advanced in parallel - accuracy alone would not have changed a single decision.",
-    "roadmap": [
-      "Predictive credit risk model development",
-      "Accuracy improvement iterations",
-      "Real-time analytics dashboards across 25+ KPIs",
-      "Translation of business requirements into analytical solutions"
-    ],
-    "userStories": [
-      "As a risk executive, I need portfolio risk visible in real time, not in a monthly pack.",
-      "As an analyst, I need model outputs traceable to the features that drove them."
-    ],
-    "architecture": [
-      "Predictive credit risk modelling pipeline",
-      "Real-time analytics dashboards tracking 25+ business and operational KPIs"
-    ],
-    "launch": "Deployed as an executive-visible dashboard layer over the risk models, with cross-functional stakeholder alignment on definitions.",
-    "kpis": [
-      "+15% model accuracy",
-      "25+ KPIs tracked",
-      "+11% strategy support"
-    ],
-    "failures": "Early dashboards mirrored the model's internal structure rather than the executive decision - they were accurate and unused until reframed around decisions.",
-    "lessons": [
-      "A model that doesn't reach a decision-maker has zero accuracy in practice",
-      "Dashboard structure should mirror decisions, not data models"
-    ],
-    "retrospective": "This engagement set the data-driven decision-making pattern carried into every later product role: instrument the decision, then improve the model."
-  },
-  {
     "slug": "lenskart-virtual-try-on",
     "company": "Lenskart",
     "period": "May 2024",
@@ -342,7 +80,11 @@
       "Personalization only compounds after the try-before-you-buy friction is removed",
       "Return experience is a growth lever, not just a cost center"
     ],
-    "retrospective": "This Notion research case study shows how AR + AI personalization can turn a high-uncertainty category into a measurable retention and revenue engine."
+    "retrospective": "This Notion research case study shows how AR + AI personalization can turn a high-uncertainty category into a measurable retention and revenue engine.",
+    "featured": true,
+    "priority": 1,
+    "image": "/case-studies/lenskart.svg",
+    "galleryTitle": "Case Study Lenskart"
   },
   {
     "slug": "amazon-minitv-growth",
@@ -418,7 +160,11 @@
       "Distribution inside an existing super-app beats cold-start marketing",
       "Format-market fit matters as much as catalogue size"
     ],
-    "retrospective": "This Notion research case study frames miniTV as a product-growth play: remove payment friction, ride Amazon distribution, and win with short-form relevance."
+    "retrospective": "This Notion research case study frames miniTV as a product-growth play: remove payment friction, ride Amazon distribution, and win with short-form relevance.",
+    "featured": true,
+    "priority": 1,
+    "image": "/case-studies/amazon-minitv.svg",
+    "galleryTitle": "Case Study Amazon mini TV"
   },
   {
     "slug": "gumroad-creator-commerce",
@@ -496,7 +242,11 @@
       "Fee models should stay aligned with creator success",
       "Growth goals only work when tied to UX and performance work"
     ],
-    "retrospective": "This Notion research case study highlights Gumroad as a product of restraint: win creators with simplicity, then compound with analytics and monetization layers."
+    "retrospective": "This Notion research case study highlights Gumroad as a product of restraint: win creators with simplicity, then compound with analytics and monetization layers.",
+    "featured": true,
+    "priority": 1,
+    "image": "/case-studies/gumroad.svg",
+    "galleryTitle": "Case Study Gumroad"
   },
   {
     "slug": "astrotalk-india-traction",
@@ -573,6 +323,284 @@
       "Trust and privacy are product features in sensitive categories",
       "Freemium is especially powerful when belief and willingness-to-pay are uncertain"
     ],
-    "retrospective": "This Notion research case study shows Astrotalk winning by modernizing a trusted cultural behavior rather than inventing a new one."
+    "retrospective": "This Notion research case study shows Astrotalk winning by modernizing a trusted cultural behavior rather than inventing a new one.",
+    "featured": true,
+    "priority": 1,
+    "image": "/case-studies/astrotalk.svg",
+    "galleryTitle": "Case Study Astrotalk"
+  },
+  {
+    "slug": "agentic-ai-banking-platform",
+    "company": "Oraczen India",
+    "period": "May 2025 to Present",
+    "title": "Agentic AI for a $12.4B Banking Enterprise",
+    "summary": "Owning a $6.4M Agentic AI portfolio and building a multi-product AI platform - Chat Agents, Voice Agents, Lending AI, Requirement Gathering, Spend Intelligence and Risk Intelligence - for a $12.4 billion U.S. banking enterprise.",
+    "metrics": [
+      {
+        "label": "Accuracy",
+        "value": "92-95%"
+      },
+      {
+        "label": "P95 Latency",
+        "value": "<1.5s"
+      },
+      {
+        "label": "Error Rate",
+        "value": "<0.75%"
+      },
+      {
+        "label": "Uptime SLA",
+        "value": "99%+"
+      },
+      {
+        "label": "Governance Adherence",
+        "value": "95%"
+      },
+      {
+        "label": "Release Velocity",
+        "value": "+30%"
+      }
+    ],
+    "challenge": "A banking enterprise ran high-volume, low-efficiency manual processes that couldn't be automated with rules. The work required judgement, document context and conversational handling - but under HIPAA, PCI-DSS and GDPR obligations, with executive scrutiny on accuracy and latency.",
+    "research": "4+ process discovery workshops with business stakeholders documented current-state workflows, surfaced operational bottlenecks and defined optimisation opportunities before any model decision was made.",
+    "discovery": "Discovery separated processes into three buckets: deterministic (automate conventionally), context-heavy (RAG), and conversation-driven (agentic). That segmentation set the platform architecture and the product roadmap.",
+    "stakeholders": [
+      "Client SVP of Product Architecture",
+      "Client COO",
+      "Internal CTO and COO",
+      "8 functional teams across the organisation",
+      "Architecture Review Board"
+    ],
+    "prioritization": "Sequenced by risk-adjusted value: highest-volume manual processes with the clearest evaluation criteria shipped first, so accuracy could be proven before expanding surface area.",
+    "roadmap": [
+      "0\u21921 Chat Agents on the highest-volume support surface",
+      "Enterprise RAG pipelines with Model Context Protocol integration",
+      "Knowledge graph layer for cross-document reasoning",
+      "Voice Agents for realtime workflows",
+      "Lending AI, Spend Intelligence and Risk Intelligence expansion",
+      "1\u2192N scaling across business units"
+    ],
+    "userStories": [
+      "As an operations analyst, I need the agent to resolve routine requests end to end so my queue holds only exceptions.",
+      "As a compliance officer, I need every AI decision auditable against HIPAA, PCI-DSS and GDPR obligations.",
+      "As an executive sponsor, I need accuracy, latency and uptime reported continuously, not anecdotally.",
+      "As a risk analyst, I need spend and risk signals surfaced from documents I would otherwise read manually."
+    ],
+    "architecture": [
+      "Enterprise-grade RAG pipelines - semantic, hybrid, self, memory and graph retrieval",
+      "Model Context Protocol platform and servers connecting agents to enterprise systems",
+      "Knowledge graph introduced for cross-source reasoning",
+      "LLM evaluation and observability with Langfuse, Grafana and Promptfoo red-teaming",
+      "Architecture Review Board release governance gating every deployment"
+    ],
+    "launch": "Released under ARB-compliant governance at 95% adherence, with compliance sign-off across HIPAA, PCI-DSS and GDPR for every AI deployment.",
+    "kpis": [
+      "92-95% accuracy",
+      "P95 latency under 1.5s",
+      "Error rate under 0.75%",
+      "99%+ uptime SLA",
+      "95% governance adherence",
+      "+30% release velocity"
+    ],
+    "failures": "Early iterations proved that model quality alone doesn't survive enterprise scrutiny - without a formal evaluation harness, accuracy claims couldn't be defended to the ARB. Red-teaming with Promptfoo exposed failure modes that hadn't appeared in happy-path testing.",
+    "lessons": [
+      "Evaluation infrastructure is a launch requirement, not a post-launch nicety",
+      "Governance participation early converts the ARB from a gate into an accelerator",
+      "Agentic scope should expand only after the previous surface holds its accuracy SLA"
+    ],
+    "retrospective": "The portfolio scaled because evaluation, observability and governance were treated as first-class product surfaces. Team structure followed: an 8+ member cross-functional organisation with 3 PMs, 3 developers, 1 QA and 1 designer, restructured on Agile to lift release velocity 30%.",
+    "featured": false,
+    "priority": 2,
+    "source": "career"
+  },
+  {
+    "slug": "enterprise-saas-category-turnaround",
+    "company": "EMB Global",
+    "period": "Sep 2022 to Apr 2025",
+    "title": "26 Products, \u20b97.78 Cr: Building an Enterprise SaaS Category",
+    "summary": "Category ownership across Enterprise SaaS, Consumer Tech and Fintech - 26 products, \u20b97.78 Cr revenue, and an 82% enterprise retention improvement.",
+    "metrics": [
+      {
+        "label": "Products",
+        "value": "26"
+      },
+      {
+        "label": "Revenue",
+        "value": "\u20b97.78 Cr"
+      },
+      {
+        "label": "Enterprise Retention",
+        "value": "+82%"
+      },
+      {
+        "label": "Onboarding Time",
+        "value": "-35%"
+      }
+    ],
+    "challenge": "A broad portfolio of fintech and SaaS products competed for the same delivery capacity, with enterprise customers churning after onboarding friction and no shared roadmap discipline across the category.",
+    "research": "Analysed retention cohorts against onboarding duration and integration complexity to locate where enterprise accounts actually disengaged.",
+    "discovery": "Onboarding - not features - was the churn driver. Enterprise accounts that cleared integration quickly retained; those that stalled during API setup never recovered.",
+    "stakeholders": [
+      "Enterprise customers and their technical teams",
+      "5 cross-functional delivery teams",
+      "Executive leadership",
+      "Sales, marketing and customer success"
+    ],
+    "prioritization": "Roadmap balanced strategic company priorities against direct customer value, with onboarding-path work protected from feature-request pressure.",
+    "roadmap": [
+      "Instrument the enterprise onboarding funnel",
+      "Optimise API-driven integrations",
+      "UX rework of the onboarding workflow with the UX team",
+      "GTM programme for enterprise SaaS adoption",
+      "Agile restructuring across 5 delivery teams"
+    ],
+    "userStories": [
+      "As an enterprise buyer, I need integration to complete in days so value lands inside the evaluation window.",
+      "As a customer success manager, I need visibility into where an account is stuck in onboarding.",
+      "As a delivery lead, I need one prioritised category backlog rather than 26 competing ones."
+    ],
+    "architecture": [
+      "API-driven integration layer standardised across products",
+      "Shared onboarding instrumentation",
+      "Category-level roadmap and backlog governance"
+    ],
+    "launch": "Rolled out through sprint ceremonies across 5 cross-functional teams, with Agile mentoring to sustain the change after launch.",
+    "kpis": [
+      "26 products",
+      "\u20b97.78 Cr revenue",
+      "+82% enterprise retention",
+      "-35% onboarding time"
+    ],
+    "failures": "Treating each product's roadmap independently early on spread delivery capacity too thin; the category only moved once prioritisation was consolidated.",
+    "lessons": [
+      "Retention is an onboarding metric long before it is a feature metric",
+      "Category ownership means saying no across products, not optimising within one",
+      "Agile mentoring outlasts Agile mandates"
+    ],
+    "retrospective": "Consolidating prioritisation and attacking onboarding produced an 82% retention improvement and a 35% reduction in onboarding time - outcomes no individual feature roadmap would have delivered.",
+    "featured": false,
+    "priority": 2,
+    "source": "career"
+  },
+  {
+    "slug": "b2b-marketplace-churn-reduction",
+    "company": "Filmboard Movies Technologies Inc.",
+    "period": "Jun 2020 to Aug 2022",
+    "title": "Cutting B2B Churn 22% Through UX-Led Redesign",
+    "summary": "Launching an enterprise B2B eCommerce platform, improving vendor onboarding 29% and cutting churn 22% through UX-led design improvements, while lifting lead conversion 18% via CRM integration.",
+    "metrics": [
+      {
+        "label": "Vendor Onboarding",
+        "value": "+29%"
+      },
+      {
+        "label": "Churn",
+        "value": "-22%"
+      },
+      {
+        "label": "Lead Conversion",
+        "value": "+18%"
+      }
+    ],
+    "challenge": "Vendors abandoned onboarding partway through, and enterprise accounts churned after the first cycle. Sales and product were also working from disconnected lead data.",
+    "research": "Onboarding drop-off analysis by step, paired with vendor interviews on where the process lost them.",
+    "discovery": "Vendor onboarding failed on comprehension, not capability - the steps existed but the sequence and language didn't match how vendors think about listing.",
+    "stakeholders": [
+      "Enterprise vendors",
+      "Sales team",
+      "Marketing",
+      "Engineering",
+      "Design"
+    ],
+    "prioritization": "Onboarding sequence rework first (highest churn leverage), CRM integration second (highest revenue leverage).",
+    "roadmap": [
+      "Instrument onboarding step-level drop-off",
+      "Resequence and rewrite the onboarding flow",
+      "Enterprise CRM integration",
+      "GTM alignment between product marketing and sales execution"
+    ],
+    "userStories": [
+      "As a vendor, I need to understand what each onboarding step requires before I start it.",
+      "As a sales rep, I need enterprise lead activity in the CRM without manual entry.",
+      "As an enterprise buyer, I need the platform to hold my catalogue structure, not flatten it."
+    ],
+    "architecture": [
+      "B2B eCommerce platform with vendor-scoped catalogue management",
+      "CRM integration for enterprise lead flow"
+    ],
+    "launch": "Launched with GTM strategies aligning product marketing to sales execution, so the funnel and the product moved together.",
+    "kpis": [
+      "+29% vendor onboarding",
+      "-22% churn",
+      "+18% lead conversion"
+    ],
+    "failures": "The first onboarding revision added explanatory content without changing the sequence - it barely moved the numbers. The resequencing did.",
+    "lessons": [
+      "Explaining a bad flow is not the same as fixing it",
+      "CRM integration is a product feature when sales is part of the funnel"
+    ],
+    "retrospective": "UX-led design work - not incentives or feature additions - delivered the 22% churn reduction, which reset how the team scoped retention work afterwards.",
+    "featured": false,
+    "priority": 2,
+    "source": "career"
+  },
+  {
+    "slug": "credit-risk-analytics",
+    "company": "IBM",
+    "period": "May 2019 to Jun 2020",
+    "title": "Predictive Credit Risk at Enterprise Scale",
+    "summary": "Building predictive credit risk models for enterprise financial services - 15% accuracy improvement - and the real-time dashboards that made them actionable across 25+ KPIs.",
+    "metrics": [
+      {
+        "label": "Model Accuracy",
+        "value": "+15%"
+      },
+      {
+        "label": "KPIs Tracked",
+        "value": "25+"
+      },
+      {
+        "label": "Strategy Support",
+        "value": "+11%"
+      }
+    ],
+    "challenge": "Credit risk decisions relied on models whose outputs never reached the executives making portfolio calls, and accuracy plateaued below what the business needed.",
+    "research": "Feature analysis across the credit portfolio alongside stakeholder interviews on which risk signals actually influenced decisions.",
+    "discovery": "The gap was distribution, not modelling: risk signals existed but had no executive-facing surface, so decisions ran on stale reporting.",
+    "stakeholders": [
+      "Enterprise financial services client",
+      "Risk and portfolio executives",
+      "Cross-functional analytics stakeholders"
+    ],
+    "prioritization": "Model accuracy and dashboard delivery advanced in parallel - accuracy alone would not have changed a single decision.",
+    "roadmap": [
+      "Predictive credit risk model development",
+      "Accuracy improvement iterations",
+      "Real-time analytics dashboards across 25+ KPIs",
+      "Translation of business requirements into analytical solutions"
+    ],
+    "userStories": [
+      "As a risk executive, I need portfolio risk visible in real time, not in a monthly pack.",
+      "As an analyst, I need model outputs traceable to the features that drove them."
+    ],
+    "architecture": [
+      "Predictive credit risk modelling pipeline",
+      "Real-time analytics dashboards tracking 25+ business and operational KPIs"
+    ],
+    "launch": "Deployed as an executive-visible dashboard layer over the risk models, with cross-functional stakeholder alignment on definitions.",
+    "kpis": [
+      "+15% model accuracy",
+      "25+ KPIs tracked",
+      "+11% strategy support"
+    ],
+    "failures": "Early dashboards mirrored the model's internal structure rather than the executive decision - they were accurate and unused until reframed around decisions.",
+    "lessons": [
+      "A model that doesn't reach a decision-maker has zero accuracy in practice",
+      "Dashboard structure should mirror decisions, not data models"
+    ],
+    "retrospective": "This engagement set the data-driven decision-making pattern carried into every later product role: instrument the decision, then improve the model.",
+    "featured": false,
+    "priority": 2,
+    "source": "career"
   }
 ]
