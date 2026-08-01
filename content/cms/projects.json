@@ -1,0 +1,883 @@
+[
+  {
+    "slug": "bharatlabs",
+    "title": "Bharatlabs",
+    "status": "DELIVERED",
+    "category": "Healthcare SaaS",
+    "tagline": "HIPAA-compliant diagnostics commerce for Bharat",
+    "image": "/projects/Bharatlabs.png",
+    "liveUrl": "https://www.bharatlabz.com/",
+    "tech": [
+      "React",
+      "REST APIs",
+      "Payment Gateway"
+    ],
+    "highlights": [
+      {
+        "label": "Patient transactions",
+        "value": "+22%"
+      },
+      {
+        "label": "Compliance",
+        "value": "HIPAA-aligned"
+      },
+      {
+        "label": "Delivery surfaces",
+        "value": "Web + Android"
+      }
+    ],
+    "overview": "A diagnostics and healthcare services platform delivered across web and Android, with a compliant enterprise payment solution at its core. Listed in the delivered-projects portfolio as a healthcare SaaS build with both a live site and a Play Store application.",
+    "problem": "Diagnostic bookings and patient payments were fragmented across offline collection, manual reconciliation and non-compliant payment handling \u2014 blocking scale and creating regulatory exposure.",
+    "businessContext": "Healthcare payments carry HIPAA obligations alongside Indian payment-gateway constraints. The platform had to serve both a consumer app audience and lab-side operations without splitting the data model.",
+    "users": [
+      "Patients booking diagnostic tests",
+      "Lab operations and sample-collection staff",
+      "Finance and reconciliation teams",
+      "Partner diagnostic centres"
+    ],
+    "discovery": "Mapped the current-state booking-to-report journey across web, app and offline touchpoints to locate the drop-offs between test selection, payment and report delivery.",
+    "research": "Journey interviews with patients and lab staff, plus reconciliation-log analysis to quantify failed and manually-settled transactions.",
+    "prd": [
+      "Unified catalogue of tests, packages and pricing across web and app",
+      "Compliant payment capture with retry, refund and reconciliation states",
+      "Booking lifecycle: slot \u2192 collection \u2192 processing \u2192 report",
+      "Role-based operations console for lab staff",
+      "Consent and data-handling flows aligned to HIPAA expectations"
+    ],
+    "architecture": [
+      "Shared API layer serving the responsive web app and the Android client",
+      "Payment gateway integration with idempotent transaction handling",
+      "Report storage with access-scoped delivery to the booking owner",
+      "Audit logging on every record touch for compliance review"
+    ],
+    "wireframes": "Low-fidelity flows were produced for booking, checkout and report retrieval before build, then validated with lab operations before UI polish.",
+    "flow": [
+      "Discover test / package",
+      "Select slot and location",
+      "Authenticated checkout",
+      "Payment + confirmation",
+      "Sample collection",
+      "Report delivery"
+    ],
+    "challenges": [
+      "Keeping payment retries idempotent across flaky mobile networks",
+      "Aligning compliance requirements with a fast consumer checkout",
+      "Parity between web and Android release cycles"
+    ],
+    "tradeoffs": [
+      "Shipped web-first with the Android client following, rather than delaying both for simultaneous launch",
+      "Chose a single unified catalogue over per-partner catalogues to reduce operational overhead at launch"
+    ],
+    "metrics": [
+      {
+        "label": "Patient transactions",
+        "value": "+22%"
+      }
+    ],
+    "outcome": "Delivered a HIPAA-compliant enterprise payment solution that improved patient transactions by 22%, shipped live on the web and the Google Play Store.",
+    "learnings": [
+      "In regulated healthcare, the compliance model has to be designed into the checkout, not layered on after",
+      "Operations staff are the real power users \u2014 their console determines whether the consumer funnel works"
+    ],
+    "roadmap": [
+      "Deeper partner-lab onboarding self-service",
+      "Report intelligence and longitudinal patient history",
+      "Insurance and cashless claim integration"
+    ],
+    "businessValue": "Turned an offline, manually-reconciled diagnostics workflow into a compliant digital revenue channel."
+  },
+  {
+    "slug": "finixpe",
+    "title": "Finixpe",
+    "status": "DELIVERED",
+    "category": "Fintech",
+    "tagline": "Comprehensive financial services for India's online retailers",
+    "image": "/projects/Finixpe.png",
+    "liveUrl": "https://finixpe.com/",
+    "tech": [
+      "Payment Gateways",
+      "KYC",
+      "Webhooks"
+    ],
+    "highlights": [
+      {
+        "label": "Service rails",
+        "value": "Payments, transfers, insurance"
+      },
+      {
+        "label": "Market",
+        "value": "Pan-India retailers"
+      },
+      {
+        "label": "Status",
+        "value": "Live"
+      }
+    ],
+    "overview": "From the Notion project page: comprehensive financial services across India, empowering online retailers with solutions for daily challenges. From online transactions to bank transfers and insurance services \u2014 efficient and innovative payment solutions that streamline transactions.",
+    "problem": "Small and mid-sized online retailers were stitching together separate providers for collections, payouts and insurance, with no single view of money movement.",
+    "businessContext": "India's payments landscape is provider-fragmented and compliance-heavy. A retailer-facing aggregator only wins if onboarding is fast and settlement is transparent.",
+    "users": [
+      "Online retailers and merchants",
+      "Merchant finance / accounts teams",
+      "Support and onboarding operations"
+    ],
+    "discovery": "Catalogued the daily money-movement tasks a retailer performs and where each one breaks \u2014 failed collections, delayed transfers, opaque settlement.",
+    "research": "Merchant workflow reviews and provider-capability mapping across transaction, bank transfer and insurance rails.",
+    "prd": [
+      "Unified merchant dashboard for collections, transfers and settlements",
+      "Multi-rail payment support with fallback routing",
+      "Bank transfer / payout module",
+      "Insurance service module",
+      "KYC-compliant merchant onboarding"
+    ],
+    "architecture": [
+      "Payment orchestration layer across multiple gateway providers",
+      "Ledgered settlement view per merchant",
+      "KYC and compliance service gating merchant activation",
+      "Webhook-driven transaction state machine"
+    ],
+    "wireframes": "Dashboard-first wireframes: money in, money out and pending states visible above the fold on every screen.",
+    "flow": [
+      "Merchant sign-up",
+      "KYC verification",
+      "Rail activation",
+      "Collect payment",
+      "Payout / bank transfer",
+      "Settlement view"
+    ],
+    "challenges": [
+      "Normalising inconsistent status semantics across payment providers",
+      "Keeping KYC friction low without weakening compliance"
+    ],
+    "tradeoffs": [
+      "Orchestration across multiple providers instead of a single-provider integration \u2014 slower to build, far more resilient",
+      "Prioritised transaction transparency over advanced analytics in v1"
+    ],
+    "metrics": [],
+    "outcome": "Shipped a live financial-services platform giving Indian online retailers a single place to transact, transfer and insure.",
+    "learnings": [
+      "Merchants adopt the product that makes settlement legible, not the one with the most features",
+      "Provider fallback routing is a retention feature, not an infrastructure detail"
+    ],
+    "roadmap": [
+      "Credit and working-capital products on top of transaction history",
+      "Deeper reconciliation and accounting exports"
+    ],
+    "businessValue": "Consolidated three separate vendor relationships into one merchant-facing financial operating layer."
+  },
+  {
+    "slug": "btroo",
+    "title": "BTROO",
+    "status": "DELIVERED",
+    "category": "Enterprise SaaS",
+    "tagline": "Customer-success driven platform delivery",
+    "image": "/projects/BTROO.png",
+    "liveUrl": null,
+    "tech": [
+      "Agile delivery",
+      "UAT",
+      "Jira"
+    ],
+    "highlights": [
+      {
+        "label": "Outcome",
+        "value": "Customer success report issued"
+      },
+      {
+        "label": "Status",
+        "value": "Delivered"
+      }
+    ],
+    "overview": "A delivered platform build tracked in the Notion portfolio, accompanied by a formal customer success report from the client engagement.",
+    "problem": "The client needed a delivery partner who could take an ambiguous brief through discovery, scope and shipped product without a dedicated internal product function.",
+    "businessContext": "Engagement-led delivery where product ownership, stakeholder alignment and success reporting all sat with the product manager.",
+    "users": [
+      "Client stakeholders",
+      "End platform users",
+      "Delivery and QA teams"
+    ],
+    "discovery": "Structured requirement-gathering workshops to convert stakeholder intent into a documented scope and acceptance criteria.",
+    "research": "Stakeholder interviews and competitive review of adjacent platforms.",
+    "prd": [
+      "Documented functional scope with acceptance criteria",
+      "Release milestones tied to client sign-off",
+      "Change-request process for mid-flight scope movement"
+    ],
+    "architecture": [
+      "Modular feature delivery aligned to sprint milestones",
+      "Environment separation for UAT and production sign-off"
+    ],
+    "wireframes": "Wireframe-led sign-off before each build milestone to protect the timeline.",
+    "flow": [
+      "Discovery",
+      "Scope sign-off",
+      "Sprint delivery",
+      "UAT",
+      "Launch",
+      "Success review"
+    ],
+    "challenges": [
+      "Managing scope drift without a permanent product owner on the client side",
+      "Keeping UAT cycles short enough to hold the release plan"
+    ],
+    "tradeoffs": [
+      "Formal milestone gates over continuous delivery to match client governance"
+    ],
+    "metrics": [],
+    "outcome": "Platform delivered with a formal customer success report from the engagement.",
+    "learnings": [
+      "In agency-style delivery, the PRD is the product until the client builds their own product function"
+    ],
+    "roadmap": [],
+    "businessValue": "Gave the client a shipped platform and a documented success baseline."
+  },
+  {
+    "slug": "vedaacademy",
+    "title": "Veda Academy",
+    "status": "DELIVERED",
+    "category": "Ed-tech",
+    "tagline": "Digital learning platform for a growing academy",
+    "image": "/projects/VedaAcademy.png",
+    "liveUrl": "https://www.vedaacademy.org.in/",
+    "tech": [
+      "Web platform",
+      "CMS",
+      "Lead capture"
+    ],
+    "highlights": [
+      {
+        "label": "Status",
+        "value": "Live"
+      },
+      {
+        "label": "Surface",
+        "value": "Public web"
+      }
+    ],
+    "overview": "A live education platform delivering course discovery, enrolment and learner engagement for Veda Academy.",
+    "problem": "Enquiries and enrolments were handled manually, giving the academy no digital funnel and no visibility into where prospective learners dropped off.",
+    "businessContext": "Ed-tech buyers compare on credibility and clarity first. The platform needed to convert trust into enrolment in a single session.",
+    "users": [
+      "Prospective learners",
+      "Enrolled students",
+      "Academy administrators"
+    ],
+    "discovery": "Mapped the enquiry-to-enrolment journey and identified the trust signals that drive conversion in education.",
+    "research": "Competitive review of regional academy sites and enquiry-flow benchmarking.",
+    "prd": [
+      "Course catalogue with structured programme detail",
+      "Enquiry and enrolment capture",
+      "Faculty and credibility surfaces",
+      "Admin content management"
+    ],
+    "architecture": [
+      "Content-driven page composition for non-technical course updates",
+      "Lead capture wired to the academy's follow-up workflow"
+    ],
+    "wireframes": "Conversion-first wireframes with the enquiry action persistent on every page.",
+    "flow": [
+      "Discover programme",
+      "Review detail",
+      "Submit enquiry",
+      "Counsellor follow-up",
+      "Enrol"
+    ],
+    "challenges": [
+      "Presenting a wide programme catalogue without overwhelming first-time visitors",
+      "Keeping content editable by non-technical staff"
+    ],
+    "tradeoffs": [
+      "Content-managed pages over bespoke templates per programme",
+      "Enquiry-led conversion over full self-serve checkout in v1"
+    ],
+    "metrics": [],
+    "outcome": "Launched a live academy platform with a structured digital enrolment funnel.",
+    "learnings": [
+      "In education, credibility content converts harder than feature content",
+      "If staff can't edit it, the catalogue goes stale within a quarter"
+    ],
+    "roadmap": [
+      "Self-serve payment and enrolment",
+      "Learner progress dashboard"
+    ],
+    "businessValue": "Replaced manual enquiry handling with a measurable digital funnel."
+  },
+  {
+    "slug": "doolally",
+    "title": "Doolally",
+    "status": "DELIVERED",
+    "category": "Consumer Tech",
+    "tagline": "Hospitality brand commerce and engagement",
+    "image": "/projects/Doolally.png",
+    "liveUrl": "https://doolally.algodev.in/",
+    "tech": [
+      "Responsive web",
+      "CMS",
+      "Ordering flow"
+    ],
+    "highlights": [
+      {
+        "label": "Status",
+        "value": "Delivered"
+      },
+      {
+        "label": "Primary surface",
+        "value": "Mobile web"
+      }
+    ],
+    "overview": "A consumer-facing hospitality platform delivered for the Doolally brand, covering discovery, ordering and brand engagement surfaces.",
+    "problem": "Brand experience lived across disconnected channels, with no owned digital surface tying discovery, venues and ordering together.",
+    "businessContext": "Hospitality customers decide fast and on mobile. Every extra step between intent and order costs the venue an order.",
+    "users": [
+      "Guests and customers",
+      "Venue teams",
+      "Marketing team"
+    ],
+    "discovery": "Mapped the guest journey from brand discovery to in-venue and online ordering.",
+    "research": "Channel audit and mobile-first behavioural review of the ordering funnel.",
+    "prd": [
+      "Brand-led discovery experience",
+      "Menu and venue surfaces",
+      "Ordering flow",
+      "Campaign and content surfaces"
+    ],
+    "architecture": [
+      "Mobile-first responsive frontend",
+      "Content-managed menu and venue data"
+    ],
+    "wireframes": "Mobile wireframes first, desktop derived from them rather than the reverse.",
+    "flow": [
+      "Discover brand",
+      "Browse menu / venue",
+      "Order",
+      "Engage with campaigns"
+    ],
+    "challenges": [
+      "Holding a strong brand voice inside a fast transactional flow",
+      "Keeping menu data current across venues"
+    ],
+    "tradeoffs": [
+      "Brand-forward hero over a purely utilitarian menu-first landing",
+      "Content-managed menus over POS integration in the first release"
+    ],
+    "metrics": [],
+    "outcome": "Delivered an owned digital surface unifying brand, venue and ordering.",
+    "learnings": [
+      "Consumer hospitality is won in the first two taps",
+      "Brand and conversion are not a tradeoff if the hierarchy is right"
+    ],
+    "roadmap": [
+      "POS and inventory integration",
+      "Loyalty programme"
+    ],
+    "businessValue": "Gave the brand a direct, owned channel instead of renting reach."
+  },
+  {
+    "slug": "project-us",
+    "title": "Project US",
+    "status": "DELIVERED",
+    "category": "Enterprise SaaS",
+    "tagline": "Delivered enterprise engagement",
+    "image": "/projects/ProjectUS.png",
+    "liveUrl": null,
+    "tech": [
+      "Agile delivery",
+      "RICE / MoSCoW prioritisation",
+      "Jira"
+    ],
+    "highlights": [
+      {
+        "label": "Status",
+        "value": "Delivered"
+      }
+    ],
+    "overview": "An enterprise engagement delivered through structured prioritisation and Agile delivery, tracked in the Notion portfolio.",
+    "problem": "Competing stakeholder asks without a shared prioritisation model were slowing delivery and diluting outcomes.",
+    "businessContext": "Enterprise SaaS delivery where roadmap clarity is the product manager's primary lever.",
+    "users": [
+      "Enterprise stakeholders",
+      "Delivery teams",
+      "End users"
+    ],
+    "discovery": "Facilitated backlog discovery and scored initiatives with RICE / MoSCoW to create a single prioritised plan.",
+    "research": "Stakeholder interviews and usage analysis to ground prioritisation in evidence.",
+    "prd": [
+      "Prioritised backlog with RICE / MoSCoW scoring",
+      "Sprint-ready user stories",
+      "Acceptance criteria per release"
+    ],
+    "architecture": [
+      "Agile delivery cadence with Jira-tracked milestones"
+    ],
+    "wireframes": "Story-level wireframes for high-risk flows before sprint commitment.",
+    "flow": [
+      "Discovery",
+      "Prioritisation",
+      "Sprint delivery",
+      "UAT",
+      "Release"
+    ],
+    "challenges": [
+      "Aligning executives on a single priority order"
+    ],
+    "tradeoffs": [
+      "Fewer features at higher quality over broad simultaneous delivery"
+    ],
+    "metrics": [],
+    "outcome": "Enterprise engagement delivered against a shared, scored roadmap.",
+    "learnings": [
+      "Prioritisation frameworks only work when stakeholders see the scoring, not just the outcome"
+    ],
+    "roadmap": [],
+    "businessValue": "Converted competing asks into an executable enterprise delivery plan."
+  },
+  {
+    "slug": "major-kalshi-classes",
+    "title": "Major Kalshi Classes",
+    "status": "DELIVERED",
+    "category": "Ed-tech",
+    "tagline": "Defence-exam coaching platform at scale",
+    "image": "/projects/MajorKalshiClasses.png",
+    "liveUrl": null,
+    "tech": [
+      "Web platform",
+      "CMS",
+      "Lead management"
+    ],
+    "highlights": [
+      {
+        "label": "Status",
+        "value": "Delivered"
+      },
+      {
+        "label": "Domain",
+        "value": "Defence exam coaching"
+      }
+    ],
+    "overview": "A digital platform for a defence-exam coaching brand, covering programme discovery, credibility and lead capture at scale.",
+    "problem": "A growing coaching brand needed a digital surface that could convert aspirants without relying solely on offline counselling.",
+    "businessContext": "Defence exam aspirants research intensely before enrolling \u2014 credibility and clarity convert.",
+    "users": [
+      "Defence exam aspirants",
+      "Counsellors",
+      "Academy admins"
+    ],
+    "discovery": "Mapped aspirant research journeys and counselling handoff points.",
+    "research": "Competitive review of coaching platforms and lead-quality analysis.",
+    "prd": [
+      "Programme catalogue",
+      "Faculty and result credibility surfaces",
+      "Lead capture and counselling routing",
+      "CMS for course updates"
+    ],
+    "architecture": [
+      "Content-managed public site",
+      "Lead management workflow"
+    ],
+    "wireframes": "Trust-first layouts with counselling CTA persistent across programme pages.",
+    "flow": [
+      "Discover programme",
+      "Review credibility",
+      "Submit lead",
+      "Counsellor follow-up",
+      "Enrol"
+    ],
+    "challenges": [
+      "Scaling lead quality without flooding counsellors"
+    ],
+    "tradeoffs": [
+      "Lead-qualified counselling over full self-serve enrolment in v1"
+    ],
+    "metrics": [],
+    "outcome": "Delivered a defence-exam coaching platform with structured digital lead capture.",
+    "learnings": [
+      "In coaching, result proof outperforms feature lists"
+    ],
+    "roadmap": [
+      "Self-serve demo classes",
+      "Learner progress tracking"
+    ],
+    "businessValue": "Gave the academy a scalable digital acquisition channel."
+  },
+  {
+    "slug": "modulars-4-you",
+    "title": "Modulars 4 You",
+    "status": "IN PROGRESS",
+    "category": "Consumer Tech / 3D",
+    "tagline": "WebGL kitchen planner \u2014 configure in 3D",
+    "image": "/projects/Modulars4You.png",
+    "liveUrl": "http://142.93.207.50/development/kitchen-planner/admin/public/webgl-files/beta_build_modulars_for_you/",
+    "tech": [
+      "WebGL",
+      "3D configurator",
+      "Admin catalogue"
+    ],
+    "highlights": [
+      {
+        "label": "Status",
+        "value": "In progress"
+      },
+      {
+        "label": "Runtime",
+        "value": "WebGL, browser-native"
+      }
+    ],
+    "overview": "A browser-based WebGL kitchen planner letting customers configure modular kitchen layouts in real-time 3D before they buy. Currently in progress in the delivered-projects portfolio.",
+    "problem": "Modular kitchen buyers can't visualise a configuration from a catalogue, so the sales cycle depends on showroom visits and manual quotations.",
+    "businessContext": "High-consideration purchase with long sales cycles \u2014 visualisation collapses the gap between interest and quotation.",
+    "users": [
+      "Homeowners configuring a kitchen",
+      "Sales and design consultants",
+      "Manufacturing ops"
+    ],
+    "discovery": "Mapped the showroom-led sales journey to find which steps a 3D configurator can absorb.",
+    "research": "Observed consultant-led design sessions to identify the decisions customers stall on.",
+    "prd": [
+      "Real-time 3D layout configuration in the browser",
+      "Module, finish and hardware selection",
+      "Configuration persistence and quotation handoff",
+      "Admin management of the module catalogue"
+    ],
+    "architecture": [
+      "WebGL runtime delivering the interactive 3D planner",
+      "Catalogue-driven module definitions with an admin surface",
+      "Configuration state persisted for consultant handoff"
+    ],
+    "wireframes": "Configurator UI framed around the 3D viewport: canvas first, controls docked.",
+    "flow": [
+      "Choose layout",
+      "Place modules",
+      "Select finishes",
+      "Review in 3D",
+      "Request quotation"
+    ],
+    "challenges": [
+      "Delivering acceptable WebGL performance on mid-range consumer hardware",
+      "Keeping the 3D catalogue synchronised with real manufacturable modules"
+    ],
+    "tradeoffs": [
+      "Browser WebGL over a native app for zero-install reach, accepting the performance ceiling",
+      "Guided layout templates over fully freeform modelling to keep configurations manufacturable"
+    ],
+    "metrics": [],
+    "outcome": "A beta WebGL planner build is live, moving kitchen configuration from the showroom into the browser.",
+    "learnings": [
+      "3D configurators only pay off when every renderable configuration is actually manufacturable",
+      "Guardrails beat freedom in a purchase configurator"
+    ],
+    "roadmap": [
+      "Instant quotation from configuration",
+      "AR preview",
+      "Consultant co-browsing"
+    ],
+    "businessValue": "Shortens a showroom-dependent sales cycle into a self-serve digital one."
+  },
+  {
+    "slug": "wallantics",
+    "title": "Wallantics",
+    "status": "IN PROGRESS",
+    "category": "Consumer Tech",
+    "tagline": "Design-led commerce experience",
+    "image": "/projects/Wallantics.png",
+    "liveUrl": null,
+    "tech": [
+      "Commerce frontend",
+      "CMS",
+      "Media optimisation"
+    ],
+    "highlights": [
+      {
+        "label": "Status",
+        "value": "In progress"
+      }
+    ],
+    "overview": "A design-led commerce experience for wall art and d\u00e9cor, focused on visual merchandising and conversion.",
+    "problem": "Visual products sell on imagery and inspiration \u2014 a generic catalogue kills conversion.",
+    "businessContext": "Design-led commerce where the browse experience is the product.",
+    "users": [
+      "Home d\u00e9cor shoppers",
+      "Merchandising team"
+    ],
+    "discovery": "Mapped inspiration-to-purchase journeys for wall art shoppers.",
+    "research": "Visual merchandising benchmarks and media performance review.",
+    "prd": [
+      "Inspiration-led browse",
+      "Product detail with high-fidelity media",
+      "CMS for collections",
+      "Checkout path"
+    ],
+    "architecture": [
+      "Commerce frontend with media-optimised assets",
+      "Content-managed collections"
+    ],
+    "wireframes": "Gallery-first layouts with product detail as a cinematic surface.",
+    "flow": [
+      "Browse inspiration",
+      "Filter collection",
+      "Product detail",
+      "Add to cart",
+      "Checkout"
+    ],
+    "challenges": [
+      "Keeping media weight low without losing visual fidelity"
+    ],
+    "tradeoffs": [
+      "Visual density over feature density on listing pages"
+    ],
+    "metrics": [],
+    "outcome": "Design-led commerce experience in progress.",
+    "learnings": [
+      "For visual products, media performance is a conversion feature"
+    ],
+    "roadmap": [
+      "Room preview",
+      "Personalised collections"
+    ],
+    "businessValue": "Turns browsing into buying for a design-led catalogue."
+  },
+  {
+    "slug": "bhagyavakta",
+    "title": "Bhagyavakta",
+    "status": "DELIVERED",
+    "category": "Consumer Tech / Fintech",
+    "tagline": "Consultation marketplace with payments",
+    "image": "/projects/Bhagyavakta.png",
+    "liveUrl": "https://bhagyavakta.com/home",
+    "tech": [
+      "Marketplace platform",
+      "Payment Gateway",
+      "Scheduling"
+    ],
+    "highlights": [
+      {
+        "label": "Status",
+        "value": "Live"
+      },
+      {
+        "label": "Model",
+        "value": "Two-sided marketplace"
+      }
+    ],
+    "overview": "A live consultation platform connecting users with practitioners, including booking and payment flows.",
+    "problem": "Consultations were booked over informal channels with no scheduling, no payment guarantee and no record.",
+    "businessContext": "A two-sided marketplace only holds if both supply availability and payment settlement are reliable.",
+    "users": [
+      "Users seeking consultations",
+      "Practitioners",
+      "Platform operations"
+    ],
+    "discovery": "Mapped both sides of the marketplace: seeker intent and practitioner availability.",
+    "research": "Practitioner interviews on scheduling and payout expectations.",
+    "prd": [
+      "Practitioner discovery and profiles",
+      "Slot-based booking",
+      "Integrated payment and payout",
+      "Consultation history"
+    ],
+    "architecture": [
+      "Availability and booking service",
+      "Payment gateway integration with practitioner settlement"
+    ],
+    "wireframes": "Discovery-to-booking wireframes validated for both marketplace sides.",
+    "flow": [
+      "Discover practitioner",
+      "Select slot",
+      "Pay",
+      "Consult",
+      "History"
+    ],
+    "challenges": [
+      "Cold-start supply",
+      "Settlement timing expectations from practitioners"
+    ],
+    "tradeoffs": [
+      "Curated practitioner supply over open onboarding to protect early quality"
+    ],
+    "metrics": [],
+    "outcome": "Launched a live consultation marketplace with integrated payments.",
+    "learnings": [
+      "Marketplaces are payout products before they are discovery products"
+    ],
+    "roadmap": [
+      "Video consultation in-platform",
+      "Ratings and quality scoring"
+    ],
+    "businessValue": "Formalised an informal consultation economy into a transacting platform."
+  },
+  {
+    "slug": "dhi-atelier",
+    "title": "Dhi Atelier",
+    "status": "DELIVERED",
+    "category": "Consumer Tech",
+    "tagline": "Studio project showcase and client portal",
+    "image": "/projects/DhiAtelier.png",
+    "liveUrl": null,
+    "tech": [
+      "React",
+      "Vercel",
+      "Client portal"
+    ],
+    "highlights": [
+      {
+        "label": "Status",
+        "value": "Delivered"
+      }
+    ],
+    "overview": "A studio showcase and client portal for presenting projects and managing client-facing delivery artefacts.",
+    "problem": "Studio work lived in scattered folders and email threads with no owned presentation surface.",
+    "businessContext": "Creative studios win on presentation quality \u2014 the portfolio is the sales asset.",
+    "users": [
+      "Prospective clients",
+      "Existing clients",
+      "Studio team"
+    ],
+    "discovery": "Mapped how the studio presents work and where client handoff breaks.",
+    "research": "Review of studio portfolio patterns and client feedback loops.",
+    "prd": [
+      "Project showcase",
+      "Client portal surfaces",
+      "Deployment-ready frontend"
+    ],
+    "architecture": [
+      "React frontend deployed on Vercel"
+    ],
+    "wireframes": "Showcase-first layouts with project case depth on demand.",
+    "flow": [
+      "Browse work",
+      "Open project",
+      "Client portal access"
+    ],
+    "challenges": [
+      "Balancing portfolio storytelling with operational portal needs"
+    ],
+    "tradeoffs": [
+      "Showcase polish over portal breadth in v1"
+    ],
+    "metrics": [],
+    "outcome": "Delivered a studio showcase and client portal.",
+    "learnings": [
+      "For studios, the portfolio is the product"
+    ],
+    "roadmap": [
+      "Client feedback threads",
+      "Project status timelines"
+    ],
+    "businessValue": "Gave the studio an owned, presentable digital surface for work and clients."
+  },
+  {
+    "slug": "balfund",
+    "title": "Balfund",
+    "status": "DELIVERED",
+    "category": "Fintech",
+    "tagline": "Financial product delivery",
+    "image": "/projects/Balfund.png",
+    "liveUrl": null,
+    "tech": [
+      "Fintech platform",
+      "KYC",
+      "Payments"
+    ],
+    "highlights": [
+      {
+        "label": "Status",
+        "value": "Delivered"
+      }
+    ],
+    "overview": "A fintech product delivery covering onboarding, KYC and payment surfaces.",
+    "problem": "Financial product users needed a compliant path from signup to funded activity without manual back-office loops.",
+    "businessContext": "Fintech conversion dies in KYC friction \u2014 the product has to make compliance feel invisible.",
+    "users": [
+      "End customers",
+      "Ops / compliance",
+      "Support"
+    ],
+    "discovery": "Mapped the signup-to-funded journey and compliance choke points.",
+    "research": "KYC drop-off analysis and payment-rail capability review.",
+    "prd": [
+      "KYC-compliant onboarding",
+      "Payment surfaces",
+      "Ops visibility"
+    ],
+    "architecture": [
+      "Fintech platform with KYC and payment integrations"
+    ],
+    "wireframes": "Friction-aware onboarding wireframes with progress clarity.",
+    "flow": [
+      "Sign up",
+      "KYC",
+      "Activate",
+      "Transact"
+    ],
+    "challenges": [
+      "Reducing KYC drop-off without weakening compliance"
+    ],
+    "tradeoffs": [
+      "Progressive KYC over upfront full verification where regulation allowed"
+    ],
+    "metrics": [],
+    "outcome": "Delivered a fintech product with compliant onboarding and payments.",
+    "learnings": [
+      "In fintech, compliance UX is growth UX"
+    ],
+    "roadmap": [],
+    "businessValue": "Enabled compliant digital financial product delivery."
+  },
+  {
+    "slug": "rd-guru",
+    "title": "R&D Guru",
+    "status": "DELIVERED",
+    "category": "Enterprise SaaS",
+    "tagline": "Research and development enablement platform",
+    "image": null,
+    "liveUrl": null,
+    "tech": [
+      "Web platform",
+      "Search",
+      "Access control"
+    ],
+    "highlights": [
+      {
+        "label": "Status",
+        "value": "Delivered"
+      }
+    ],
+    "overview": "An R&D enablement platform supporting research discovery, access control and knowledge surfaces for enterprise teams.",
+    "problem": "R&D knowledge was siloed, hard to search and inconsistently permissioned across teams.",
+    "businessContext": "Enterprise R&D productivity depends on findability and governed access.",
+    "users": [
+      "Researchers",
+      "R&D managers",
+      "Compliance / access admins"
+    ],
+    "discovery": "Mapped how research artefacts are created, shared and retrieved.",
+    "research": "Internal knowledge-access interviews and search-failure analysis.",
+    "prd": [
+      "Searchable research corpus",
+      "Role-based access control",
+      "Knowledge surfaces for teams"
+    ],
+    "architecture": [
+      "Web platform with search and access-control layers"
+    ],
+    "wireframes": "Search-first layouts with permission-aware result presentation.",
+    "flow": [
+      "Authenticate",
+      "Search / browse",
+      "Open artefact",
+      "Collaborate"
+    ],
+    "challenges": [
+      "Balancing open discovery with access control"
+    ],
+    "tradeoffs": [
+      "Governed access over fully open internal search"
+    ],
+    "metrics": [],
+    "outcome": "Delivered an R&D enablement platform with search and access control.",
+    "learnings": [
+      "Findability without governance creates risk; governance without findability creates shadow IT"
+    ],
+    "roadmap": [],
+    "businessValue": "Made enterprise R&D knowledge findable under controlled access."
+  }
+]

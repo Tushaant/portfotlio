@@ -1,0 +1,234 @@
+[
+  {
+    "id": "oraczen",
+    "company": "Oraczen India",
+    "location": "Hyderabad, India",
+    "role": "AI Product Manager and Acting Director of Product Management",
+    "period": "May 2025 \u2014 Present",
+    "active": true,
+    "metrics": [
+      {
+        "label": "Portfolio",
+        "value": "$6.4M"
+      },
+      {
+        "label": "Accuracy",
+        "value": "92\u201395%"
+      },
+      {
+        "label": "P95 Latency",
+        "value": "<1.5s"
+      },
+      {
+        "label": "Error Rate",
+        "value": "<0.75%"
+      },
+      {
+        "label": "Uptime SLA",
+        "value": "99%+"
+      },
+      {
+        "label": "Governance",
+        "value": "95%"
+      }
+    ],
+    "responsibilities": [
+      "Director-Level Accountability: Owned strategic roadmap, P&L accountability for a 6.4-million-dollar portfolio, and executive client relationships for a 12.4-billion-dollar U.S. banking enterprise.",
+      "AI Platform Strategy: Defined and executed multi-product AI strategy spanning Chat Agents, Voice Agents, Lending AI, Requirement gathering, Spend Intelligence, and Risk Intelligence.",
+      "AI-powered Enterprise: Built AI products from 0 to 1 and scaled them from 1 to N to transform customer and end user problems and feedback into market-ready SaaS solutions.",
+      "RAG and MCP Transformation: Architected enterprise-grade RAG pipelines integrated with Model Context Protocol to replace low-efficiency manual processes with AI-driven automation at scale, introducing a knowledge graph.",
+      "Organization Leadership: Hired and managed an 8+ member cross-functional organization containing 3 Product Managers, 3 developers, 1 QA, and 1 UI/UX designer; increased release velocity by 30% through Agile restructuring.",
+      "Process Engineering: Conducted 4+ process discovery workshops with business stakeholders to document current-state workflows, identify operational bottlenecks, and define optimization opportunities.",
+      "AI Quality and Ops: Instituted LLM evaluation frameworks using Langfuse, Grafana, and Promptfoo red-teaming to achieve 92% to 95% accuracy, P95 latency under 1.5 seconds, an error rate under 0.75%, and a 99% plus uptime SLA.",
+      "Governance and Compliance: Established Architecture Review Board compliant release governance with 95% adherence; ensured HIPAA, PCI-DSS, and GDPR compliance across all AI product deployments.",
+      "C-Suite Engagement: Directly engaged with client SVP of Product Architecture and COO alongside internal alignment with CTO and COO to lead cross-organization coordination across 8 functional teams."
+    ],
+    "technologies": [
+      "Agentic AI",
+      "RAG",
+      "MCP",
+      "Knowledge Graph",
+      "Langfuse",
+      "Grafana",
+      "Promptfoo",
+      "Azure OpenAI",
+      "Voice Agents"
+    ],
+    "lesson": "Enterprise AI wins on evaluation discipline and governance, not model novelty \u2014 measurable accuracy, latency and compliance are the product."
+  },
+  {
+    "id": "emb",
+    "company": "EMB Global",
+    "location": "Gurugram, India",
+    "role": "Category Head \u2013 Enterprise SaaS, Consumer Tech and Fintech",
+    "period": "Sep 2022 \u2014 Apr 2025",
+    "active": false,
+    "metrics": [
+      {
+        "label": "Products",
+        "value": "26"
+      },
+      {
+        "label": "Revenue",
+        "value": "\u20b97.78 Cr"
+      },
+      {
+        "label": "Retention",
+        "value": "+82%"
+      },
+      {
+        "label": "Onboarding",
+        "value": "-35%"
+      }
+    ],
+    "responsibilities": [
+      "Portfolio Leadership: Spearheaded 26 Fintech and SaaS products generating 7.78 Crores in revenue; owned enterprise feature roadmap balancing strategic priorities with customer value.",
+      "Enterprise Retention: Implemented GTM strategies for enterprise SaaS adoption, achieving an 82% enterprise retention improvement.",
+      "Onboarding Optimization: Collaborated with UX teams to streamline workflows, reducing onboarding time by 35% via optimized API-driven integrations and UX improvements.",
+      "Agile Delivery: Led sprint ceremonies amongst 5 cross-functional teams and executive members; mentored teams in Agile best practices to foster a continuous improvement culture."
+    ],
+    "technologies": [
+      "Enterprise SaaS",
+      "Fintech",
+      "Agile",
+      "API Integrations",
+      "GTM",
+      "UX"
+    ],
+    "lesson": "Retention is an onboarding metric long before it is a feature metric."
+  },
+  {
+    "id": "filmboard",
+    "company": "Filmboard Movies Technologies Inc.",
+    "location": "Mumbai, India",
+    "role": "Senior Product Manager \u2013 Fintech and Martech",
+    "period": "Jun 2020 \u2014 Aug 2022",
+    "active": false,
+    "metrics": [
+      {
+        "label": "Vendor Onboarding",
+        "value": "+29%"
+      },
+      {
+        "label": "Churn",
+        "value": "-22%"
+      },
+      {
+        "label": "Lead Conversion",
+        "value": "+18%"
+      }
+    ],
+    "responsibilities": [
+      "B2B Platform Launch: Developed an enterprise B2B eCommerce platform, improving vendor onboarding by 29% and reducing churn by 22% through UX-led design improvements.",
+      "Lead Conversion: Improved CRM integration for enterprise clients, boosting lead conversion by 18%; implemented GTM strategies aligning product marketing with sales execution."
+    ],
+    "technologies": [
+      "B2B eCommerce",
+      "CRM",
+      "UX",
+      "Fintech",
+      "Martech",
+      "GTM"
+    ],
+    "lesson": "Explaining a bad flow is not the same as fixing it \u2014 resequencing onboarding moved the numbers."
+  },
+  {
+    "id": "ibm",
+    "company": "IBM",
+    "location": "Vizag and Gurugram, India",
+    "role": "Data Analyst and Product Associate \u2013 Credit and Risk Analytics",
+    "period": "May 2019 \u2014 Jun 2020",
+    "active": false,
+    "metrics": [
+      {
+        "label": "Model Accuracy",
+        "value": "+15%"
+      },
+      {
+        "label": "KPIs",
+        "value": "25+"
+      },
+      {
+        "label": "Strategy Support",
+        "value": "+11%"
+      }
+    ],
+    "responsibilities": [
+      "Predictive Modeling: Predictive credit risk models for enterprise financial services, improving model accuracy by 15% and supporting data-driven business decisions.",
+      "Dashboard Engineering: Real-time analytics dashboards tracking over 25 business and operational KPIs to enable executive visibility into portfolio enhancement and risk metrics.",
+      "Stakeholder Collaboration: Worked with cross-functional stakeholders to translate business requirements into analytical solutions supporting product and risk strategy by 11%."
+    ],
+    "technologies": [
+      "Predictive Analytics",
+      "Dashboards",
+      "Credit Risk",
+      "Python",
+      "R"
+    ],
+    "lesson": "A model that doesn't reach a decision-maker has zero accuracy in practice."
+  },
+  {
+    "id": "extramarks",
+    "company": "Extra marks Education",
+    "location": "Noida, India",
+    "role": "Hybrid: Product and Sales Manager",
+    "period": "Aug 2018 \u2014 Dec 2018",
+    "active": false,
+    "metrics": [
+      {
+        "label": "Retention",
+        "value": "+25%"
+      },
+      {
+        "label": "Feedback",
+        "value": "~28%"
+      }
+    ],
+    "responsibilities": [
+      "Customer Engagement: Initiated customer engagement and product adoption initiatives, improving customer retention by 25% through data-informed engagement strategies.",
+      "Workflow Optimization: Partnered with product, marketing, and sales teams to optimize CRM workflows, customer segmentation, and lead management across B2B and B2C channels.",
+      "Feedback Collection: Gathered approximately 28% customer feedback on features to identify product improvement opportunities and enhance the overall user experience."
+    ],
+    "technologies": [
+      "CRM",
+      "Ed-tech",
+      "B2B",
+      "B2C"
+    ],
+    "lesson": "Engagement loops only work when feedback is measured and closed."
+  },
+  {
+    "id": "byjus",
+    "company": "Byju's Think and Learn",
+    "location": "Bangalore and Noida, India",
+    "role": "Front End Developer",
+    "period": "Jun 2016 \u2014 Aug 2018",
+    "active": false,
+    "metrics": [
+      {
+        "label": "UX Improvement",
+        "value": "+30%"
+      },
+      {
+        "label": "Research",
+        "value": "500+"
+      },
+      {
+        "label": "PMF Lift",
+        "value": "+20%"
+      }
+    ],
+    "responsibilities": [
+      "Web Application Development: Developed customer-facing web applications while supporting product enhancements and improving user experience by 30% input from using tailwind.",
+      "Market Research: Conducted market research with over 500 customers to identify product gaps, contributing to a 20% improvement in product-market fit and more effective onboarding workflows.",
+      "Feature Translation: Worked closely with product managers and designers to translate business requirements into 100% scalable, user-centric product features."
+    ],
+    "technologies": [
+      "Frontend",
+      "Tailwind",
+      "Web Apps",
+      "UX Research"
+    ],
+    "lesson": "Talking to 500 customers early compounds every product decision afterwards."
+  }
+]

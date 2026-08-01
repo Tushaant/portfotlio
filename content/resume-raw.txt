@@ -1,0 +1,94 @@
+TUSHANT SHARMA 
+Hyderabad, India | +91 8586023101 | Tushant.s4@gmail.com  
+https://www.linkedin.com/in/tushant-sharma-95303b424/ 
+ 
+PROFESSIONAL SUMMARY 
+Senior Product Executive with over 10 years of experience leading enterprise AI and SaaS product organizations. Currently acting as Director 
+of Product Management at Oraczen, owning a 6.4 million dollar Agentic AI portfolio, leading 40 plus cross-functional team members, and 
+delivering AI-powered banking and insurance solutions for a 12.4 billion dollar U.S. enterprise client. Expertise spans Agentic AI, 
+Conversational AI, Generative AI platform strategy, RAG architectures, LLM evaluation, enterprise Go-To-Market execution, and regulatory 
+compliance including PCI-DSS, HIPAA, and GDPR. Seeking a competitive leadership role to drive organizational AI strategy, build high-
+performance product teams, and deliver transformational enterprise value from 0 to 1 and scaling to N. 
+CORE COMPETENCIES 
+Director Product Management, Agentic AI Strategy, Enterprise AI Platform, P&L Ownership, Conversational AI, Generative AI, RAG 
+Architecture (Semantic, Hybrid, Self, Memory, Graph), MCP (Platform & servers), LLM, Executive Stakeholder Management, Fintech, 
+Enterprise Product Strategy, Agile Delivery, Backlog and Roadmap Management, API and Integration Ecosystem, LLM Evaluation, KYC 
+Compliance, PCI-DSS Compliance, HIPAA Compliance, GDPR Compliance, Customer Success and Retention, Cross-functional Team 
+Leadership, Data-Driven Decision Making, Go-to-Market Execution, Escalation Handling, Data Discovery, Release Structure, Process 
+Alignment, Dashboard Analytics, User Story Mapping, Product Storytelling, User Acceptance Testing, Change Request Management, PRD 
+and FRD Authoring. 
+PROFESSIONAL EXPERIENCE 
+Oraczen India | Hyderabad, India 
+AI Product Manager and Acting Director of Product Management | May 2025 - Present 
+• Director-Level Accountability: Owned strategic roadmap, P&L accountability for a 6.4-million-dollar portfolio, and executive client 
+relationships for a 12.4-billion-dollar U.S. banking enterprise. 
+• AI Platform Strategy: Defined and executed multi-product AI strategy spanning Chat Agents, Voice Agents, Lending AI, Requirement 
+gathering, Spend Intelligence, and Risk Intelligence.  
+• AI-powered Enterprise: Built AI products from 0 to 1 and scaled them from 1 to N to transform customer and end user problems 
+and feedback into market-ready SaaS solutions. 
+• RAG and MCP Transformation: Architected enterprise-grade RAG pipelines integrated with Model Context Protocol to replace low-
+efficiency manual processes with AI-driven automation at scale & introducing knowledge graph. 
+• Organization Leadership: Hired and managed an 8+ member cross-functional organization containing 3 Product Managers, 3 
+developers, 1 QA, and 1 UI/UX designer; increased release velocity by 30% through Agile restructuring. 
+• Process Engineering: Conducted 4+ process discovery workshops with business stakeholders to document current-state workflows, 
+identify operational bottlenecks, and define optimization opportunities. 
+• AI Quality and Ops: Instituted LLM evaluation frameworks using Langfuse, Grafana, and Promptfoo red-teaming to achieve 92% to 
+95% accuracy, P95 latency under 1.5 seconds, an error rate under 0.75%, and a 99% plus uptime SLA. 
+• Governance and Compliance: Established Architecture Review Board compliant release governance with 95% adherence; ensured 
+HIPAA, PCI-DSS, and GDPR compliance across all AI product deployments. 
+• C-Suite Engagement: Directly engaged with client SVP of Product Architecture and COO alongside internal alignment with CTO and 
+COO to lead cross-organization coordination across 8 functional teams. 
+EMB Global | Gurugram, India 
+Category Head – Enterprise SaaS, Consumer Tech and Fintech | Sep 2022 – Apr 2025 
+• Portfolio Leadership: Spearheaded 26 Fintech and SaaS products generating 7.78 Crores in revenue; owned enterprise feature 
+roadmap balancing strategic priorities with customer value. 
+• Enterprise Retention: Implemented GTM strategies for enterprise SaaS adoption, achieving an 82% enterprise retention 
+improvement. 
+• Onboarding Optimization: Collaborated with UX teams to streamline workflows, reducing onboarding time by 35% via optimized 
+API-driven integrations and UX improvements. 
+• Agile Delivery: Led sprint ceremonies amongst 5 cross-functional teams and executive members; mentored teams in Agile best 
+practices to foster a continuous improvement culture. 
+Filmboard Movies Technologies Inc. | Mumbai, India 
+Senior Product Manager – Fintech and Martech | Jun 2020 – Aug 2022 
+• B2B Platform Launch: Developed an enterprise B2B eCommerce platform, improving vendor onboarding by 29% and reducing 
+churn by 22% through UX-led design improvements. 
+• Lead Conversion: Improved CRM integration for enterprise clients, boosting lead conversion by 18%; implemented GTM strategies 
+aligning product marketing with sales execution. 
+IBM | Vizag and Gurugram, India 
+Data Analyst and Product Associate – Credit and Risk Analytics | May 2019 – Jun 2020 
+• Predictive Modeling: Predictive credit risk models for enterprise financial services, improving model accuracy by 15% and 
+supporting data-driven business decisions. 
+• Dashboard Engineering: Real-time analytics dashboards tracking over 25 business and operational KPIs to enable executive 
+visibility into portfolio enhancement and risk metrics. 
+• Stakeholder Collaboration: Worked with cross-functional stakeholders to translate business requirements into analytical solutions 
+supporting product and risk strategy by 11%. 
+Extra marks Education | Noida, India 
+Hybrid: Product and Sales Manager | Aug 2018 – Dec 2018 
+• Customer Engagement: Initiated customer engagement and product adoption initiatives, improving customer retention by 25% 
+through data-informed engagement strategies. 
+• Workflow Optimization: Partnered with product, marketing, and sales teams to optimize CRM workflows, customer segmentation, 
+and lead management across B2B and B2C channels. 
+• Feedback Collection: Gathered approximately 28% customer feedback on features to identify product improvement opportunities 
+and enhance the overall user experience. 
+Byju's Think and Learn | Bangalore and Noida, India 
+Front End Developer | Jun 2016 – Aug 2018 
+• Web Application Development: Developed customer-facing web applications while supporting product enhancements and 
+improving user experience by 30% input from using tailwind. 
+• Market Research: Conducted market research with over 500 customers to identify product gaps, contributing to a 20% 
+improvement in product-market fit and more effective onboarding workflows. 
+• Feature Translation: Worked closely with product managers and designers to translate business requirements into 100% scalable, 
+user-centric product features. 
+EDUCATION AND CERTIFICATIONS 
+• Bachelors in Technology - Electronics and Communication Engineering | DCE | 2016 
+• Project Management Professional (PMP) | PMI | Certified  
+• Predictive Business Analytics Certification | Edu Pristine | 2019 
+TECHNICAL TOOLKIT 
+• AI and ML Platforms: OpenAI GPT-4o, GPT-5, Azure OpenAI, Claude Anthropic, Copilot, Langfuse, Promptfoo, RAG, MCP 
+• STT and Voice APIs: Assembly AI, GPT-4o Transcribe, Agora, Twilio, Video SDK, Azure OpenAI Realtime, OpenAI SDK 
+• Payment Integrations: Razorpay, PayU, Cashfree, Stripe, PhonePe 
+• Auth and Security: OAuth, JWT, Authzen, SSO, MS Entra Multi-IDP , OKTA 
+• Product Management and Design Tools: Jira, Linear, Figma, Miro, Mermaid, Vercel, Cursor, Artha, Trello, SKAN.AI, Power BI 
+• Analytics and Monitoring: Tableau, Grafana, Python, R, HubSpot, Salesforce, Zoho CRM, Langfuse 
+• Methodologies and Frameworks: Agile, SAFe, Waterfall, RICE, MoSCoW, WCAG 2.0, Scrum 
+• Compliance and Governance: HIPAA, PCI-DSS, GDPR, KYC, SLA Management 
+ 

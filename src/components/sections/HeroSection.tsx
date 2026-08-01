@@ -1,0 +1,153 @@
+"use client";
+
+import dynamic from "next/dynamic";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { cms } from "@/lib/cms";
+
+const HeroScene = dynamic(
+  () => import("@/components/three/HeroScene").then((m) => m.HeroScene),
+  { ssr: false, loading: () => <div className="absolute inset-0 bg-[#05060B]" /> },
+);
+
+const ROLES = [
+  "AI Product Manager",
+  "Director of Product Management",
+  "Agentic AI",
+  "LLMs",
+  "Enterprise AI",
+];
+
+export function HeroSection() {
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [typed, setTyped] = useState("");
+
+  useEffect(() => {
+    const word = ROLES[roleIndex];
+    let i = 0;
+    let deleting = false;
+    const tick = () => {
+      if (!deleting) {
+        i += 1;
+        setTyped(word.slice(0, i));
+        if (i === word.length) {
+          deleting = true;
+          setTimeout(tick, 1400);
+          return;
+        }
+      } else {
+        i -= 1;
+        setTyped(word.slice(0, i));
+        if (i === 0) {
+          deleting = false;
+          setRoleIndex((r) => (r + 1) % ROLES.length);
+          return;
+        }
+      }
+      setTimeout(tick, deleting ? 28 : 55);
+    };
+    const id = setTimeout(tick, 200);
+    return () => clearTimeout(id);
+  }, [roleIndex]);
+
+  const ctas = [
+    { label: "Resume", href: "/resume" },
+    { label: "Projects", href: "/#projects" },
+    { label: "Case Studies", href: "/#case-studies" },
+    { label: "Contact", href: "/#contact" },
+    { label: "LinkedIn", href: cms.site.social.linkedin, external: true },
+    { label: "Github", href: "https://github.com/Tushaant", external: true },
+  ];
+
+  return (
+    <section
+      id="top"
+      className="relative flex min-h-[100svh] items-center overflow-hidden"
+    >
+      <HeroScene />
+      <div className="pointer-events-none absolute inset-0 grid-bg" />
+
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-24 pt-32 md:px-6">
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-4 font-mono text-xs tracking-[0.28em] text-cyan-300/80"
+        >
+          COMMAND CENTER ONLINE · {cms.resume.location}
+        </motion.p>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="display text-5xl font-bold leading-[1.05] md:text-7xl lg:text-8xl"
+        >
+          <span className="neon-text">{cms.resume.name}</span>
+        </motion.h1>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.25 }}
+          className="mt-5 flex flex-wrap items-center gap-3"
+        >
+          <p className="text-lg text-slate-200 md:text-xl">
+            {cms.resume.title.split(" and ")[0]}
+            <span className="text-slate-500"> / </span>
+            Acting Director of Product Management
+          </p>
+        </motion.div>
+
+        <div className="mt-4 h-8 font-mono text-cyan-300">
+          <span className="text-slate-500">operating on </span>
+          <span>{typed}</span>
+          <span className="animate-pulse-glow ml-0.5 inline-block h-5 w-[2px] bg-cyan-300 align-middle" />
+        </div>
+
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
+          className="mt-6 max-w-2xl text-base text-slate-400 md:text-lg"
+        >
+          Mission Control for AI Products — Agentic systems, enterprise RAG, and
+          P&amp;L-owned platforms that prove product thinking in motion.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45 }}
+          className="mt-10 flex flex-wrap gap-3"
+        >
+          {ctas.map((c, i) => (
+            <motion.div
+              key={c.label}
+              className="animate-float"
+              style={{ animationDelay: `${i * 0.35}s` }}
+            >
+              {c.external ? (
+                <a
+                  href={c.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="glass inline-flex rounded-full px-5 py-2.5 text-sm tracking-wide text-cyan-100 transition hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(56,248,255,0.35)]"
+                >
+                  {c.label}
+                </a>
+              ) : (
+                <Link
+                  href={c.href}
+                  className="glass inline-flex rounded-full px-5 py-2.5 text-sm tracking-wide text-cyan-100 transition hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(56,248,255,0.35)]"
+                >
+                  {c.label}
+                </Link>
+              )}
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
