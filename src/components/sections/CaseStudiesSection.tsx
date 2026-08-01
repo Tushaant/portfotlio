@@ -16,7 +16,8 @@ export function CaseStudiesSection() {
  <span className="neon-text">numbers</span>
  </h2>
         <p className="mt-4 max-w-xl text-slate-400">
-          Interactive product stories covering:
+          Career delivery stories plus Notion Featured Work research case
+          studies covering:
         </p>
         <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-slate-400">
           <li className="list-disc list-inside">Challenge</li>
@@ -42,6 +43,7 @@ export function CaseStudiesSection() {
  <div>
  <p className="font-mono text-xs text-slate-500">
  {c.company} · {c.period}
+ {"source" in c && c.source === "notion" ? " · Notion Featured Work" : ""}
  </p>
  <h3 className="display mt-2 max-w-2xl text-2xl md:text-3xl">
  {c.title}
@@ -50,12 +52,24 @@ export function CaseStudiesSection() {
  {c.summary}
  </p>
  </div>
+ <div className="flex shrink-0 flex-col items-end gap-2">
+ {"notionUrl" in c && c.notionUrl ? (
+ <a
+ href={String(c.notionUrl)}
+ target="_blank"
+ rel="noreferrer"
+ className="rounded-full border border-[#D4AF37]/40 px-4 py-2 text-sm text-[#D4AF37] transition hover:bg-[#D4AF37]/10"
+ >
+ Open in Notion
+ </a>
+ ) : null}
  <Link
  href={`/case-studies/${c.slug}`}
- className="shrink-0 rounded-full border border-cyan-400/40 px-4 py-2 text-sm text-cyan-200 transition hover:bg-cyan-400/10"
+ className="rounded-full border border-cyan-400/40 px-4 py-2 text-sm text-cyan-200 transition hover:bg-cyan-400/10"
  >
  Read the full story
  </Link>
+ </div>
  </div>
  <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
  {c.metrics.map((m) => (
