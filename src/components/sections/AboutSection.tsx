@@ -127,7 +127,7 @@ export function AboutSection() {
  {r.coreCompetencies.map((c) => (
  <span
  key={c}
- className="rounded-lg border border-[#00D95A]/45 bg-[#121212] px-2.5 py-1.5 text-[11px] font-medium text-[#FFFFFF] shadow-[inset_0_1px_0_rgba(0,217,90,0.1)] transition hover:border-[#00D95A] hover:bg-[#1A1A1A] hover:text-[#FFFFFF]"
+ className="rounded-lg border border-[color:rgba(var(--accent-rgb),0.45)] bg-[var(--surface)] px-2.5 py-1.5 text-[11px] font-medium text-[var(--text)] shadow-[inset_0_1px_0_rgba(var(--accent-rgb),0.1)] transition hover:border-[var(--gold)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
  >
  {c}
  </span>

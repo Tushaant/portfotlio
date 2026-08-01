@@ -69,7 +69,7 @@ function AchievementGlyph({
   const Icon = ACHIEVEMENT_ICONS[item.id] || Trophy;
   return (
     <Icon
-      className={active ? "text-[#00D95A]" : "text-[#FFFFFF]/80"}
+      className={active ? "text-[var(--gold)]" : "text-[color-mix(in_srgb,var(--text)_80%,transparent)]"}
       style={{ width: size * 0.85, height: size * 0.85 }}
     />
   );
@@ -86,7 +86,7 @@ export function AchievementsSection() {
   return (
     <section id="achievements" className="relative scroll-mt-24 py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <p className="font-mono text-xs tracking-[0.3em] text-[#00D95A]/80">
+        <p className="font-mono text-xs tracking-[0.3em] text-[rgba(var(--accent-rgb),0.8)]">
           05 · TROPHY ROOM
         </p>
         <h2 className="display mt-3 text-3xl md:text-5xl">
@@ -113,7 +113,7 @@ export function AchievementsSection() {
                 type="button"
                 onClick={() => setActive(a.id)}
                 className={`skill-card overflow-hidden rounded-3xl text-left transition ${
-                  active === a.id ? "ring-2 ring-[#00D95A]/60" : ""
+                  active === a.id ? "ring-2 ring-[rgba(var(--accent-rgb),0.6)]" : ""
                 }`}
               >
                 {a.image && (
@@ -126,11 +126,11 @@ export function AchievementsSection() {
                       sizes="(max-width:768px) 100vw, 50vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-                    <div className="absolute left-3 top-3 flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl border border-[#00D95A]/45 bg-[#121212]/95">
+                    <div className="absolute left-3 top-3 flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl border border-[color:rgba(var(--accent-rgb),0.45)] bg-[color-mix(in_srgb,var(--surface)_95%,transparent)]">
                       <AchievementGlyph item={a} active size={36} />
                     </div>
                     <div className="absolute bottom-3 left-3 right-3">
-                      <p className="display text-2xl text-[#00D95A]">
+                      <p className="display text-2xl text-[var(--gold)]">
                         {a.metrics?.Downloads || ""}
                       </p>
                       <p className="text-sm text-white">{a.title}</p>
@@ -142,7 +142,7 @@ export function AchievementsSection() {
         </div>
 
         <div className="mt-12 grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="relative min-h-[360px] rounded-3xl border border-[#00D95A]/20 bg-[radial-gradient(ellipse_at_center,#161616_0%,#0B0B0B_70%)] p-6">
+          <div className="relative min-h-[360px] rounded-3xl border border-[color:rgba(var(--accent-rgb),0.2)] bg-[radial-gradient(ellipse_at_center,#161616_0%,var(--bg)_70%)] p-6">
             <div className="absolute inset-0 grid-bg opacity-40" />
             <div className="relative flex flex-wrap items-center justify-center gap-4 py-8">
               {achievements.map((a, i) => (
@@ -159,12 +159,12 @@ export function AchievementsSection() {
                   <div
                     className={`flex h-20 w-20 flex-col items-center justify-center overflow-hidden rounded-full border ${
                       active === a.id
-                        ? "border-[#00D95A] bg-[#1A1A1A] shadow-[0_0_40px_rgba(0,217,90,0.35)]"
-                        : "border-[#00D95A]/30 bg-[#121212]"
+                        ? "border-[var(--gold)] bg-[var(--surface-2)] shadow-[0_0_40px_rgba(var(--accent-rgb),0.35)]"
+                        : "border-[color:rgba(var(--accent-rgb),0.3)] bg-[var(--surface)]"
                     }`}
                   >
                     <AchievementGlyph item={a} active={active === a.id} size={34} />
-                    <span className="mt-1 text-[8px] uppercase tracking-wider text-[#999999]">
+                    <span className="mt-1 text-[8px] uppercase tracking-wider text-[var(--muted)]">
                       {a.type.slice(0, 4)}
                     </span>
                   </div>
@@ -182,7 +182,7 @@ export function AchievementsSection() {
               className="skill-card rounded-3xl p-6"
             >
               <div className="flex items-start gap-3">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#00D95A]/40 bg-[#121212]">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[color:rgba(var(--accent-rgb),0.4)] bg-[var(--surface)]">
                   <AchievementGlyph item={item} active size={36} />
                 </div>
                 <div>
