@@ -116,16 +116,15 @@ export function TestimonialsSection() {
     return () => window.clearInterval(id);
   }, [paused, count, go, expandedId]);
 
+  // Keep carousel card in view horizontally only — never scroll the page
   useEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
     const card = el.children[index] as HTMLElement | undefined;
     if (!card) return;
-    card.scrollIntoView({
-      behavior: "smooth",
-      inline: "center",
-      block: "nearest",
-    });
+    const target =
+      card.offsetLeft - (el.clientWidth - card.clientWidth) / 2;
+    el.scrollTo({ left: Math.max(0, target), behavior: "smooth" });
   }, [index]);
 
   if (!count) return null;
