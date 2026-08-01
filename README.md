@@ -4,7 +4,7 @@ Immersive **AI Product Manager** portfolio: Cyberpunk mission-control energy mee
 
 > Inspiration reference: [portfolio-web-tushant.lovable.app](https://portfolio-web-tushant.lovable.app)  
 > Notion projects source: [Tushant Sharma — Notion](https://woolly-saga-8e5.notion.site/Tushant-Sharma-05d5b8ce678a4698ae6e7c89c726027e)  
-> Resume source: `public/resume/Tushant_Sharma_Resume.pdf` (PDF only — no fabricated resume content)
+> Resume source: uploaded `TUSHANT_SHARMA_1CAGAI_b7f6.pdf` → `public/resume/Tushant_Sharma_Resume.pdf` (PDF only — no fabricated resume content)
 
 ---
 
