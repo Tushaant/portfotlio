@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { cms } from "@/lib/cms";
+import { TiltCard } from "@/components/ui/TiltCard";
 import {
   Award,
   BarChart3,
@@ -69,7 +70,11 @@ function AchievementGlyph({
   const Icon = ACHIEVEMENT_ICONS[item.id] || Trophy;
   return (
     <Icon
-      className={active ? "text-[var(--gold)]" : "text-[color-mix(in_srgb,var(--text)_80%,transparent)]"}
+      className={
+        active
+          ? "text-[var(--gold)]"
+          : "text-[color-mix(in_srgb,var(--text)_80%,transparent)]"
+      }
       style={{ width: size * 0.85, height: size * 0.85 }}
     />
   );
@@ -108,12 +113,16 @@ export function AchievementsSection() {
             .map((id) => achievements.find((a) => a.id === id))
             .filter((a): a is Achievement => Boolean(a))
             .map((a) => (
-              <button
+              <TiltCard
                 key={a.id}
-                type="button"
+                as="button"
                 onClick={() => setActive(a.id)}
-                className={`skill-card overflow-hidden rounded-3xl text-left transition ${
-                  active === a.id ? "ring-2 ring-[rgba(var(--accent-rgb),0.6)]" : ""
+                maxTilt={12}
+                pushBack={26}
+                className={`skill-card w-full overflow-hidden rounded-3xl text-left transition ${
+                  active === a.id
+                    ? "ring-2 ring-[rgba(var(--accent-rgb),0.6)]"
+                    : ""
                 }`}
               >
                 {a.image && (
@@ -137,7 +146,7 @@ export function AchievementsSection() {
                     </div>
                   </div>
                 )}
-              </button>
+              </TiltCard>
             ))}
         </div>
 
@@ -163,7 +172,11 @@ export function AchievementsSection() {
                         : "border-[color:rgba(var(--accent-rgb),0.3)] bg-[var(--surface)]"
                     }`}
                   >
-                    <AchievementGlyph item={a} active={active === a.id} size={34} />
+                    <AchievementGlyph
+                      item={a}
+                      active={active === a.id}
+                      size={34}
+                    />
                     <span className="mt-1 text-[8px] uppercase tracking-wider text-[var(--muted)]">
                       {a.type.slice(0, 4)}
                     </span>
@@ -179,64 +192,71 @@ export function AchievementsSection() {
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
-              className="skill-card rounded-3xl p-6"
             >
-              <div className="flex items-start gap-3">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[color:rgba(var(--accent-rgb),0.4)] bg-[var(--surface)]">
-                  <AchievementGlyph item={item} active size={36} />
+              <TiltCard
+                maxTilt={11}
+                pushBack={24}
+                className="skill-card rounded-3xl p-6"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[color:rgba(var(--accent-rgb),0.4)] bg-[var(--surface)]">
+                    <AchievementGlyph item={item} active size={36} />
+                  </div>
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--gold)]">
+                      {item.type}
+                    </p>
+                    <h3 className="display mt-1 text-2xl text-[var(--text)]">
+                      {item.title}
+                    </h3>
+                    <p className="mt-1 text-sm text-[var(--muted)]">
+                      {item.org} · {item.year}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--gold)]">
-                    {item.type}
+                {item.image && (
+                  <div className="relative mt-4 aspect-[16/9] overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--gold)_35%,transparent)]">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover"
+                      sizes="400px"
+                    />
+                  </div>
+                )}
+                {item.description && (
+                  <p className="mt-4 text-sm font-medium leading-relaxed text-[var(--text)]">
+                    {item.description}
                   </p>
-                  <h3 className="display mt-1 text-2xl text-[var(--text)]">
-                    {item.title}
-                  </h3>
-                  <p className="mt-1 text-sm text-[var(--muted)]">
-                    {item.org} · {item.year}
-                  </p>
-                </div>
-              </div>
-              {item.image && (
-                <div className="relative mt-4 aspect-[16/9] overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--gold)_35%,transparent)]">
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    className="object-cover"
-                    sizes="400px"
-                  />
-                </div>
-              )}
-              {item.description && (
-                <p className="mt-4 text-sm font-medium leading-relaxed text-[var(--text)]">
-                  {item.description}
-                </p>
-              )}
-              {item.metrics && Object.keys(item.metrics).length > 0 && (
-                <div className="mt-5 grid grid-cols-2 gap-2">
-                  {Object.entries(item.metrics).map(([k, v]) => (
-                    <div key={k} className="metric-chip rounded-xl p-3">
-                      <p className="display text-lg text-[var(--gold)]">{v}</p>
-                      <p className="text-[11px] font-medium text-[var(--muted)]">
-                        {k}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {item.link && (
-                <a
-                  href={item.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-5 inline-block text-sm font-semibold text-[var(--gold)]"
-                >
-                  {item.id.includes("downloads") || item.id === "mkc-downloads" || item.id === "veda-downloads"
-                    ? "Open Play Store →"
-                    : "Open link →"}
-                </a>
-              )}
+                )}
+                {item.metrics && Object.keys(item.metrics).length > 0 && (
+                  <div className="mt-5 grid grid-cols-2 gap-2">
+                    {Object.entries(item.metrics).map(([k, v]) => (
+                      <div key={k} className="metric-chip rounded-xl p-3">
+                        <p className="display text-lg text-[var(--gold)]">{v}</p>
+                        <p className="text-[11px] font-medium text-[var(--muted)]">
+                          {k}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {item.link && (
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-5 inline-block text-sm font-semibold text-[var(--gold)]"
+                  >
+                    {item.id.includes("downloads") ||
+                    item.id === "mkc-downloads" ||
+                    item.id === "veda-downloads"
+                      ? "Open Play Store →"
+                      : "Open link →"}
+                  </a>
+                )}
+              </TiltCard>
             </motion.div>
           </AnimatePresence>
         </div>
