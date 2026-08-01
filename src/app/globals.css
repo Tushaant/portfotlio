@@ -20,6 +20,9 @@
  --muted: #999999;
  --glow: 0 0 36px rgba(0, 217, 90, 0.32);
  --surface-soft: rgba(5, 5, 5, 0.72);
+ --surface: #121212;
+ --surface-2: #1a1a1a;
+ --accent-rgb: 0, 217, 90;
  --font-display: var(--font-orbitron);
  --font-body: var(--font-space);
  --font-mono: var(--font-jetbrains);
@@ -85,6 +88,9 @@ body.hologram-light {
  --muted: #4a3c22;
  --glow: 0 0 28px rgba(138, 100, 18, 0.25);
  --surface-soft: rgba(255, 255, 255, 0.78);
+ --surface: #fff8e8;
+ --surface-2: #fffaf0;
+ --accent-rgb: 138, 100, 18;
  color-scheme: light;
 }
 

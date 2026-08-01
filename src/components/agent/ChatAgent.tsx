@@ -204,7 +204,7 @@ export function ChatAgent() {
  />
  <button
  type="submit"
- className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#00D95A] to-[#00B34A] text-[#0B0B0B]"
+ className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--gold)] to-[var(--ember)] text-[var(--bg)]"
  aria-label="Send"
  >
  <Send className="h-4 w-4" />
