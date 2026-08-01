@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import { useUIStore } from "@/store/ui-store";
 import { Preloader } from "@/components/layout/Preloader";
@@ -14,6 +14,9 @@ import { FloatingControls } from "@/components/layout/FloatingControls";
 export function Providers({ children }: { children: React.ReactNode }) {
   const hologramMode = useUIStore((s) => s.hologramMode);
   const terminalMode = useUIStore((s) => s.terminalMode);
+  const agentOpen = useUIStore((s) => s.agentOpen);
+  const paletteOpen = useUIStore((s) => s.paletteOpen);
+  const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -21,6 +24,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       smoothWheel: true,
       touchMultiplier: 1.4,
     });
+    lenisRef.current = lenis;
     let raf = 0;
     const frame = (time: number) => {
       lenis.raf(time);
@@ -30,8 +34,46 @@ export function Providers({ children }: { children: React.ReactNode }) {
     return () => {
       cancelAnimationFrame(raf);
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, []);
+
+  // Freeze page scroll while agent or command palette is open
+  useEffect(() => {
+    const locked = agentOpen || paletteOpen;
+    const lenis = lenisRef.current;
+    if (lenis) {
+      if (locked) lenis.stop();
+      else lenis.start();
+    }
+
+    const html = document.documentElement;
+    const body = document.body;
+    const prevHtml = html.style.overflow;
+    const prevBody = body.style.overflow;
+    const prevPad = body.style.paddingRight;
+
+    if (locked) {
+      const scrollbar = window.innerWidth - html.clientWidth;
+      html.style.overflow = "hidden";
+      body.style.overflow = "hidden";
+      if (scrollbar > 0) body.style.paddingRight = `${scrollbar}px`;
+      body.classList.add("scroll-locked");
+    } else {
+      html.style.overflow = prevHtml;
+      body.style.overflow = prevBody;
+      body.style.paddingRight = prevPad;
+      body.classList.remove("scroll-locked");
+    }
+
+    return () => {
+      html.style.overflow = "";
+      body.style.overflow = "";
+      body.style.paddingRight = "";
+      body.classList.remove("scroll-locked");
+      lenisRef.current?.start();
+    };
+  }, [agentOpen, paletteOpen]);
 
   useEffect(() => {
     document.body.classList.toggle("hologram-light", hologramMode === "light");

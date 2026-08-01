@@ -77,11 +77,12 @@ export function CommandPalette() {
             initial={{ opacity: 0, y: 16, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8 }}
-            className="glass w-full max-w-xl overflow-hidden rounded-2xl shadow-[0_0_60px_rgba(56,248,255,0.15)]"
+            className="header-solid w-full max-w-xl overflow-hidden rounded-2xl shadow-[0_0_60px_rgba(255,179,0,0.15)]"
             onClick={(e) => e.stopPropagation()}
+            onWheel={(e) => e.stopPropagation()}
           >
             <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3">
-              <Search className="h-4 w-4 text-cyan-300" />
+              <Search className="h-4 w-4 text-amber-300" />
               <input
                 autoFocus
                 value={q}
@@ -93,13 +94,13 @@ export function CommandPalette() {
                 ESC
               </kbd>
             </div>
-            <ul className="max-h-80 overflow-auto p-2">
+            <ul className="max-h-80 overflow-auto overscroll-contain p-2">
               {items.map((item) => (
                 <li key={`${item.group}-${item.label}`}>
                   <button
                     type="button"
                     onClick={() => run(item)}
-                    className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm hover:bg-cyan-400/10"
+                    className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm hover:bg-amber-400/10"
                   >
                     <span>{item.label}</span>
                     <span className="text-[10px] uppercase tracking-wider text-slate-500">
