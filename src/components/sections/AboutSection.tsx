@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { cms } from "@/lib/cms";
+import { CompetencySolarSystem } from "@/components/sections/CompetencySolarSystem";
 
 function Counter({
  value,
@@ -162,20 +163,8 @@ export function AboutSection() {
  </div>
  </motion.div>
 
- <div className="mt-8">
- <p className="mb-3 font-mono text-[11px] tracking-[0.2em] text-[var(--gold)]">
- CORE COMPETENCY MATRIX
- </p>
- <div className="flex flex-wrap gap-2">
- {r.coreCompetencies.map((c) => (
- <span
- key={c}
- className="rounded-lg border border-[color:rgba(var(--accent-rgb),0.45)] bg-[var(--surface)] px-2.5 py-1.5 text-[11px] font-medium text-[var(--text)] shadow-[inset_0_1px_0_rgba(var(--accent-rgb),0.1)] transition hover:border-[var(--gold)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
- >
- {c}
- </span>
- ))}
- </div>
+ <div className="mt-10">
+ <CompetencySolarSystem competencies={r.coreCompetencies} />
  </div>
  </div>
  </section>
