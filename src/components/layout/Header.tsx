@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { cms } from "@/lib/cms";
 import { useUIStore } from "@/store/ui-store";
@@ -62,23 +63,30 @@ export function Header() {
             : "bg-transparent",
         )}
       >
-        <Link href="/#top" className="group flex items-center gap-2 py-2">
+        <Link href="/#top" className="group flex items-center gap-2.5 py-2">
           <motion.span
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-amber-400/40 bg-amber-400/10 display text-sm text-amber-300"
+            className="relative flex h-9 w-9 overflow-hidden rounded-full border border-[color:rgba(var(--accent-rgb),0.55)] bg-[var(--surface)]"
             animate={{
               boxShadow: [
-                "0 0 0 rgba(255,179,0,0)",
-                "0 0 24px rgba(255,179,0,0.45)",
-                "0 0 0 rgba(255,179,0,0)",
+                "0 0 0 0 rgba(var(--accent-rgb),0)",
+                "0 0 18px 2px rgba(var(--accent-rgb),0.4)",
+                "0 0 0 0 rgba(var(--accent-rgb),0)",
               ],
             }}
-            transition={{ duration: 3, repeat: Infinity }}
+            transition={{ duration: 3.2, repeat: Infinity }}
           >
-            TS
+            <Image
+              src="/profile/tushant-circle.png"
+              alt="Tushant Sharma"
+              width={36}
+              height={36}
+              className="h-full w-full object-cover"
+              priority
+            />
           </motion.span>
           <span className="display text-sm tracking-wider">
             <span className="text-[var(--text)]">Tushant</span>
-            <span className="text-amber-300">.AI</span>
+            <span className="text-[var(--gold)]">.AI</span>
           </span>
         </Link>
 

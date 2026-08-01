@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { cms } from "@/lib/cms";
 
@@ -88,34 +89,79 @@ export function AboutSection() {
  viewport={{ once: true }}
  className="glass mt-8 rounded-3xl p-6 md:p-8"
  >
- <p className="font-mono text-[11px] tracking-[0.2em] text-purple-300">
+ <div className="flex flex-col items-center gap-8 md:flex-row md:items-start">
+ <motion.div
+ initial={{ opacity: 0, scale: 0.92 }}
+ whileInView={{ opacity: 1, scale: 1 }}
+ viewport={{ once: true }}
+ transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+ className="relative shrink-0"
+ >
+ <div
+ className="absolute -inset-3 rounded-full opacity-70 blur-2xl"
+ style={{
+ background:
+ "radial-gradient(circle, rgba(var(--accent-rgb),0.35) 0%, transparent 70%)",
+ }}
+ />
+ <motion.div
+ className="relative h-36 w-36 overflow-hidden rounded-full border border-[color:rgba(var(--accent-rgb),0.5)] md:h-44 md:w-44"
+ animate={{
+ boxShadow: [
+ "0 0 0 0 rgba(var(--accent-rgb),0)",
+ "0 0 28px 4px rgba(var(--accent-rgb),0.35)",
+ "0 0 0 0 rgba(var(--accent-rgb),0)",
+ ],
+ }}
+ transition={{ duration: 3.6, repeat: Infinity }}
+ >
+ <Image
+ src="/profile/tushant-circle.png"
+ alt="Tushant Sharma — Director of Product Management"
+ width={176}
+ height={176}
+ className="h-full w-full object-cover"
+ priority
+ />
+ </motion.div>
+ <p className="relative mt-3 text-center font-mono text-[10px] tracking-[0.22em] text-[var(--muted)]">
+ OPERATOR ID · TS
+ </p>
+ </motion.div>
+
+ <div className="min-w-0 flex-1">
+ <p className="font-mono text-[11px] tracking-[0.2em] text-[var(--gold)]">
  PROFESSIONAL SUMMARY
  </p>
- <p className="mt-4 text-base leading-relaxed text-slate-200 md:text-lg">
+ <p className="mt-4 text-base leading-relaxed text-[var(--text)] md:text-lg">
  {r.summary}
  </p>
- <p className="mt-4 text-base leading-relaxed text-slate-200 md:text-lg">
+ <p className="mt-4 text-base leading-relaxed text-[var(--text)] md:text-lg">
  Highlighted consumer scale: shipped the Veda Academy Learning App to{" "}
  <span className="font-semibold text-[var(--gold)]">1L+ downloads</span>{" "}
  and the Major Kalshi Classes Learning App to{" "}
- <span className="font-semibold text-[var(--gold)]">1M+ (10L+) downloads</span>{" "}
+ <span className="font-semibold text-[var(--gold)]">
+ 1M+ (10L+) downloads
+ </span>{" "}
  on Google Play.
  </p>
  <div className="mt-6 flex flex-wrap gap-2">
  {r.tags.map((t) => (
  <span
  key={t}
- className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-200"
+ className="rounded-full border border-[color:rgba(var(--accent-rgb),0.35)] bg-[color:rgba(var(--accent-rgb),0.1)] px-3 py-1 text-xs text-[var(--text)]"
  >
  {t}
  </span>
  ))}
- <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-slate-400">
+ <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[var(--muted)]">
  10+ yrs
  </span>
- <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-slate-400">
+ <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[var(--muted)]">
  0→1 and 1→N
  </span>
+ </div>
+ </div>
  </div>
  </motion.div>
 
