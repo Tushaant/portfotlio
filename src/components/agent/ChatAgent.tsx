@@ -10,8 +10,9 @@ type Msg = { role: "user" | "assistant"; content: string };
 
 const STARTERS = [
   "Give me a smart summary of Tushant",
+  "List all projects",
   "What did he ship at Oraczen?",
-  "Tell me about Bharatlabs",
+  "Show client testimonials",
   "How do I contact him?",
 ];
 
@@ -48,7 +49,7 @@ export function ChatAgent() {
     {
       role: "assistant",
       content:
-        "Command Center Agent online. I answer strictly from Tushant's resume PDF and portfolio CMS (Notion projects, case studies, achievements). Ask anything - or try a smart summary.",
+        "Command Center Agent online. I answer from everything on this website: resume, experience, projects, case studies, skills, tech stack, achievements, testimonials, and contact. Ask anything about Tushant's portfolio data.",
     },
   ]);
 
@@ -164,7 +165,7 @@ export function ChatAgent() {
                     RESUME AGENT
                   </p>
                   <p className="text-xs text-[var(--muted)]">
-                    Strict sources · PDF + Notion CMS
+                    Trained on full website CMS
                   </p>
                 </div>
               </div>
