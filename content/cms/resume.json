@@ -1,0 +1,121 @@
+{
+  "source": "public/resume/Tushant_Sharma_Resume.pdf",
+  "name": "Tushant Sharma",
+  "location": "Hyderabad, India",
+  "phone": "+91 8586023101",
+  "email": "Tushant.s4@gmail.com",
+  "linkedin": "https://www.linkedin.com/in/tushant-sharma-95303b424/",
+  "title": "AI Product Manager and Acting Director of Product Management",
+  "tags": [
+    "Agentic AI",
+    "LLMs",
+    "Enterprise AI"
+  ],
+  "summary": "Senior Product Executive with over 10 years of experience leading enterprise AI and SaaS product organizations. Currently acting as Director of Product Management at Oraczen, owning a 6.4 million dollar Agentic AI portfolio, leading 40 plus cross-functional team members, and delivering AI-powered banking and insurance solutions for a 12.4 billion dollar U.S. enterprise client. Expertise spans Agentic AI, Conversational AI, Generative AI platform strategy, RAG architectures, LLM evaluation, enterprise Go-To-Market execution, and regulatory compliance including PCI-DSS, HIPAA, and GDPR. Seeking a competitive leadership role to drive organizational AI strategy, build high-performance product teams, and deliver transformational enterprise value from 0 to 1 and scaling to N.",
+  "coreCompetencies": [
+    "Director Product Management",
+    "Agentic AI Strategy",
+    "Enterprise AI Platform",
+    "P&L Ownership",
+    "Conversational AI",
+    "Generative AI",
+    "RAG Architecture (Semantic, Hybrid, Self, Memory, Graph)",
+    "MCP (Platform & servers)",
+    "LLM",
+    "Executive Stakeholder Management",
+    "Fintech",
+    "Enterprise Product Strategy",
+    "Agile Delivery",
+    "Backlog and Roadmap Management",
+    "API and Integration Ecosystem",
+    "LLM Evaluation",
+    "KYC Compliance",
+    "PCI-DSS Compliance",
+    "HIPAA Compliance",
+    "GDPR Compliance",
+    "Customer Success and Retention",
+    "Cross-functional Team Leadership",
+    "Data-Driven Decision Making",
+    "Go-to-Market Execution",
+    "Escalation Handling",
+    "Data Discovery",
+    "Release Structure",
+    "Process Alignment",
+    "Dashboard Analytics",
+    "User Story Mapping",
+    "Product Storytelling",
+    "User Acceptance Testing",
+    "Change Request Management",
+    "PRD and FRD Authoring"
+  ],
+  "education": [
+    {
+      "degree": "Bachelors in Technology - Electronics and Communication Engineering",
+      "institution": "DCE",
+      "year": "2016"
+    },
+    {
+      "degree": "Project Management Professional (PMP)",
+      "institution": "PMI",
+      "year": "Certified"
+    },
+    {
+      "degree": "Predictive Business Analytics Certification",
+      "institution": "Edu Pristine",
+      "year": "2019"
+    }
+  ],
+  "metrics": [
+    {
+      "label": "Years Experience",
+      "value": 10,
+      "suffix": "+",
+      "hint": "Enterprise AI & SaaS"
+    },
+    {
+      "label": "Portfolio Owned",
+      "value": 6.4,
+      "prefix": "$",
+      "suffix": "M",
+      "hint": "Agentic AI P&L"
+    },
+    {
+      "label": "Team Members Led",
+      "value": 40,
+      "suffix": "+",
+      "hint": "Cross-functional"
+    },
+    {
+      "label": "Client Enterprise Value",
+      "value": 12.4,
+      "prefix": "$",
+      "suffix": "B",
+      "hint": "U.S. banking client"
+    },
+    {
+      "label": "Products Shipped",
+      "value": 26,
+      "suffix": "",
+      "hint": "Fintech & SaaS at EMB"
+    },
+    {
+      "label": "Revenue Generated",
+      "value": 7.78,
+      "suffix": " Cr",
+      "hint": "EMB Global portfolio"
+    },
+    {
+      "label": "Release Velocity",
+      "value": 30,
+      "suffix": "%",
+      "hint": "Increase via Agile restructuring"
+    },
+    {
+      "label": "LLM Accuracy",
+      "value": 95,
+      "suffix": "%",
+      "hint": "Evaluated with Langfuse / Promptfoo"
+    }
+  ],
+  "sourceUpload": "TUSHANT_SHARMA_1CAGAI_b7f6.pdf"
+}

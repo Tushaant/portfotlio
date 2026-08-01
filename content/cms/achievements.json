@@ -1,0 +1,142 @@
+[
+  {
+    "id": "pmp",
+    "type": "certification",
+    "title": "Project Management Professional (PMP)",
+    "org": "Project Management Institute",
+    "year": "Certified",
+    "image": null,
+    "link": null,
+    "metrics": {}
+  },
+  {
+    "id": "analytics",
+    "type": "certification",
+    "title": "Predictive Business Analytics Certification",
+    "org": "Edu Pristine",
+    "year": "2019",
+    "image": null,
+    "link": null,
+    "metrics": {}
+  },
+  {
+    "id": "portfolio",
+    "type": "milestone",
+    "title": "Director-Level Portfolio Ownership",
+    "org": "Oraczen India",
+    "year": "2025",
+    "image": null,
+    "link": null,
+    "metrics": {
+      "Portfolio": "$6.4M",
+      "Client Scale": "$12.4B",
+      "Teams": "8 functional"
+    }
+  },
+  {
+    "id": "llm-quality",
+    "type": "milestone",
+    "title": "Enterprise LLM Quality Bar",
+    "org": "Oraczen India",
+    "year": "2025",
+    "image": null,
+    "link": null,
+    "metrics": {
+      "Accuracy": "92\u201395%",
+      "P95": "<1.5s",
+      "Uptime": "99%+"
+    }
+  },
+  {
+    "id": "revenue",
+    "type": "milestone",
+    "title": "\u20b97.78 Cr Category Revenue",
+    "org": "EMB Global",
+    "year": "2022\u20132025",
+    "image": null,
+    "link": null,
+    "metrics": {
+      "Products": "26",
+      "Revenue": "\u20b97.78 Cr"
+    }
+  },
+  {
+    "id": "retention",
+    "type": "milestone",
+    "title": "82% Enterprise Retention Improvement",
+    "org": "EMB Global",
+    "year": "2024",
+    "image": null,
+    "link": null,
+    "metrics": {
+      "Retention": "+82%",
+      "Onboarding": "-35%"
+    }
+  },
+  {
+    "id": "governance",
+    "type": "milestone",
+    "title": "95% Release Governance Adherence",
+    "org": "Oraczen India",
+    "year": "2025",
+    "image": null,
+    "link": null,
+    "metrics": {
+      "Adherence": "95%"
+    }
+  },
+  {
+    "id": "velocity",
+    "type": "milestone",
+    "title": "30% Release Velocity Gain",
+    "org": "Oraczen India",
+    "year": "2025",
+    "image": null,
+    "link": null,
+    "metrics": {
+      "Velocity": "+30%"
+    }
+  },
+  {
+    "id": "btech",
+    "type": "education",
+    "title": "B.Tech \u2014 Electronics and Communication Engineering",
+    "org": "DCE",
+    "year": "2016",
+    "image": null,
+    "link": null,
+    "metrics": {}
+  },
+  {
+    "id": "workshops",
+    "type": "speaking",
+    "title": "Process Discovery Workshops for Enterprise AI",
+    "org": "Oraczen",
+    "year": "2025",
+    "image": null,
+    "link": null,
+    "metrics": {},
+    "description": "Facilitated 4+ stakeholder workshops documenting current-state workflows and defining AI optimisation opportunities."
+  },
+  {
+    "id": "arb",
+    "type": "speaking",
+    "title": "Architecture Review Board \u2014 AI Release Governance",
+    "org": "Oraczen",
+    "year": "2025",
+    "image": null,
+    "link": null,
+    "metrics": {},
+    "description": "Presented AI release governance and compliance posture to the ARB across HIPAA, PCI-DSS and GDPR requirements."
+  },
+  {
+    "id": "notion",
+    "type": "blog",
+    "title": "Delivered Projects Portfolio",
+    "org": "Notion",
+    "year": "Live",
+    "image": null,
+    "link": "https://woolly-saga-8e5.notion.site/Tushant-Sharma-05d5b8ce678a4698ae6e7c89c726027e",
+    "description": "Live Notion workspace documenting every delivered project with outcomes and links."
+  }
+]

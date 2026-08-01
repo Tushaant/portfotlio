@@ -1,0 +1,60 @@
+{
+  "brand": "Tushant.AI PRODUCT OS",
+  "theme": "The AI Product Command Center",
+  "inspiration": "https://portfolio-web-tushant.lovable.app",
+  "notion": "https://woolly-saga-8e5.notion.site/Tushant-Sharma-05d5b8ce678a4698ae6e7c89c726027e",
+  "nav": [
+    {
+      "label": "Home",
+      "href": "/#top"
+    },
+    {
+      "label": "About",
+      "href": "/#about"
+    },
+    {
+      "label": "Journey",
+      "href": "/#journey"
+    },
+    {
+      "label": "Projects",
+      "href": "/#projects"
+    },
+    {
+      "label": "Case Studies",
+      "href": "/#case-studies"
+    },
+    {
+      "label": "Achievements",
+      "href": "/#achievements"
+    },
+    {
+      "label": "Skills",
+      "href": "/#skills"
+    },
+    {
+      "label": "Timeline",
+      "href": "/#timeline"
+    },
+    {
+      "label": "Gallery",
+      "href": "/#gallery"
+    },
+    {
+      "label": "Resume",
+      "href": "/resume"
+    },
+    {
+      "label": "Contact",
+      "href": "/#contact"
+    }
+  ],
+  "social": {
+    "linkedin": "https://www.linkedin.com/in/tushant-sharma-95303b424/",
+    "email": "Tushant.s4@gmail.com",
+    "phone": "+91 8586023101",
+    "resume": "/resume/Tushant_Sharma_Resume.pdf"
+  },
+  "resumeSource": "public/resume/Tushant_Sharma_Resume.pdf",
+  "resumeUpload": "TUSHANT_SHARMA_1CAGAI_b7f6.pdf"
+}

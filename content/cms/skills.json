@@ -1,0 +1,197 @@
+[
+  {
+    "id": "agentic",
+    "name": "Agentic AI",
+    "tier": "CORE",
+    "experience": "Current focus at Oraczen (2025 \u2014 Present)",
+    "projects": [
+      "Chat Agents",
+      "Voice Agents",
+      "Lending AI",
+      "Spend & Risk Intelligence"
+    ],
+    "tools": [
+      "Azure OpenAI",
+      "OpenAI SDK",
+      "MCP",
+      "Knowledge Graph"
+    ],
+    "example": "Multi-product agentic AI strategy across a $6.4M portfolio for a $12.4B U.S. banking enterprise."
+  },
+  {
+    "id": "rag",
+    "name": "RAG Architecture",
+    "tier": "CORE",
+    "experience": "Oraczen \u2014 enterprise RAG pipelines",
+    "projects": [
+      "Semantic retrieval",
+      "Hybrid / Self / Memory / Graph RAG"
+    ],
+    "tools": [
+      "MCP",
+      "Knowledge Graph",
+      "Azure OpenAI"
+    ],
+    "example": "Architected enterprise-grade RAG pipelines integrated with Model Context Protocol."
+  },
+  {
+    "id": "llm-eval",
+    "name": "LLM Evaluation",
+    "tier": "CORE",
+    "experience": "Oraczen AI Quality and Ops",
+    "projects": [
+      "Evaluation harness",
+      "Red-teaming"
+    ],
+    "tools": [
+      "Langfuse",
+      "Grafana",
+      "Promptfoo"
+    ],
+    "example": "Achieved 92\u201395% accuracy, P95 <1.5s, error rate <0.75%, 99%+ uptime SLA."
+  },
+  {
+    "id": "enterprise",
+    "name": "Enterprise Product Strategy",
+    "tier": "CORE",
+    "experience": "10+ years across IBM, Filmboard, EMB, Oraczen",
+    "projects": [
+      "Category ownership",
+      "0\u21921 and 1\u2192N platforms"
+    ],
+    "tools": [
+      "RICE",
+      "MoSCoW",
+      "PRD/FRD"
+    ],
+    "example": "Owned strategic roadmap and P&L for a $6.4M Agentic AI portfolio."
+  },
+  {
+    "id": "voice",
+    "name": "Conversational & Voice AI",
+    "tier": "CORE",
+    "experience": "Oraczen Voice Agents",
+    "projects": [
+      "Chat Agents",
+      "Voice Agents"
+    ],
+    "tools": [
+      "Assembly AI",
+      "GPT-4o Transcribe",
+      "Azure OpenAI Realtime",
+      "Twilio",
+      "Agora"
+    ],
+    "example": "Multi-product strategy spanning Chat Agents and Voice Agents for banking workflows."
+  },
+  {
+    "id": "compliance",
+    "name": "Compliance & Governance",
+    "tier": "CORE",
+    "experience": "Enterprise AI deployments",
+    "projects": [
+      "ARB governance",
+      "Release compliance"
+    ],
+    "tools": [
+      "HIPAA",
+      "PCI-DSS",
+      "GDPR",
+      "KYC"
+    ],
+    "example": "95% Architecture Review Board adherence across AI product deployments."
+  },
+  {
+    "id": "pnl",
+    "name": "P&L Ownership",
+    "tier": "CORE",
+    "experience": "Oraczen Director-level accountability",
+    "projects": [
+      "$6.4M portfolio"
+    ],
+    "tools": [
+      "Executive reporting"
+    ],
+    "example": "P&L accountability for a 6.4-million-dollar Agentic AI portfolio."
+  },
+  {
+    "id": "leadership",
+    "name": "Org Leadership",
+    "tier": "CORE",
+    "experience": "Oraczen + EMB",
+    "projects": [
+      "8+ member org",
+      "5 cross-functional teams"
+    ],
+    "tools": [
+      "Agile",
+      "SAFe",
+      "Scrum"
+    ],
+    "example": "Hired and managed 3 PMs, 3 developers, 1 QA, 1 designer; +30% release velocity."
+  },
+  {
+    "id": "data",
+    "name": "Data-Driven Decisions",
+    "tier": "CORE",
+    "experience": "IBM through Oraczen",
+    "projects": [
+      "Credit risk dashboards",
+      "LLM eval telemetry"
+    ],
+    "tools": [
+      "Tableau",
+      "Grafana",
+      "Power BI",
+      "Python",
+      "R"
+    ],
+    "example": "Real-time dashboards tracking 25+ KPIs; continuous LLM accuracy/latency reporting."
+  },
+  {
+    "id": "gtm",
+    "name": "Go-To-Market",
+    "tier": "CORE",
+    "experience": "EMB + Filmboard",
+    "projects": [
+      "Enterprise SaaS adoption",
+      "B2B GTM"
+    ],
+    "tools": [
+      "HubSpot",
+      "Salesforce",
+      "Zoho CRM"
+    ],
+    "example": "GTM strategies driving 82% enterprise retention improvement."
+  },
+  {
+    "id": "api",
+    "name": "API & Integration Ecosystem",
+    "tier": "CORE",
+    "experience": "EMB + Fintech products",
+    "projects": [
+      "API-driven onboarding",
+      "Payment orchestration"
+    ],
+    "tools": [
+      "REST",
+      "Webhooks",
+      "Payment Gateways"
+    ],
+    "example": "Reduced onboarding time 35% via optimized API-driven integrations."
+  },
+  {
+    "id": "frontend",
+    "name": "Frontend Craft",
+    "tier": "SUPPORT",
+    "experience": "Byju's Front End Developer",
+    "projects": [
+      "Customer-facing web apps"
+    ],
+    "tools": [
+      "Tailwind",
+      "React"
+    ],
+    "example": "Improved UX by 30% on customer-facing web applications."
+  }
+]

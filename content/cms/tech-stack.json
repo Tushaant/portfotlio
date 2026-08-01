@@ -1,0 +1,76 @@
+{
+  "AI and ML Platforms": [
+    "OpenAI GPT-4o",
+    "GPT-5",
+    "Azure OpenAI",
+    "Claude Anthropic",
+    "Copilot",
+    "Langfuse",
+    "Promptfoo",
+    "RAG",
+    "MCP"
+  ],
+  "STT and Voice APIs": [
+    "Assembly AI",
+    "GPT-4o Transcribe",
+    "Agora",
+    "Twilio",
+    "Video SDK",
+    "Azure OpenAI Realtime",
+    "OpenAI SDK"
+  ],
+  "Payment Integrations": [
+    "Razorpay",
+    "PayU",
+    "Cashfree",
+    "Stripe",
+    "PhonePe"
+  ],
+  "Auth and Security": [
+    "OAuth",
+    "JWT",
+    "Authzen",
+    "SSO",
+    "MS Entra Multi-IDP",
+    "OKTA"
+  ],
+  "Product Management and Design": [
+    "Jira",
+    "Linear",
+    "Figma",
+    "Miro",
+    "Mermaid",
+    "Vercel",
+    "Cursor",
+    "Artha",
+    "Trello",
+    "SKAN.AI",
+    "Power BI"
+  ],
+  "Analytics and Monitoring": [
+    "Tableau",
+    "Grafana",
+    "Python",
+    "R",
+    "HubSpot",
+    "Salesforce",
+    "Zoho CRM",
+    "Langfuse"
+  ],
+  "Methodologies and Frameworks": [
+    "Agile",
+    "SAFe",
+    "Waterfall",
+    "RICE",
+    "MoSCoW",
+    "WCAG 2.0",
+    "Scrum"
+  ],
+  "Compliance and Governance": [
+    "HIPAA",
+    "PCI-DSS",
+    "GDPR",
+    "KYC",
+    "SLA Management"
+  ]
+}
