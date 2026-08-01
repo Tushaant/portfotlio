@@ -4,19 +4,89 @@ import { useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { cms } from "@/lib/cms";
-import { Trophy } from "lucide-react";
+import {
+  Award,
+  BarChart3,
+  BookOpen,
+  Bot,
+  Briefcase,
+  Download,
+  GraduationCap,
+  IndianRupee,
+  Mic2,
+  ShieldCheck,
+  Trophy,
+  Users,
+  Zap,
+  type LucideIcon,
+} from "lucide-react";
+
+const ACHIEVEMENT_ICONS: Record<string, LucideIcon> = {
+  pmp: Award,
+  analytics: BarChart3,
+  "mkc-downloads": Download,
+  "veda-downloads": Download,
+  portfolio: Briefcase,
+  "llm-quality": Bot,
+  revenue: IndianRupee,
+  retention: Users,
+  governance: ShieldCheck,
+  velocity: Zap,
+  btech: GraduationCap,
+  workshops: Mic2,
+  arb: ShieldCheck,
+  notion: BookOpen,
+};
+
+type Achievement = (typeof cms.achievements)[number] & {
+  icon?: string | null;
+  image?: string | null;
+  description?: string;
+  link?: string | null;
+};
+
+function AchievementGlyph({
+  item,
+  active,
+  size = 28,
+}: {
+  item: Achievement;
+  active?: boolean;
+  size?: number;
+}) {
+  if (item.icon) {
+    return (
+      <Image
+        src={item.icon}
+        alt=""
+        width={size}
+        height={size}
+        className="rounded-md object-cover"
+      />
+    );
+  }
+
+  const Icon = ACHIEVEMENT_ICONS[item.id] || Trophy;
+  return (
+    <Icon
+      className={active ? "text-[#D4AF37]" : "text-[#F3EBD8]/80"}
+      style={{ width: size * 0.85, height: size * 0.85 }}
+    />
+  );
+}
 
 export function AchievementsSection() {
+  const achievements = cms.achievements as Achievement[];
   const [active, setActive] = useState(
-    cms.achievements.find((a) => a.id === "mkc-downloads")?.id ||
-      cms.achievements[0].id,
+    achievements.find((a) => a.id === "mkc-downloads")?.id ||
+      achievements[0].id,
   );
-  const item = cms.achievements.find((a) => a.id === active)!;
+  const item = achievements.find((a) => a.id === active)!;
 
   return (
     <section id="achievements" className="relative scroll-mt-24 py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <p className="font-mono text-xs tracking-[0.3em] text-cyan-300/70">
+        <p className="font-mono text-xs tracking-[0.3em] text-[#D4AF37]/80">
           05 · TROPHY ROOM
         </p>
         <h2 className="display mt-3 text-3xl md:text-5xl">
@@ -33,18 +103,17 @@ export function AchievementsSection() {
           <li className="list-disc list-inside">Recognition</li>
         </ul>
 
-        {/* Featured download achievements */}
         <div className="mt-10 grid gap-4 md:grid-cols-2">
           {(["veda-downloads", "mkc-downloads"] as const)
-            .map((id) => cms.achievements.find((a) => a.id === id))
-            .filter((a): a is (typeof cms.achievements)[number] => Boolean(a))
+            .map((id) => achievements.find((a) => a.id === id))
+            .filter((a): a is Achievement => Boolean(a))
             .map((a) => (
               <button
                 key={a.id}
                 type="button"
                 onClick={() => setActive(a.id)}
                 className={`skill-card overflow-hidden rounded-3xl text-left transition ${
-                  active === a.id ? "ring-2 ring-amber-400/60" : ""
+                  active === a.id ? "ring-2 ring-[#D4AF37]/60" : ""
                 }`}
               >
                 {a.image && (
@@ -56,9 +125,12 @@ export function AchievementsSection() {
                       className="object-cover"
                       sizes="(max-width:768px) 100vw, 50vw"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                    <div className="absolute left-3 top-3 flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl border border-[#D4AF37]/45 bg-[#121212]/95">
+                      <AchievementGlyph item={a} active size={36} />
+                    </div>
                     <div className="absolute bottom-3 left-3 right-3">
-                      <p className="display text-2xl text-amber-300">
+                      <p className="display text-2xl text-[#D4AF37]">
                         {a.metrics?.Downloads || ""}
                       </p>
                       <p className="text-sm text-white">{a.title}</p>
@@ -73,7 +145,7 @@ export function AchievementsSection() {
           <div className="relative min-h-[360px] rounded-3xl border border-[#D4AF37]/20 bg-[radial-gradient(ellipse_at_center,#161616_0%,#0B0B0B_70%)] p-6">
             <div className="absolute inset-0 grid-bg opacity-40" />
             <div className="relative flex flex-wrap items-center justify-center gap-4 py-8">
-              {cms.achievements.map((a, i) => (
+              {achievements.map((a, i) => (
                 <motion.button
                   key={a.id}
                   type="button"
@@ -82,30 +154,17 @@ export function AchievementsSection() {
                   style={{ animationDelay: `${(i % 5) * 0.4}s` }}
                   whileHover={{ scale: 1.12 }}
                   whileTap={{ scale: 0.96 }}
+                  title={a.title}
                 >
                   <div
                     className={`flex h-20 w-20 flex-col items-center justify-center overflow-hidden rounded-full border ${
                       active === a.id
-                        ? "border-[#D4AF37] bg-[#D4AF37]/20 shadow-[0_0_40px_rgba(212,175,55,0.35)]"
-                        : "border-white/15 bg-black/50"
+                        ? "border-[#D4AF37] bg-[#1A1A1A] shadow-[0_0_40px_rgba(212,175,55,0.35)]"
+                        : "border-[#D4AF37]/30 bg-[#121212]"
                     }`}
                   >
-                    {"icon" in a && a.icon ? (
-                      <Image
-                        src={String(a.icon)}
-                        alt=""
-                        width={40}
-                        height={40}
-                        className="rounded-md object-cover"
-                      />
-                    ) : (
-                      <Trophy
-                        className={`h-6 w-6 ${
-                          active === a.id ? "text-amber-200" : "text-slate-400"
-                        }`}
-                      />
-                    )}
-                    <span className="mt-1 text-[8px] uppercase tracking-wider text-slate-300">
+                    <AchievementGlyph item={a} active={active === a.id} size={34} />
+                    <span className="mt-1 text-[8px] uppercase tracking-wider text-[#A8946B]">
                       {a.type.slice(0, 4)}
                     </span>
                   </div>
@@ -122,16 +181,23 @@ export function AchievementsSection() {
               exit={{ opacity: 0 }}
               className="skill-card rounded-3xl p-6"
             >
-              <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--gold)]">
-                {item.type}
-              </p>
-              <h3 className="display mt-2 text-2xl text-[var(--text)]">
-                {item.title}
-              </h3>
-              <p className="mt-1 text-sm text-[var(--muted)]">
-                {item.org} · {item.year}
-              </p>
-              {"image" in item && item.image && (
+              <div className="flex items-start gap-3">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#D4AF37]/40 bg-[#121212]">
+                  <AchievementGlyph item={item} active size={36} />
+                </div>
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--gold)]">
+                    {item.type}
+                  </p>
+                  <h3 className="display mt-1 text-2xl text-[var(--text)]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-1 text-sm text-[var(--muted)]">
+                    {item.org} · {item.year}
+                  </p>
+                </div>
+              </div>
+              {item.image && (
                 <div className="relative mt-4 aspect-[16/9] overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--gold)_35%,transparent)]">
                   <Image
                     src={item.image}
@@ -142,7 +208,7 @@ export function AchievementsSection() {
                   />
                 </div>
               )}
-              {"description" in item && item.description && (
+              {item.description && (
                 <p className="mt-4 text-sm font-medium leading-relaxed text-[var(--text)]">
                   {item.description}
                 </p>
@@ -159,14 +225,16 @@ export function AchievementsSection() {
                   ))}
                 </div>
               )}
-              {"link" in item && item.link && (
+              {item.link && (
                 <a
                   href={item.link}
                   target="_blank"
                   rel="noreferrer"
                   className="mt-5 inline-block text-sm font-semibold text-[var(--gold)]"
                 >
-                  Open Play Store →
+                  {item.id.includes("downloads") || item.id === "mkc-downloads" || item.id === "veda-downloads"
+                    ? "Open Play Store →"
+                    : "Open link →"}
                 </a>
               )}
             </motion.div>
