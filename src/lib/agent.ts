@@ -436,7 +436,7 @@ export function answerFromPortfolio(question: string): {
   }
 
   if (
-    /(list|show|all).*(skills?)|(skills?|skill galaxy).*(list|show|have|has)|what (are|is|skills)|(his|tushant.?s?) skills?|skills? does/.test(
+    /(list|show|all).*(skills?)|(his|tushant.?s?) skills?|skills? (list|show|have|has|does)|what (are|is) (his |tushant.?s? )?skills?\b|skill galaxy/.test(
       q,
     )
   ) {
