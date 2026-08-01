@@ -60,6 +60,41 @@ const STOP = new Set([
   "show",
   "list",
   "explain",
+  "is",
+  "it",
+  "in",
+  "on",
+  "to",
+  "of",
+  "an",
+  "as",
+  "be",
+  "or",
+  "if",
+  "so",
+  "do",
+  "my",
+  "we",
+  "us",
+  "at",
+  "by",
+  "not",
+  "but",
+  "am",
+  "im",
+  "its",
+  "too",
+  "very",
+  "really",
+  "there",
+  "here",
+  "will",
+  "get",
+  "got",
+  "let",
+  "out",
+  "up",
+  "down",
 ]);
 
 const SYNONYMS: Record<string, string[]> = {
@@ -96,15 +131,21 @@ function tokenize(q: string): string[] {
     .toLowerCase()
     .replace(/[^a-z0-9\s$%+.\-/]/g, " ")
     .split(/[\s/]+/)
-    .filter((t) => t.length > 1 && !STOP.has(t));
+    .filter((t) => t.length > 2 && !STOP.has(t));
 
   const expanded = new Set<string>(base);
   for (const t of base) {
     const syns = SYNONYMS[t];
     if (syns) syns.forEach((s) => expanded.add(s));
-    // light stemming: plurals / trailing s
-    if (t.endsWith("ies") && t.length > 4) expanded.add(`${t.slice(0, -3)}y`);
-    if (t.endsWith("s") && !t.endsWith("ss") && t.length > 3) {
+    // Only stem obvious plurals (avoid "mars" -> "mar")
+    if (t.endsWith("ies") && t.length > 5) expanded.add(`${t.slice(0, -3)}y`);
+    if (
+      t.endsWith("s") &&
+      !t.endsWith("ss") &&
+      !t.endsWith("us") &&
+      !t.endsWith("is") &&
+      t.length > 5
+    ) {
       expanded.add(t.slice(0, -1));
     }
   }
