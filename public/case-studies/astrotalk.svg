@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" fill="none">
+  <rect width="800" height="480" fill="#F7F1E3"/>
+  <circle cx="260" cy="220" r="90" fill="#F5C518"/>
+  <circle cx="260" cy="220" r="18" fill="#111"/>
+  <ellipse cx="260" cy="220" rx="70" ry="28" stroke="#111" stroke-width="4"/>
+  <ellipse cx="260" cy="220" rx="28" ry="70" stroke="#111" stroke-width="4" transform="rotate(35 260 220)"/>
+  <text x="260" y="360" text-anchor="middle" fill="#111" font-family="Arial, sans-serif" font-size="36" font-weight="700">Astrotalk</text>
+  <rect x="470" y="150" width="220" height="140" rx="16" fill="#FFF" stroke="#D4AF37" stroke-width="3"/>
+  <path d="M500 250l40-40 30 24 50-60" stroke="#D4AF37" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="640" cy="180" r="16" fill="#F5C518"/>
+  <circle cx="680" cy="210" r="12" fill="#F5C518"/>
+</svg>
