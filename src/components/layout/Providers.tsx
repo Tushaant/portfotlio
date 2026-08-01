@@ -9,6 +9,7 @@ import { GlobalMotionBackground } from "@/components/effects/GlobalMotionBackgro
 import { CommandPalette } from "@/components/layout/CommandPalette";
 import { ChatAgent } from "@/components/agent/ChatAgent";
 import { FloatingControls } from "@/components/layout/FloatingControls";
+import { ThemeSwitch } from "@/components/ui/ThemeSwitch";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const hologramMode = useUIStore((s) => s.hologramMode);
@@ -109,6 +110,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <GlobalMotionBackground />
       <Preloader />
       <Header />
+      <div className="theme-switch-dock">
+        <ThemeSwitch />
+      </div>
       <main className="relative z-10">{children}</main>
       <CommandPalette />
       <ChatAgent />
