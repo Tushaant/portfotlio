@@ -677,7 +677,7 @@ body.hologram-light .testimonial-termite--active {
 
 /* Uiverse strong-squid-82 day/night theme switch (Galahhad) */
 .theme-switch {
- --toggle-size: 14px;
+ --toggle-size: 12px;
  --container-width: 5.625em;
  --container-height: 2.5em;
  --container-radius: 6.25em;
@@ -887,7 +887,28 @@ body.hologram-light .testimonial-termite--active {
  opacity: 0.28;
  }
  .theme-switch {
- --toggle-size: 12px;
+ --toggle-size: 10px;
+ }
+}
+
+/* Fixed extreme-right theme dock (outside header) */
+.theme-switch-dock {
+ position: fixed;
+ top: 1rem;
+ right: 0.75rem;
+ z-index: 60;
+ display: flex;
+ align-items: center;
+ justify-content: flex-end;
+ pointer-events: none;
+}
+.theme-switch-dock .theme-switch {
+ pointer-events: auto;
+}
+@media (min-width: 768px) {
+ .theme-switch-dock {
+  top: 1.25rem;
+  right: 1.25rem;
  }
 }
 

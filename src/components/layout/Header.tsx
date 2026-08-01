@@ -8,7 +8,6 @@ import { cms } from "@/lib/cms";
 import { useUIStore } from "@/store/ui-store";
 import { cn } from "@/lib/utils";
 import { Menu, X, Command } from "lucide-react";
-import { ThemeSwitch } from "@/components/ui/ThemeSwitch";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -25,7 +24,6 @@ export function Header() {
       const delta = y - lastY.current;
       setScrolled(y > 16);
 
-      // Hide when scrolling down past hero; show when scrolling up
       if (y < 80) {
         setHidden(false);
       } else if (delta > 6) {
@@ -40,7 +38,6 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Keep header out of the way while agent is open
   const shouldHide = hidden || agentOpen;
 
   return (
@@ -58,13 +55,16 @@ export function Header() {
     >
       <div
         className={cn(
-          "mx-auto flex max-w-7xl items-center justify-between px-4 md:px-6 rounded-2xl transition-all duration-300",
+          "mx-auto grid max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 md:px-6 rounded-2xl transition-all duration-300",
           scrolled
             ? "header-solid mx-3 md:mx-auto shadow-[0_8px_40px_rgba(0,0,0,0.45)]"
             : "bg-transparent",
         )}
       >
-        <Link href="/#top" className="group flex items-center gap-2.5 py-2">
+        <Link
+          href="/#top"
+          className="group flex items-center gap-2.5 justify-self-start py-2"
+        >
           <motion.span
             className="relative flex h-9 w-9 overflow-hidden rounded-full border border-[color:rgba(var(--accent-rgb),0.55)] bg-[var(--surface)]"
             animate={{
@@ -91,7 +91,7 @@ export function Header() {
           </span>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center justify-center gap-0.5 justify-self-center">
           {cms.site.nav.map((item, i) => (
             <motion.div
               key={item.href}
@@ -101,7 +101,7 @@ export function Header() {
             >
               <Link
                 href={item.href}
-                className="px-2.5 py-1.5 text-[11px] uppercase tracking-[0.14em] text-[var(--muted)] transition hover:text-amber-300"
+                className="inline-flex items-center px-2.5 py-1.5 text-[11px] uppercase tracking-[0.14em] text-[var(--muted)] transition hover:text-amber-300"
               >
                 {item.label}
               </Link>
@@ -109,7 +109,7 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center justify-end gap-2 justify-self-end max-lg:mr-[4.75rem]">
           <button
             type="button"
             onClick={() => setPaletteOpen(true)}
@@ -127,7 +127,6 @@ export function Header() {
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
-          <ThemeSwitch />
         </div>
       </div>
 
