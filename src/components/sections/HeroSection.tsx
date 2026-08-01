@@ -86,20 +86,20 @@ export function HeroSection() {
  style={{ rotateX: tiltX, rotateY: tiltY }}
  className="pointer-events-none absolute inset-0 perspective-[1200px]"
  >
- <div className="animate-float absolute left-[6%] top-[22%] hidden h-28 w-40 rounded-2xl border border-[#D4AF37]/30 bg-[#D4AF37]/5 backdrop-blur-md md:block" />
+ <div className="animate-float absolute left-[6%] top-[22%] hidden h-28 w-40 rounded-2xl border border-[#00D95A]/30 bg-[#00D95A]/5 backdrop-blur-md md:block" />
  <div
- className="animate-float absolute right-[8%] top-[30%] hidden h-36 w-28 rounded-2xl border border-[#B8860B]/25 bg-[#B8860B]/5 backdrop-blur-md md:block"
+ className="animate-float absolute right-[8%] top-[30%] hidden h-36 w-28 rounded-2xl border border-[#00B34A]/25 bg-[#00B34A]/5 backdrop-blur-md md:block"
  style={{ animationDelay: "1.2s" }}
  />
  <div
- className="animate-float absolute bottom-[18%] left-[18%] hidden h-20 w-52 rounded-xl border border-[#C9A227]/20 bg-[#C9A227]/5 backdrop-blur-md lg:block"
+ className="animate-float absolute bottom-[18%] left-[18%] hidden h-20 w-52 rounded-xl border border-[#00C853]/20 bg-[#00C853]/5 backdrop-blur-md lg:block"
  style={{ animationDelay: "2s" }}
  />
- <div className="absolute right-[12%] top-[18%] font-mono text-[10px] tracking-widest text-[#D4AF37]/50 animate-pulse-glow">
+ <div className="absolute right-[12%] top-[18%] font-mono text-[10px] tracking-widest text-[#00D95A]/50 animate-pulse-glow">
  NEURAL BRAIN · LINKED
  </div>
  <div
- className="absolute left-[10%] bottom-[22%] font-mono text-[10px] tracking-widest text-[#D4AF37]/40 animate-pulse-glow"
+ className="absolute left-[10%] bottom-[22%] font-mono text-[10px] tracking-widest text-[#00D95A]/40 animate-pulse-glow"
  style={{ animationDelay: "1s" }}
  >
  NODE GRAPH · LIVE

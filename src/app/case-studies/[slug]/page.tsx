@@ -110,7 +110,7 @@ export default async function CaseStudyPage({ params }: Props) {
             href={String(c.notionUrl)}
             target="_blank"
             rel="noreferrer"
-            className="text-[#D4AF37] underline-offset-4 hover:underline"
+            className="text-[#00D95A] underline-offset-4 hover:underline"
           >
             Open original Notion case study →
           </a>

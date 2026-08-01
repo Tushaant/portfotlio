@@ -28,8 +28,8 @@ export function SkillsSection() {
             <div className="absolute inset-4 rounded-full border border-amber-400/20" />
             <div className="absolute inset-12 rounded-full border border-amber-400/15" />
             <div className="absolute inset-20 rounded-full border border-amber-400/10" />
-            <div className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-[#F3EBD8] to-[#B8860B] opacity-80 blur-sm" />
-            <div className="absolute left-1/2 top-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#121212] display text-[10px] text-[#F3EBD8] shadow-lg">
+            <div className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-[#FFFFFF] to-[#00B34A] opacity-80 blur-sm" />
+            <div className="absolute left-1/2 top-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#121212] display text-[10px] text-[#FFFFFF] shadow-lg">
               CORE
             </div>
             {cms.skills.map((s, i) => {
@@ -45,8 +45,8 @@ export function SkillsSection() {
                   className={cn(
                     "absolute flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border text-[10px] font-semibold transition",
                     active === s.id
-                      ? "h-16 w-16 border-[#D4AF37] bg-[#1A1A1A] text-[#F3EBD8] shadow-[0_0_30px_rgba(212,175,55,0.45)]"
-                      : "h-12 w-12 border-[#D4AF37]/40 bg-[#121212]/95 text-[#F3EBD8]/90 hover:scale-110",
+                      ? "h-16 w-16 border-[#00D95A] bg-[#1A1A1A] text-[#FFFFFF] shadow-[0_0_30px_rgba(0,217,90,0.45)]"
+                      : "h-12 w-12 border-[#00D95A]/40 bg-[#121212]/95 text-[#FFFFFF]/90 hover:scale-110",
                   )}
                   style={{ left: `${x}%`, top: `${y}%` }}
                   whileHover={{ scale: 1.15 }}

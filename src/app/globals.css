@@ -1,25 +1,25 @@
 @import "tailwindcss";
 
-/* Dark: matte black + classic gold
+/* Dark trial: Codespot-style matte black + neon emerald
  Light: white + metallic gold circuit
 */
 :root {
- --bg: #0b0b0b;
- --navy: #121212;
- --cyan: #d4af37;
- --blue: #c9a227;
- --purple: #b8860b;
- --magenta: #a67c00;
- --green: #c9a227;
- --gold: #d4af37;
- --champagne: #f3ebd8;
- --ember: #b8860b;
- --glass: rgba(18, 18, 18, 0.72);
- --glass-border: rgba(212, 175, 55, 0.32);
- --text: #f3ebd8;
- --muted: #a8946b;
- --glow: 0 0 36px rgba(212, 175, 55, 0.28);
- --surface-soft: rgba(11, 11, 11, 0.72);
+ --bg: #050505;
+ --navy: #0a0a0a;
+ --cyan: #00d95a;
+ --blue: #00c853;
+ --purple: #00e676;
+ --magenta: #00b34a;
+ --green: #00d95a;
+ --gold: #00d95a;
+ --champagne: #ffffff;
+ --ember: #00b34a;
+ --glass: rgba(14, 14, 14, 0.78);
+ --glass-border: rgba(0, 217, 90, 0.28);
+ --text: #ffffff;
+ --muted: #999999;
+ --glow: 0 0 36px rgba(0, 217, 90, 0.32);
+ --surface-soft: rgba(5, 5, 5, 0.72);
  --font-display: var(--font-orbitron);
  --font-body: var(--font-space);
  --font-mono: var(--font-jetbrains);
@@ -94,7 +94,7 @@ body.hologram-light ::selection {
 }
 
 ::selection {
- background: rgba(212, 175, 55, 0.35);
+ background: rgba(0, 217, 90, 0.35);
  color: #0b0b0b;
 }
 
@@ -133,8 +133,8 @@ button:active,
 body:not(.hologram-light) a:active,
 body:not(.hologram-light) button:active,
 body:not(.hologram-light) [role="button"]:active {
- color: #f3ebd8;
- box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+ color: #ffffff;
+ box-shadow: 0 0 20px rgba(0, 217, 90, 0.3);
 }
 
 body.hologram-light a:active,
@@ -150,10 +150,10 @@ body.hologram-light [role="button"]:active {
  rgba(18, 18, 18, 0.88),
  rgba(14, 14, 14, 0.78)
  );
- border: 1px solid rgba(212, 175, 55, 0.28);
+ border: 1px solid rgba(0, 217, 90, 0.28);
  box-shadow:
   0 12px 28px rgba(0, 0, 0, 0.45),
-  inset 0 1px 0 rgba(212, 175, 55, 0.08);
+  inset 0 1px 0 rgba(0, 217, 90, 0.08);
  backdrop-filter: blur(18px);
  -webkit-backdrop-filter: blur(18px);
  transition: var(--transition-theme);
@@ -162,7 +162,7 @@ body.hologram-light [role="button"]:active {
 /* Solid header / modal surface - low transparency so text never merges */
 .header-solid {
  background: rgba(11, 11, 11, 0.94);
- border: 1px solid rgba(212, 175, 55, 0.3);
+ border: 1px solid rgba(0, 217, 90, 0.3);
  backdrop-filter: blur(22px) saturate(1.1);
  -webkit-backdrop-filter: blur(22px) saturate(1.1);
 }
@@ -188,21 +188,21 @@ body.hologram-light .glass {
  box-shadow: 0 8px 28px rgba(197, 160, 89, 0.12);
 }
 
-/* Opaque skill / metric panels - matte black + gold */
+/* Opaque skill / metric panels - matte black + emerald */
 .skill-card {
  background: rgba(16, 16, 16, 0.96);
- border: 1px solid rgba(212, 175, 55, 0.38);
+ border: 1px solid rgba(0, 217, 90, 0.38);
  box-shadow:
   0 18px 42px rgba(0, 0, 0, 0.55),
-  inset 0 1px 0 rgba(212, 175, 55, 0.12);
+  inset 0 1px 0 rgba(0, 217, 90, 0.12);
  color: var(--text);
 }
 
 .metric-chip {
  background: rgba(22, 22, 22, 0.96);
- border: 1px solid rgba(212, 175, 55, 0.32);
+ border: 1px solid rgba(0, 217, 90, 0.32);
  color: var(--text);
- box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.08);
+ box-shadow: inset 0 1px 0 rgba(0, 217, 90, 0.08);
 }
 
 body.hologram-light .skill-card {
@@ -226,7 +226,7 @@ body.hologram-light .metric-chip {
 }
 
 .neon-text {
- background: linear-gradient(120deg, #f3ebd8, #d4af37, #b8860b);
+ background: linear-gradient(120deg, #ffffff, #00d95a, #00b34a);
  -webkit-background-clip: text;
  background-clip: text;
  color: transparent;
@@ -247,16 +247,16 @@ body.hologram-light .neon-text {
 
 .grid-bg {
  background-image:
- linear-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 1px),
- linear-gradient(90deg, rgba(212, 175, 55, 0.05) 1px, transparent 1px);
+ linear-gradient(rgba(0, 217, 90, 0.05) 1px, transparent 1px),
+ linear-gradient(90deg, rgba(0, 217, 90, 0.05) 1px, transparent 1px);
  background-size: 64px 64px;
  mask-image: radial-gradient(ellipse at center, black 15%, transparent 78%);
 }
 
 .grid-bg.grid-amber {
  background-image:
- linear-gradient(rgba(212, 175, 55, 0.07) 1px, transparent 1px),
- linear-gradient(90deg, rgba(212, 175, 55, 0.07) 1px, transparent 1px);
+ linear-gradient(rgba(0, 217, 90, 0.07) 1px, transparent 1px),
+ linear-gradient(90deg, rgba(0, 217, 90, 0.07) 1px, transparent 1px);
 }
 
 .grid-bg.grid-gold {
@@ -291,11 +291,11 @@ body.hologram-light .neon-text {
 .aurora-amber {
  background: linear-gradient(
  125deg,
- rgba(212, 175, 55, 0.16),
+ rgba(0, 217, 90, 0.16),
  transparent 35%,
- rgba(184, 134, 11, 0.12),
+ rgba(0, 179, 74, 0.12),
  transparent 65%,
- rgba(243, 235, 216, 0.08)
+ rgba(255, 255, 255, 0.08)
  );
 }
 
@@ -342,13 +342,13 @@ body.hologram-light .neon-text {
 }
 
 .orb-amber {
- background: radial-gradient(circle, rgba(212, 175, 55, 0.4), transparent 70%);
+ background: radial-gradient(circle, rgba(0, 217, 90, 0.4), transparent 70%);
 }
 .orb-ember {
- background: radial-gradient(circle, rgba(184, 134, 11, 0.32), transparent 70%);
+ background: radial-gradient(circle, rgba(0, 179, 74, 0.32), transparent 70%);
 }
 .orb-hot {
- background: radial-gradient(circle, rgba(243, 235, 216, 0.22), transparent 70%);
+ background: radial-gradient(circle, rgba(255, 255, 255, 0.22), transparent 70%);
 }
 .orb-gold {
  background: radial-gradient(circle, rgba(197, 160, 89, 0.5), transparent 70%);
@@ -560,49 +560,49 @@ body.hologram-light .font-mono.text-green-300\/90 {
  color: #3d4a12 !important;
 }
 
-/* Dark-mode: map leftover cyan/amber/orange utilities toward classic gold */
+/* Dark-mode: map leftover cyan/amber/orange utilities toward neon emerald */
 body:not(.hologram-light) .text-cyan-300,
 body:not(.hologram-light) .text-cyan-200,
 body:not(.hologram-light) .text-cyan-100 {
- color: #d4af37 !important;
+ color: #00d95a !important;
 }
 body:not(.hologram-light) .text-amber-100,
 body:not(.hologram-light) .text-amber-200,
 body:not(.hologram-light) .text-amber-300,
 body:not(.hologram-light) .text-amber-400,
 body:not(.hologram-light) [class*="text-amber-"] {
- color: #d4af37 !important;
+ color: #00d95a !important;
 }
 body:not(.hologram-light) .text-orange-300,
 body:not(.hologram-light) .text-orange-400,
 body:not(.hologram-light) .text-yellow-300,
 body:not(.hologram-light) .text-yellow-400 {
- color: #c9a227 !important;
+ color: #00c853 !important;
 }
 body:not(.hologram-light) .border-cyan-400\/40,
 body:not(.hologram-light) .border-cyan-400\/30,
 body:not(.hologram-light) .border-cyan-400\/25,
 body:not(.hologram-light) [class*="border-amber-"],
 body:not(.hologram-light) [class*="border-orange-"] {
- border-color: rgba(212, 175, 55, 0.35) !important;
+ border-color: rgba(0, 217, 90, 0.35) !important;
 }
 body:not(.hologram-light) .bg-cyan-400\/10,
 body:not(.hologram-light) .bg-cyan-400\/15,
 body:not(.hologram-light) .bg-cyan-400\/20,
 body:not(.hologram-light) [class*="bg-amber-400/"],
 body:not(.hologram-light) [class*="bg-orange-"] {
- background-color: rgba(212, 175, 55, 0.12) !important;
+ background-color: rgba(0, 217, 90, 0.12) !important;
 }
 body:not(.hologram-light) .from-cyan-400,
 body:not(.hologram-light) .from-amber-300 {
- --tw-gradient-from: #d4af37 !important;
+ --tw-gradient-from: #00d95a !important;
 }
 body:not(.hologram-light) .to-blue-600,
 body:not(.hologram-light) .to-purple-500,
 body:not(.hologram-light) .via-blue-500,
 body:not(.hologram-light) .to-orange-600 {
- --tw-gradient-to: #b8860b !important;
- --tw-gradient-stops: var(--tw-gradient-from), #d4af37, var(--tw-gradient-to) !important;
+ --tw-gradient-to: #00b34a !important;
+ --tw-gradient-stops: var(--tw-gradient-from), #00d95a, var(--tw-gradient-to) !important;
 }
 
 @media (max-width: 768px) {
