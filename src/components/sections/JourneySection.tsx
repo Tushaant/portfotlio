@@ -41,10 +41,10 @@ export function JourneySection() {
  type="button"
  onClick={() => setActive(e.id)}
  className={cn(
- "relative w-full rounded-2xl pl-10 pr-3 py-3 text-left transition",
+ "relative w-full rounded-2xl border border-transparent pl-10 pr-3 py-3 text-left transition",
  active === e.id
- ? "glass shadow-[0_0_30px_rgba(56,248,255,0.15)]"
- : "hover:bg-white/5",
+ ? "glass shadow-[0_0_24px_rgba(255,179,0,0.12)]"
+ : "border-white/8 bg-black/20 hover:border-white/15 hover:bg-black/35",
  )}
  >
  <span
@@ -85,10 +85,10 @@ export function JourneySection() {
  {job.metrics.map((m) => (
  <div
  key={m.label}
- className="rounded-xl border border-white/10 bg-black/20 p-3"
+ className="rounded-xl border border-white/12 bg-black/30 p-3"
  >
  <p className="display text-lg text-cyan-300">{m.value}</p>
- <p className="text-[11px] text-slate-500">{m.label}</p>
+ <p className="text-[11px] text-slate-400">{m.label}</p>
  </div>
  ))}
  </div>

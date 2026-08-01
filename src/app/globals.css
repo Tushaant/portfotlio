@@ -149,10 +149,13 @@ body.hologram-light [role="button"]:active {
 .glass {
  background: linear-gradient(
  135deg,
- rgba(255, 179, 0, 0.1),
- rgba(255, 255, 255, 0.03)
+ rgba(12, 8, 2, 0.78),
+ rgba(8, 5, 2, 0.62)
  );
- border: 1px solid var(--glass-border);
+ border: 1px solid rgba(255, 179, 0, 0.28);
+ box-shadow:
+  0 12px 28px rgba(0, 0, 0, 0.35),
+  inset 0 1px 0 rgba(255, 179, 0, 0.08);
  backdrop-filter: blur(18px);
  -webkit-backdrop-filter: blur(18px);
  transition: var(--transition-theme);
@@ -180,10 +183,11 @@ body.scroll-locked {
 body.hologram-light .glass {
  background: linear-gradient(
  135deg,
- rgba(255, 255, 255, 0.85),
- rgba(249, 228, 152, 0.35)
+ rgba(255, 255, 255, 0.9),
+ rgba(249, 228, 152, 0.32)
  );
- box-shadow: 0 8px 32px rgba(197, 160, 89, 0.14);
+ border: 1px solid rgba(107, 78, 8, 0.28);
+ box-shadow: 0 8px 28px rgba(197, 160, 89, 0.12);
 }
 
 /* Opaque skill / metric panels - keep text readable on brain backdrop */

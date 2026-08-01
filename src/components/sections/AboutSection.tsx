@@ -74,10 +74,10 @@ export function AboutSection() {
  prefix={"prefix" in m ? String(m.prefix || "") : ""}
  suffix={m.suffix}
  />
- <p className="mt-2 text-sm font-medium text-slate-200">
+ <p className="mt-2 text-sm font-medium text-slate-100">
  {m.label}
  </p>
- <p className="text-xs text-slate-500">{m.hint}</p>
+ <p className="text-xs text-slate-400">{m.hint}</p>
  </motion.div>
  ))}
  </div>
@@ -91,10 +91,10 @@ export function AboutSection() {
  <p className="font-mono text-[11px] tracking-[0.2em] text-purple-300">
  PROFESSIONAL SUMMARY
  </p>
- <p className="mt-4 text-base leading-relaxed text-slate-300 md:text-lg">
+ <p className="mt-4 text-base leading-relaxed text-slate-200 md:text-lg">
  {r.summary}
  </p>
- <p className="mt-4 text-base leading-relaxed text-slate-300 md:text-lg">
+ <p className="mt-4 text-base leading-relaxed text-slate-200 md:text-lg">
  Highlighted consumer scale: shipped the Veda Academy Learning App to{" "}
  <span className="font-semibold text-[var(--gold)]">1L+ downloads</span>{" "}
  and the Major Kalshi Classes Learning App to{" "}
