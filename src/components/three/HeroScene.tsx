@@ -7,19 +7,19 @@ import { useUIStore } from "@/store/ui-store";
 
 type Theme = "dark" | "light";
 
-/** Palette: dark = matte black + gold · light = white + metallic gold */
+/** Palette: dark = Codespot black + emerald · light = white + metallic gold */
 const PALETTE = {
   dark: {
-    bg: "#0B0B0B",
-    fog: "#0B0B0B",
-    nodeCore: "#F3EBD8",
-    nodeMid: "#D4AF37",
-    nodeDeep: "#B8860B",
-    link: "#D4AF37",
-    facet: "#A67C00",
-    lightA: "#D4AF37",
-    lightB: "#B8860B",
-    ambient: 0.28,
+    bg: "#050505",
+    fog: "#050505",
+    nodeCore: "#FFFFFF",
+    nodeMid: "#00D95A",
+    nodeDeep: "#00B34A",
+    link: "#00D95A",
+    facet: "#00963F",
+    lightA: "#00D95A",
+    lightB: "#00B34A",
+    ambient: 0.32,
   },
   light: {
     bg: "#FFFFFF",

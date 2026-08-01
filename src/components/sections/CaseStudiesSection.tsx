@@ -22,7 +22,7 @@ export function CaseStudiesSection() {
   return (
     <section id="case-studies" className="relative scroll-mt-24 py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <p className="font-mono text-xs tracking-[0.3em] text-[#D4AF37]/80">
+        <p className="font-mono text-xs tracking-[0.3em] text-[#00D95A]/80">
           04 · CASE STUDIES
         </p>
         <h2 className="display mt-3 text-3xl md:text-5xl">
@@ -42,7 +42,7 @@ export function CaseStudiesSection() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.06 }}
               whileHover={{ y: -6 }}
-              className="group overflow-hidden rounded-3xl border border-[#D4AF37]/45 bg-[#121212] shadow-[0_16px_40px_rgba(0,0,0,0.45)]"
+              className="group overflow-hidden rounded-3xl border border-[#00D95A]/45 bg-[#121212] shadow-[0_16px_40px_rgba(0,0,0,0.45)]"
             >
               <Link href={`/case-studies/${c.slug}`} className="block">
                 <div className="relative aspect-[5/3] bg-[#0B0B0B]">
@@ -56,22 +56,22 @@ export function CaseStudiesSection() {
                     />
                   ) : null}
                 </div>
-                <div className="border-t border-[#D4AF37]/25 p-4">
-                  <p className="font-mono text-[10px] tracking-[0.18em] text-[#D4AF37]">
+                <div className="border-t border-[#00D95A]/25 p-4">
+                  <p className="font-mono text-[10px] tracking-[0.18em] text-[#00D95A]">
                     FEATURED WORK
                   </p>
-                  <h3 className="mt-2 display text-lg text-[#F3EBD8]">
+                  <h3 className="mt-2 display text-lg text-[#FFFFFF]">
                     {c.galleryTitle || c.title}
                   </h3>
-                  <p className="mt-2 line-clamp-2 text-xs text-[#A8946B]">
+                  <p className="mt-2 line-clamp-2 text-xs text-[#999999]">
                     {c.summary}
                   </p>
                 </div>
               </Link>
-              <div className="flex items-center justify-between gap-2 border-t border-[#D4AF37]/20 px-4 py-3">
+              <div className="flex items-center justify-between gap-2 border-t border-[#00D95A]/20 px-4 py-3">
                 <Link
                   href={`/case-studies/${c.slug}`}
-                  className="text-sm font-semibold text-[#D4AF37]"
+                  className="text-sm font-semibold text-[#00D95A]"
                 >
                   Read case study →
                 </Link>
@@ -80,7 +80,7 @@ export function CaseStudiesSection() {
                     href={c.notionUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-xs text-[#A8946B] hover:text-[#D4AF37]"
+                    className="text-xs text-[#999999] hover:text-[#00D95A]"
                   >
                     Notion
                   </a>
@@ -91,10 +91,10 @@ export function CaseStudiesSection() {
         </div>
 
         <div className="mt-16">
-          <p className="font-mono text-xs tracking-[0.28em] text-[#A8946B]">
+          <p className="font-mono text-xs tracking-[0.28em] text-[#999999]">
             SECONDARY · CAREER DELIVERY
           </p>
-          <h3 className="display mt-2 text-2xl text-[#F3EBD8] md:text-3xl">
+          <h3 className="display mt-2 text-2xl text-[#FFFFFF] md:text-3xl">
             More product decisions
           </h3>
           <div className="mt-8 space-y-5">
@@ -105,7 +105,7 @@ export function CaseStudiesSection() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.01 }}
-                className="glass group rounded-3xl border border-[#D4AF37]/25 p-6 md:p-8"
+                className="glass group rounded-3xl border border-[#00D95A]/25 p-6 md:p-8"
               >
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
@@ -121,7 +121,7 @@ export function CaseStudiesSection() {
                   </div>
                   <Link
                     href={`/case-studies/${c.slug}`}
-                    className="shrink-0 rounded-full border border-[#D4AF37]/40 px-4 py-2 text-sm text-[#D4AF37] transition hover:bg-[#D4AF37]/10"
+                    className="shrink-0 rounded-full border border-[#00D95A]/40 px-4 py-2 text-sm text-[#00D95A] transition hover:bg-[#00D95A]/10"
                   >
                     Read the full story
                   </Link>
@@ -130,9 +130,9 @@ export function CaseStudiesSection() {
                   {c.metrics.map((m) => (
                     <div
                       key={m.label}
-                      className="rounded-xl border border-[#D4AF37]/25 bg-[#121212] p-3"
+                      className="rounded-xl border border-[#00D95A]/25 bg-[#121212] p-3"
                     >
-                      <p className="display text-lg text-[#D4AF37] md:text-xl">
+                      <p className="display text-lg text-[#00D95A] md:text-xl">
                         {m.value}
                       </p>
                       <p className="text-[11px] text-slate-400">{m.label}</p>
