@@ -182,17 +182,6 @@ export function ContactSection() {
  <p>
  {cms.resume.name} · AI Product Manager · {cms.resume.location}
  </p>
- <p className="mt-2">
- Inspiration reference:{" "}
- <a
- href={cms.site.inspiration}
- className="text-cyan-400/80 hover:underline"
- target="_blank"
- rel="noreferrer"
- >
- portfolio-web-tushant.lovable.app
- </a>
- </p>
  <p className="mt-2">Press ⌘K to search · ⌘J for AI agent</p>
  </motion.footer>
  </div>
