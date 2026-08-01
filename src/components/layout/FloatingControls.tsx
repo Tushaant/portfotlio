@@ -1,14 +1,13 @@
 "use client";
 
 import { useUIStore } from "@/store/ui-store";
-import { Bot, Music, Volume2, Terminal, Sun, Moon } from "lucide-react";
+import { Bot, Music, Volume2, Terminal } from "lucide-react";
 
 export function FloatingControls() {
   const {
     setAgentOpen,
     toggleSound,
     toggleMusic,
-    toggleHologram,
     toggleTerminal,
     soundEnabled,
     musicEnabled,
@@ -33,19 +32,6 @@ export function FloatingControls() {
         aria-label="Open AI agent"
       >
         <Bot className="h-4 w-4" />
-      </button>
-      <button
-        type="button"
-        className={`${btn} ${light ? "ring-1 ring-amber-400/50" : ""}`}
-        onClick={toggleHologram}
-        title={
-          light
-            ? "Switch to cyber dark mode (⌘T)"
-            : "Switch to white / gold hologram mode (⌘T)"
-        }
-        aria-label="Toggle white gold theme"
-      >
-        {light ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
       </button>
       <button
         type="button"
