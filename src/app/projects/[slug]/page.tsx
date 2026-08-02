@@ -99,7 +99,7 @@ export default async function ProjectPage({ params }: Props) {
       <InfoBlock label="RESEARCH">{p.research}</InfoBlock>
       <InfoBlock label="PRD">
         <ul className="list-disc space-y-1 pl-5">
-          {p.prd.map((x) => (
+          {p.prd?.map((x) => (
             <li key={x}>{x}</li>
           ))}
         </ul>
