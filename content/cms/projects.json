@@ -909,7 +909,7 @@
     "metrics": [],
     "outcome": "Delivered an R&D enablement platform with search and access control.",
     "learnings": [
-      "Findability without governance creates risk; governance without findability creates shadow IT"
+      "Findability without governance creates risk, governance without findability creates shadow IT"
     ],
     "roadmap": [],
     "businessValue": "Made enterprise R&D knowledge findable under controlled access."
