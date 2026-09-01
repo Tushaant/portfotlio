@@ -170,12 +170,20 @@ export function VoiceAgent() {
         const answer = String(data.answer || "Something went wrong. Please try again.");
         append({ role: "assistant", content: answer });
         setState("speaking");
-        await tts.speak(answer, { voiceURI: selectedVoiceURI });
+        try {
+          await tts.speak(answer, { voiceURI: selectedVoiceURI });
+        } catch {
+          if (id !== requestId.current) return;
+          setError("I could not speak that answer aloud. You can still read it here or continue in chat.");
+          setState("idle");
+          return;
+        }
         if (id !== requestId.current) return;
+        setError("");
         setState("idle");
       } catch {
         if (id !== requestId.current) return;
-        setError("I could not finish that answer. You can read the transcript or continue in chat.");
+        setError("I could not reach the portfolio brain. You can continue the conversation in chat.");
         setState("error");
       }
     },
@@ -208,6 +216,7 @@ export function VoiceAgent() {
     rec.maxAlternatives = 1;
     recRef.current = rec;
     listeningRef.current = true;
+    setError("");
     setState("listening");
     await startMicMeter();
 
@@ -311,8 +320,7 @@ export function VoiceAgent() {
         })
         .catch(() => {
           if (id === requestId.current) {
-            setState("error");
-            setError("I could not speak the welcome, but you can still talk or continue in chat.");
+            setState("idle");
           }
         });
     }, 280);

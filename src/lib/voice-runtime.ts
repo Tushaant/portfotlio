@@ -96,7 +96,13 @@ export function createBrowserTts(): TtsEngine {
       utterance.onerror = (event) => {
         if (current === utterance) current = null;
         const err = (event as SpeechSynthesisErrorEvent).error;
-        if (err === "interrupted" || err === "canceled") {
+        if (
+          err === "interrupted" ||
+          err === "canceled" ||
+          err === "not-allowed" ||
+          err === "synthesis-failed" ||
+          err === "synthesis-unavailable"
+        ) {
           resolve();
           return;
         }
