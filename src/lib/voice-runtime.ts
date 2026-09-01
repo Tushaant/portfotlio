@@ -1,20 +1,68 @@
-export type TtsEngine = {
-  speak: (text: string) => Promise<void>;
-  stop: () => void;
+export type VoiceOption = {
+  uri: string;
+  name: string;
+  lang: string;
+  likelyMale: boolean;
 };
 
-function pickVoice(synth: SpeechSynthesis) {
-  const voices = synth.getVoices();
-  const preferred =
-    voices.find((v) => /en-US/i.test(v.lang) && /google|natural|premium/i.test(v.name)) ||
-    voices.find((v) => /en-US/i.test(v.lang)) ||
-    voices.find((v) => /^en/i.test(v.lang));
-  return preferred ?? null;
+export type SpeakOptions = {
+  voiceURI?: string;
+  onStart?: () => void;
+};
+
+export type TtsEngine = {
+  speak: (text: string, options?: SpeakOptions) => Promise<void>;
+  stop: () => void;
+  getVoices: () => VoiceOption[];
+  getPreferredVoice: () => VoiceOption | null;
+  setVoiceURI: (uri: string) => void;
+};
+
+const MALE_HINT =
+  /\b(male|man|david|daniel|mark|james|alex|fred|arthur|thomas|ravi|aaron|george|ryan|andrew|christopher|eric|steffan|tony|guy|daniel|gordon|lee|nathan|oliver|tom|paul|richard|roger|brian|bruce|albert|wayne|google uk english male|microsoft david|microsoft mark)\b/i;
+const FEMALE_HINT =
+  /\b(female|woman|zira|samantha|karen|moira|tessa|veena|fiona|susan|hazel|heather|linda|victoria|catherine|aria|jenny|sara|google uk english female|microsoft zira)\b/i;
+
+export function getAvailableVoices(): VoiceOption[] {
+  if (typeof window === "undefined" || !window.speechSynthesis) return [];
+  return window.speechSynthesis.getVoices().map((v) => ({
+    uri: v.voiceURI,
+    name: v.name,
+    lang: v.lang,
+    likelyMale: MALE_HINT.test(`${v.name} ${v.lang}`) && !FEMALE_HINT.test(v.name),
+  }));
 }
 
-/** V1 browser TTS. Swap this implementation later for ElevenLabs without changing UI. */
+export function selectPreferredMaleVoice(voices = getAvailableVoices()): VoiceOption | null {
+  const english = voices.filter((v) => /^en/i.test(v.lang));
+  const pool = english.length ? english : voices;
+  return (
+    pool.find((v) => v.likelyMale && /en-US/i.test(v.lang)) ||
+    pool.find((v) => v.likelyMale) ||
+    pool.find((v) => /en-US/i.test(v.lang) && !FEMALE_HINT.test(v.name)) ||
+    pool.find((v) => /^en/i.test(v.lang) && !FEMALE_HINT.test(v.name)) ||
+    pool[0] ||
+    null
+  );
+}
+
+function findSynthVoice(uri?: string) {
+  if (typeof window === "undefined") return null;
+  const list = window.speechSynthesis.getVoices();
+  if (uri) {
+    const match = list.find((v) => v.voiceURI === uri);
+    if (match) return match;
+  }
+  const preferred = selectPreferredMaleVoice();
+  return preferred
+    ? list.find((v) => v.voiceURI === preferred.uri) ?? null
+    : null;
+}
+
+/** Browser SpeechSynthesis. Swap this factory later for ElevenLabs without changing UI. */
 export function createBrowserTts(): TtsEngine {
   let current: SpeechSynthesisUtterance | null = null;
+  let selectedURI = "";
 
   const stop = () => {
     current = null;
@@ -22,7 +70,7 @@ export function createBrowserTts(): TtsEngine {
     window.speechSynthesis.cancel();
   };
 
-  const speak = (text: string) =>
+  const speak = (text: string, options: SpeakOptions = {}) =>
     new Promise<void>((resolve, reject) => {
       if (typeof window === "undefined" || !window.speechSynthesis) {
         reject(new Error("unsupported"));
@@ -31,23 +79,69 @@ export function createBrowserTts(): TtsEngine {
       stop();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "en-US";
-      utterance.rate = 1;
-      utterance.pitch = 1;
-      const voice = pickVoice(window.speechSynthesis);
-      if (voice) utterance.voice = voice;
+      utterance.rate = 0.98;
+      utterance.pitch = 0.95;
+      utterance.volume = 1;
+      const voice = findSynthVoice(options.voiceURI || selectedURI);
+      if (voice) {
+        utterance.voice = voice;
+        utterance.lang = voice.lang || "en-US";
+      }
       current = utterance;
+      utterance.onstart = () => options.onStart?.();
       utterance.onend = () => {
         if (current === utterance) current = null;
         resolve();
       };
-      utterance.onerror = () => {
+      utterance.onerror = (event) => {
         if (current === utterance) current = null;
-        resolve();
+        const err = (event as SpeechSynthesisErrorEvent).error;
+        if (
+          err === "interrupted" ||
+          err === "canceled" ||
+          err === "not-allowed" ||
+          err === "synthesis-failed" ||
+          err === "synthesis-unavailable"
+        ) {
+          resolve();
+          return;
+        }
+        reject(new Error(err || "tts-error"));
       };
-      window.speechSynthesis.speak(utterance);
+      window.setTimeout(() => {
+        window.speechSynthesis.speak(utterance);
+      }, 40);
     });
 
-  return { speak, stop };
+  return {
+    speak,
+    stop,
+    getVoices: getAvailableVoices,
+    getPreferredVoice: () => selectPreferredMaleVoice(),
+    setVoiceURI: (uri: string) => {
+      selectedURI = uri;
+    },
+  };
+}
+
+export function subscribeVoices(onChange: () => void) {
+  if (typeof window === "undefined" || !window.speechSynthesis) {
+    return () => {};
+  }
+  const synth = window.speechSynthesis;
+  const handler = () => onChange();
+  synth.addEventListener("voiceschanged", handler);
+  synth.onvoiceschanged = handler;
+  const retries = [0, 150, 400, 1200].map((ms) => window.setTimeout(onChange, ms));
+  return () => {
+    synth.removeEventListener("voiceschanged", handler);
+    retries.forEach((id) => window.clearTimeout(id));
+  };
+}
+
+export function createSpeechRecognition() {
+  const Ctor = getSpeechRecognitionCtor();
+  return Ctor ? new Ctor() : null;
 }
 
 export type SpeechRecognitionLike = {
@@ -77,7 +171,7 @@ export function isSpeechRecognitionSupported() {
 }
 
 export function toSpoken(text: string, maxWords = 110) {
-  const cleaned = text
+  let cleaned = text
     .replace(/[`*_#]/g, "")
     .replace(/https?:\/\/\S+/g, "")
     .replace(/^\[.+?\]\s*/gm, "")
@@ -85,7 +179,14 @@ export function toSpoken(text: string, maxWords = 110) {
     .replace(/\n+/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+  cleaned = cleaned.replace(
+    /\bthere are three (things|factors|parts):\s*one,?\s*/i,
+    "I'd look at three things here. First, ",
+  );
   const words = cleaned.split(" ").filter(Boolean);
   if (words.length <= maxWords) return cleaned;
   return `${words.slice(0, maxWords).join(" ")}.`;
 }
+
+export const VOICE_GREETING =
+  "Hi, welcome. I'm Tushant's AI companion. It's great to have you here. Feel free to ask me about his work, his product experience, or anything you'd like to explore.";

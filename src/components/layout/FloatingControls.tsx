@@ -29,7 +29,7 @@ export function FloatingControls() {
         className={btn}
         onClick={() => setVoiceAgentOpen(true)}
         title="Voice agent"
-        aria-label="Open voice agent"
+        aria-label="Open Tushant's AI companion"
       >
         <Mic className="h-4 w-4" />
       </button>
