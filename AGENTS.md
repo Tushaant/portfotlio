@@ -31,6 +31,8 @@ npm run build
 
 Voice Agent uses browser `SpeechRecognition` / `speechSynthesis` (no paid STT/TTS). Microphone and TTS need a real browser with permission.
 
+Private intelligence dashboard: `/admin` (password `ADMIN_PASSWORD`, local default `tushant-local`). CMS console moved to `/admin/cms`.
+
 ### Gotchas
 
 - The repository name is `portfotlio` (likely intended as "portfolio").

@@ -189,4 +189,4 @@ export function toSpoken(text: string, maxWords = 110) {
 }
 
 export const VOICE_GREETING =
-  "Hi, welcome. I'm Tushant's AI companion. It's great to have you here. Feel free to ask me about his work, his product experience, or anything you'd like to explore.";
+  "Hi, welcome. I'm Tushant's AI companion. It's great to have you here. You can ask me about his work, his product experience, or even dive into things like AI, RAG, MCP, or enterprise product strategy. Whenever you're ready, just start talking.";

@@ -118,8 +118,8 @@ export function JourneySection() {
  ))}
  </div>
 
- <div className="mt-6 rounded-2xl border border-green-400/20 bg-green-400/5 p-4">
- <p className="font-mono text-[10px] tracking-widest text-green-300">
+ <div className="mt-6 rounded-2xl border border-[#8B5CF6]/25 bg-[#8B5CF6]/5 p-4">
+ <p className="font-mono text-[10px] tracking-widest text-[#C4B5FD]">
  LESSON LEARNED
  </p>
  <p className="mt-2 text-sm text-slate-200">{job.lesson}</p>

@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
 import { cms } from "@/lib/cms";
+import { trackEvent } from "@/lib/analytics";
 
 export function ContactSection() {
  const [status, setStatus] = useState<"idle" | "sent" | "error">("idle");
@@ -32,6 +33,7 @@ export function ContactSection() {
  });
  if (!res.ok) throw new Error("fail");
  setStatus("sent");
+ trackEvent("contact_clicked");
  setLines((l) => [...l, "> transmission acknowledged", "$"]);
  e.currentTarget.reset();
  } catch {
@@ -58,16 +60,16 @@ export function ContactSection() {
  </p>
 
  <div className="mt-12 grid gap-6 lg:grid-cols-2">
- <div className="overflow-hidden rounded-3xl border border-green-400/20 bg-black/60 font-mono text-sm shadow-[0_0_40px_rgba(0,245,160,0.08)]">
+ <div className="overflow-hidden rounded-3xl border border-[#8B5CF6]/20 bg-black/60 font-mono text-sm shadow-[0_0_40px_rgba(139,92,246,0.08)]">
  <div className="flex items-center gap-2 border-b border-white/10 px-4 py-2 text-xs text-slate-500">
  <span className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
  <span className="h-2.5 w-2.5 rounded-full bg-yellow-400/80" />
- <span className="h-2.5 w-2.5 rounded-full bg-green-400/80" />
+ <span className="h-2.5 w-2.5 rounded-full bg-[#22D3EE]/80" />
  <span className="ml-2">
  tushant@command-center: ~/contact
  </span>
  </div>
- <div className="scanlines relative max-h-64 space-y-1 overflow-auto p-4 text-green-300/90">
+ <div className="scanlines relative max-h-64 space-y-1 overflow-auto p-4 text-[#22D3EE]/90">
  {lines.map((l, i) => (
  <p key={`${i}-${l}`}>{l}</p>
  ))}
@@ -77,30 +79,30 @@ export function ContactSection() {
  name="name"
  required
  placeholder="name"
- className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-green-200 outline-none focus:border-green-400/50"
+ className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-[#F472B6] outline-none focus:border-[#8B5CF6]/50"
  />
  <input
  name="email"
  type="email"
  required
  placeholder="email"
- className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-green-200 outline-none focus:border-green-400/50"
+ className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-[#F472B6] outline-none focus:border-[#8B5CF6]/50"
  />
  <textarea
  name="message"
  required
  rows={3}
  placeholder="message payload"
- className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-green-200 outline-none focus:border-green-400/50"
+ className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-[#F472B6] outline-none focus:border-[#8B5CF6]/50"
  />
  <button
  type="submit"
- className="rounded-lg bg-green-400/20 px-4 py-2 text-green-200 transition hover:bg-green-400/30"
+ className="rounded-lg bg-[#FF3CAC]/20 px-4 py-2 text-[#F472B6] transition hover:bg-[#FF3CAC]/30"
  >
  $ Message transmit
  </button>
  {status === "sent" && (
- <p className="text-xs text-green-300">Message logged locally.</p>
+ <p className="text-xs text-[#22D3EE]">Message logged locally.</p>
  )}
  {status === "error" && (
  <p className="text-xs text-amber-300">
@@ -147,6 +149,13 @@ export function ContactSection() {
  href={c.href}
  target={c.href.startsWith("http") || c.href.endsWith(".pdf") ? "_blank" : undefined}
  rel="noreferrer"
+ onClick={() => {
+  if (c.label === "LinkedIn") trackEvent("linkedin_clicked");
+  if (c.label === "Download resume") trackEvent("resume_downloaded");
+  if (c.label === "Email" || c.label === "Phone" || c.label === "Schedule meeting") {
+    trackEvent("contact_clicked");
+  }
+ }}
  className="group flex items-center justify-between rounded-xl border border-white/10 px-4 py-3 transition hover:border-cyan-400/40 hover:bg-cyan-400/5"
  >
  <span className="text-sm text-slate-400">{c.label}</span>

@@ -52,7 +52,7 @@ export default async function ProjectPage({ params }: Props) {
           <span
             className={`rounded-full px-3 py-2 text-xs ${
               p.status === "DELIVERED"
-                ? "bg-green-400/15 text-green-300"
+                ? "bg-[#22D3EE]/15 text-[#22D3EE]"
                 : "bg-fuchsia-400/15 text-fuchsia-300"
             }`}
           >

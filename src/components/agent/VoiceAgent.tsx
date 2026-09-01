@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Square, X } from "lucide-react";
 import { useUIStore } from "@/store/ui-store";
 import { useConversationStore } from "@/store/conversation-store";
+import { AgentScroll } from "@/components/agent/AgentScroll";
 import { trackEvent } from "@/lib/analytics";
 import {
   VOICE_GREETING,
@@ -35,6 +36,7 @@ export function VoiceAgent() {
   const turns = useConversationStore((s) => s.turns);
   const append = useConversationStore((s) => s.append);
   const voiceGreeted = useConversationStore((s) => s.voiceGreeted);
+  const conversationId = useConversationStore((s) => s.conversationId);
   const markVoiceGreeted = useConversationStore((s) => s.markVoiceGreeted);
 
   const [state, setState] = useState<VoiceState>("idle");
@@ -50,7 +52,6 @@ export function VoiceAgent() {
   const recRef = useRef<SpeechRecognitionLike | null>(null);
   const requestId = useRef(0);
   const listeningRef = useRef(false);
-  const transcriptRef = useRef<HTMLDivElement>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const rafRef = useRef(0);
   const micStreamRef = useRef<MediaStream | null>(null);
@@ -153,22 +154,40 @@ export function VoiceAgent() {
       setState("thinking");
       setError("");
       append({ role: "user", content: transcript });
-      trackEvent("voice_message_sent");
+      trackEvent("voice_message_sent", {
+        agentType: "voice",
+        conversationId: useConversationStore.getState().conversationId,
+        text: transcript.slice(0, 240),
+      });
+      const complex = transcript.split(/\s+/).length > 12;
+      if (complex) await new Promise((r) => setTimeout(r, 420));
+      const started = Date.now();
       try {
         const history = useConversationStore.getState().window();
+        const controller = new AbortController();
+        const timer = window.setTimeout(() => controller.abort(), 12000);
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          signal: controller.signal,
           body: JSON.stringify({
             message: transcript,
             channel: "voice",
             history,
           }),
         });
-        const data = (await res.json()) as { answer?: string };
+        window.clearTimeout(timer);
+        const data = (await res.json()) as { answer?: string; knowledgeGap?: boolean };
         if (id !== requestId.current) return;
-        const answer = String(data.answer || "Something went wrong. Please try again.");
+        const answer = String(
+          data.answer || "I'm having a little trouble getting that response. Give me another try.",
+        );
         append({ role: "assistant", content: answer });
+        trackEvent(data.knowledgeGap ? "knowledge_gap" : "response_success", {
+          agentType: "voice",
+          conversationId: useConversationStore.getState().conversationId,
+          llmLatency: Date.now() - started,
+        });
         setState("speaking");
         try {
           await tts.speak(answer, { voiceURI: selectedVoiceURI });
@@ -183,8 +202,9 @@ export function VoiceAgent() {
         setState("idle");
       } catch {
         if (id !== requestId.current) return;
-        setError("I could not reach the portfolio brain. You can continue the conversation in chat.");
+        setError("I'm having a little trouble getting that response. Give me another try.");
         setState("error");
+        trackEvent("response_failure", { agentType: "voice" });
       }
     },
     [append, selectedVoiceURI, tts],
@@ -194,7 +214,7 @@ export function VoiceAgent() {
     if (!isSpeechRecognitionSupported()) {
       setSupported(false);
       setState("error");
-      setError("Voice input isn't supported in this browser.");
+      setError("Voice input isn't supported in this browser. You can use the Chat Agent instead.");
       return;
     }
     requestId.current += 1;
@@ -207,7 +227,7 @@ export function VoiceAgent() {
     if (!rec) {
       setSupported(false);
       setState("error");
-      setError("Voice input isn't supported in this browser.");
+      setError("Voice input isn't supported in this browser. You can use the Chat Agent instead.");
       return;
     }
     rec.lang = "en-US";
@@ -250,16 +270,20 @@ export function VoiceAgent() {
       listeningRef.current = false;
       stopMicMeter();
       recRef.current = null;
-      if (event.error === "aborted" || event.error === "no-speech") {
+      if (event.error === "aborted") {
         setInterim("");
+        setState("idle");
+        return;
+      }
+      if (event.error === "no-speech") {
+        setInterim("");
+        setError("I didn't catch that. Try again when you're ready.");
         setState("idle");
         return;
       }
       setState("error");
       if (event.error === "not-allowed") {
-        setError(
-          "I'm having trouble accessing your microphone. You can continue the conversation through chat instead.",
-        );
+        setError("I can't access your microphone. You can continue through chat instead.");
       } else if (event.error === "network") {
         setError("Speech recognition lost its network connection. Try again, or continue in chat.");
       } else {
@@ -287,6 +311,7 @@ export function VoiceAgent() {
   const onOrb = useCallback(() => {
     if (state === "thinking") return;
     if (state === "speaking") {
+      trackEvent("user_interrupted", { agentType: "voice" });
       void listen();
       return;
     }
@@ -304,7 +329,8 @@ export function VoiceAgent() {
       stopAll();
       return;
     }
-    trackEvent("voice_opened");
+    trackEvent("voice_opened", { agentType: "voice" });
+    trackEvent("voice_session_started", { agentType: "voice", conversationId });
     if (voiceGreeted) return;
     markVoiceGreeted();
     append({ role: "assistant", content: VOICE_GREETING });
@@ -328,12 +354,6 @@ export function VoiceAgent() {
     // Greet once when the panel opens for this page session.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
-
-  useEffect(() => {
-    const el = transcriptRef.current;
-    if (!el || !followBottom) return;
-    el.scrollTop = el.scrollHeight;
-  }, [turns, interim, followBottom]);
 
   const voiceChoices = useMemo(() => {
     const english = voices.filter((v) => v.lang.toLowerCase().startsWith("en"));
@@ -410,21 +430,15 @@ export function VoiceAgent() {
                 <span className="voice-orb__core" />
               </button>
               <p className="mt-4 text-sm text-amber-200/90" aria-live="polite">
-                {error ? STATUS.error : STATUS[state]}
+                {state === "error" ? STATUS.error : STATUS[state]}
               </p>
             </div>
 
-            <div
-              ref={transcriptRef}
-              data-agent-scroll
-              className="mt-4 min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 pb-3"
-              style={{ WebkitOverflowScrolling: "touch" }}
-              aria-live="polite"
-              aria-label="Voice conversation transcript"
-              onScroll={(e) => {
-                const el = e.currentTarget;
-                setFollowBottom(el.scrollHeight - el.scrollTop - el.clientHeight < 48);
-              }}
+            <AgentScroll
+              follow={followBottom}
+              onFollowChange={setFollowBottom}
+              scrollKey={`${turns.length}-${interim}`}
+              className="mt-4 space-y-3 px-4 pb-3"
             >
               {turns.map((m, i) => (
                 <div key={`${m.role}-${i}`} className={m.role === "user" ? "text-right" : "text-left"}>
@@ -440,8 +454,7 @@ export function VoiceAgent() {
                   <p className="mt-1 text-sm italic text-[var(--muted)]">{interim}</p>
                 </div>
               ) : null}
-            </div>
-
+            </AgentScroll>
             {error ? <p className="px-4 pb-2 text-center text-xs text-amber-200/90">{error}</p> : null}
 
             <div className="flex shrink-0 flex-wrap items-center justify-center gap-2 border-t border-white/10 px-3 py-3">

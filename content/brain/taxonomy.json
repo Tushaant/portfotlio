@@ -1,0 +1,36 @@
+{
+  "topics": [
+    { "id": "agentic-ai", "label": "Agentic AI", "color": "violet", "match": ["agentic", "ai agent", "multi-agent"] },
+    { "id": "rag", "label": "RAG", "color": "cyan", "match": ["rag", "retrieval", "embeddings"] },
+    { "id": "mcp", "label": "MCP", "color": "blue", "match": ["mcp", "model context protocol"] },
+    { "id": "knowledge-graphs", "label": "Knowledge Graphs", "color": "cyan", "match": ["knowledge graph", "graph rag"] },
+    { "id": "ai-evaluation", "label": "AI Evaluation", "color": "violet", "match": ["evaluation", "langfuse", "promptfoo", "groundedness"] },
+    { "id": "ai-governance", "label": "AI Governance", "color": "blue", "match": ["governance", "hipaa", "pci", "gdpr"] },
+    { "id": "ai-observability", "label": "AI Observability", "color": "cyan", "match": ["observability", "grafana", "tracing"] },
+    { "id": "voice-ai", "label": "Voice AI", "color": "magenta", "match": ["voice", "speech", "stt", "tts"] },
+    { "id": "enterprise-ai", "label": "Enterprise AI", "color": "violet", "match": ["enterprise ai", "oraczen", "banking"] },
+    { "id": "product-management", "label": "Product Management", "color": "magenta", "match": ["product management", "roadmap", "priorit"] },
+    { "id": "product-strategy", "label": "Product Strategy", "color": "magenta", "match": ["strategy", "gtm", "discovery"] },
+    { "id": "leadership", "label": "Leadership", "color": "pink", "match": ["leadership", "team", "director"] },
+    { "id": "fintech", "label": "FinTech", "color": "blue", "match": ["fintech", "payments", "kyc"] },
+    { "id": "banking", "label": "Banking", "color": "blue", "match": ["bank", "credit", "risk"] },
+    { "id": "architecture", "label": "AI Architecture", "color": "cyan", "match": ["architecture", "pipeline", "system design"] },
+    { "id": "career", "label": "Career", "color": "pink", "match": ["career", "resume", "experience", "role"] },
+    { "id": "projects", "label": "Projects", "color": "magenta", "match": ["project", "portfolio", "shipped"] },
+    { "id": "interview", "label": "Interview", "color": "pink", "match": ["interview", "hire", "strength"] },
+    { "id": "contact", "label": "Contact / Hiring", "color": "pink", "match": ["contact", "email", "linkedin"] }
+  ],
+  "intents": [
+    "Career / Experience",
+    "Project Deep Dive",
+    "Product Management",
+    "Technical Architecture",
+    "AI Strategy",
+    "Leadership",
+    "Industry Experience",
+    "Interview",
+    "Portfolio Exploration",
+    "Contact / Hiring",
+    "General Professional Question"
+  ]
+}
