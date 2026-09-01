@@ -3,6 +3,9 @@ import {
   cms,
   type KnowledgeDoc,
 } from "./cms";
+import { formatGeneralAnswer, matchGeneralTopic } from "./general-knowledge";
+import { resolveSystemPrompt } from "./system-prompt";
+import { toSpoken } from "./voice-runtime";
 
 const DOCS = buildKnowledgeDocs();
 
@@ -399,48 +402,133 @@ function synthesizeFromDocs(docs: KnowledgeDoc[], question: string): string {
   return parts.join("\n");
 }
 
-function gentleFail(): { answer: string; sources: string[] } {
+function gentleFail(spoken: boolean): { answer: string; sources: string[] } {
   const r = cms.resume;
+  const answer = spoken
+    ? `I don't have verified information about that in Tushant's portfolio, so I don't want to speculate. I'll pass the question to Tushant. Until then you can reach him at ${r.email}, on LinkedIn, or at ${r.phone}.`
+    : [
+        "I don't have verified information about that in Tushant's portfolio, so I don't want to speculate.",
+        "I'll send this request to Tushant so he can clear the doubt.",
+        "In the meantime, until the next update, you can connect with him directly:",
+        `Email: ${r.email}`,
+        `LinkedIn: ${r.linkedin}`,
+        `Phone: ${r.phone}`,
+      ].join("\n");
+  return { answer, sources: ["resume.contact", "agent-fallback"] };
+}
+
+function hireWhy(): { answer: string; sources: string[] } {
+  const r = cms.resume;
+  const oraczen = cms.experience.find((j) => j.id === "oraczen");
   return {
     answer: [
-      "I don't have an answer to that question from the data on this website,",
-      "but I'll send this request to Tushant so he can clear the doubt.",
-      "",
-      "In the meantime, until the next update, you can connect with him directly:",
-      `• Email: ${r.email}`,
-      `• LinkedIn: ${r.linkedin}`,
-      `• Phone: ${r.phone}`,
-    ].join("\n"),
-    sources: ["resume.contact", "agent-fallback"],
+      `${r.name} is an ${r.title} based in ${r.location}.`,
+      r.summary,
+      oraczen
+        ? `Current verified ownership includes a ${oraczen.metrics.map((m) => `${m.value} ${m.label}`).join(", ")} at ${oraczen.company}.`
+        : "",
+      "What stands out in the portfolio is the mix of AI product strategy, enterprise delivery, and documented outcomes rather than slogans. I will not invent extra claims beyond what is on the site.",
+    ]
+      .filter(Boolean)
+      .join(" "),
+    sources: ["resume.profile", "experience.oraczen"],
   };
 }
 
-/** Portfolio site agent - answers from all CMS / website content. */
-export function answerFromPortfolio(question: string): {
+export type AgentChannel = "chat" | "voice";
+export type AgentTurn = { role: "user" | "assistant"; content: string };
+export type AgentOptions = {
+  channel?: AgentChannel;
+  history?: AgentTurn[];
+};
+
+function resolveFollowUp(question: string, history?: AgentTurn[]) {
+  const q = question.trim();
+  if (!history?.length) return q;
+  const short = q.split(/\s+/).length <= 8;
+  const lastUser = [...history].reverse().find((t) => t.role === "user");
+  const lastAssistant = [...history].reverse().find((t) => t.role === "assistant");
+  if (short && lastUser && /^(and |what about|why|how|his |her |that |this |the |continue|more)/i.test(q)) {
+    return `${lastUser.content}. Follow-up: ${q}`;
+  }
+  if (short && lastAssistant && /\b(that|this|it|those|he|his)\b/i.test(q)) {
+    return `${lastAssistant.content.slice(0, 180)}. Follow-up: ${q}`;
+  }
+  return q;
+}
+
+function applyChannel(result: { answer: string; sources: string[] }, channel: AgentChannel) {
+  if (channel !== "voice") return result;
+  return { ...result, answer: toSpoken(result.answer) };
+}
+
+/** Portfolio site agent. Chat and Voice share this brain. */
+export function answerFromPortfolio(
+  question: string,
+  options: AgentOptions = {},
+): {
   answer: string;
   sources: string[];
 } {
-  const raw = question.trim();
+  const channel: AgentChannel = options.channel ?? "chat";
+  const spoken = channel === "voice";
+  resolveSystemPrompt(cms.voiceAgent.systemPrompt);
+
+  const raw = resolveFollowUp(question, options.history).trim();
   const q = raw.toLowerCase();
 
   if (!q) {
-    return {
-      answer:
-        "Ask me anything about Tushant's profile, experience, projects, case studies, skills, tech stack, achievements, testimonials, or contact details. I answer from the data on this website.",
-      sources: [],
-    };
+    return applyChannel(
+      {
+        answer: spoken
+          ? "Ask me about Tushant's work, products, leadership, or how he thinks about AI. I only speak from verified portfolio data."
+          : "Ask me anything about Tushant's profile, experience, projects, case studies, skills, tech stack, achievements, testimonials, or contact details. I answer from the data on this website.",
+        sources: ["system-prompt"],
+      },
+      channel,
+    );
   }
 
   if (/(who are you|what can you|help|commands|how do you work)/.test(q)) {
-    return {
-      answer: [
-        "I'm the Command Center Agent for this portfolio site.",
-        "I answer using the website CMS: resume, experience, projects, case studies, skills, tech stack, achievements, testimonials, and contact.",
-        `Coverage right now: ${cms.projects.length} projects · ${cms.caseStudies.length} case studies · ${cms.experience.length} roles · ${cms.skills.length} skills · ${cms.achievements.length} achievements · ${cms.testimonials.length} testimonials.`,
-        "Try: “summarize Tushant”, “list projects”, “what did he do at Oraczen?”, “Bharatlabs outcome”, “client testimonials”, or “how do I contact him?”",
-      ].join("\n"),
-      sources: ["agent-policy", "site.navigation"],
-    };
+    return applyChannel(
+      {
+        answer: spoken
+          ? "I'm Tushant's AI companion for this portfolio. I can talk through his verified experience, products, and how he thinks about AI product work. If I don't have it in the portfolio, I won't invent it."
+          : [
+              "I'm the official AI companion for Tushant Sharma's portfolio.",
+              "I answer using the website CMS: resume, experience, projects, case studies, skills, tech stack, achievements, testimonials, and contact.",
+              `Coverage right now: ${cms.projects.length} projects, ${cms.caseStudies.length} case studies, ${cms.experience.length} roles, ${cms.skills.length} skills, ${cms.achievements.length} achievements, ${cms.testimonials.length} testimonials.`,
+              "Ask about Oraczen, RAG, MCP, a project, or how he thinks about product leadership.",
+            ].join("\n"),
+        sources: ["system-prompt", "site.navigation"],
+      },
+      channel,
+    );
+  }
+
+  if (
+    /(why (should|would) (i|we) hire|what makes him different|hire him|why tushant)/.test(
+      q,
+    )
+  ) {
+    return applyChannel(hireWhy(), channel);
+  }
+
+  const general = matchGeneralTopic(raw);
+
+  if (
+    /(current role|present role|what does he do now|acting director)/.test(q)
+  ) {
+    const job = cms.experience.find((j) => j.active) ?? cms.experience[0];
+    return applyChannel(
+      {
+        answer: job
+          ? `${cms.resume.name} is currently ${job.role} at ${job.company} (${job.period}), based in ${job.location}. Headline metrics on record: ${job.metrics.map((m) => `${m.label} ${m.value}`).join(", ")}.`
+          : cms.resume.title,
+        sources: job ? [`experience.${job.id}`] : ["resume.profile"],
+      },
+      channel,
+    );
   }
 
   if (
@@ -448,10 +536,10 @@ export function answerFromPortfolio(question: string): {
       q,
     )
   ) {
-    return {
-      answer: smartSummary(),
-      sources: ["resume.profile", "resume.contact"],
-    };
+    return applyChannel(
+      { answer: smartSummary(), sources: ["resume.profile", "resume.contact"] },
+      channel,
+    );
   }
 
   if (
@@ -462,7 +550,10 @@ export function answerFromPortfolio(question: string): {
     q === "what projects" ||
     /what (projects|products) (has|did|does)/.test(q)
   ) {
-    return { answer: listProjects(), sources: docsInSection("projects").map((d) => d.id) };
+    return applyChannel(
+      { answer: listProjects(), sources: docsInSection("projects").map((d) => d.id) },
+      channel,
+    );
   }
 
   if (
@@ -470,10 +561,13 @@ export function answerFromPortfolio(question: string): {
       q,
     )
   ) {
-    return {
-      answer: listCaseStudies(),
-      sources: docsInSection("case-studies").map((d) => d.id),
-    };
+    return applyChannel(
+      {
+        answer: listCaseStudies(),
+        sources: docsInSection("case-studies").map((d) => d.id),
+      },
+      channel,
+    );
   }
 
   if (
@@ -481,7 +575,10 @@ export function answerFromPortfolio(question: string): {
       q,
     )
   ) {
-    return { answer: listSkills(), sources: docsInSection("skills").map((d) => d.id) };
+    return applyChannel(
+      { answer: listSkills(), sources: docsInSection("skills").map((d) => d.id) },
+      channel,
+    );
   }
 
   if (
@@ -489,31 +586,40 @@ export function answerFromPortfolio(question: string): {
       q,
     )
   ) {
-    return {
-      answer: listExperience(),
-      sources: docsInSection("experience").map((d) => d.id),
-    };
+    return applyChannel(
+      {
+        answer: listExperience(),
+        sources: docsInSection("experience").map((d) => d.id),
+      },
+      channel,
+    );
   }
 
   if (/(list|show|all).*(achieve|award|certif|troph)|achievements?|certifications?/.test(q)) {
-    return {
-      answer: listAchievements(),
-      sources: docsInSection("achievements").map((d) => d.id),
-    };
+    return applyChannel(
+      {
+        answer: listAchievements(),
+        sources: docsInSection("achievements").map((d) => d.id),
+      },
+      channel,
+    );
   }
 
   if (/(list|show|all).*testimonial|testimonial|recommendation|what (do )?clients? say|reviews?/.test(q)) {
-    return {
-      answer: listTestimonials(),
-      sources: docsInSection("testimonials").map((d) => d.id),
-    };
+    return applyChannel(
+      {
+        answer: listTestimonials(),
+        sources: docsInSection("testimonials").map((d) => d.id),
+      },
+      channel,
+    );
   }
 
-  if (/(tech(nology)? stack|tools? (he |tushant )?uses?|what (tech|tools)|platforms?)/.test(q)) {
-    return {
-      answer: listTechStack(),
-      sources: ["tech-stack"],
-    };
+  if (/(tech(nology)? stack|tools? (he |tushant )?uses?|what (tech|tools) does)/.test(q)) {
+    return applyChannel(
+      { answer: listTechStack(), sources: ["tech-stack"] },
+      channel,
+    );
   }
 
   if (/(veda|mkc|kalshi|play store|app download|1l\+|1m\+|10l\+|downloads)/.test(q)) {
@@ -523,43 +629,58 @@ export function answerFromPortfolio(question: string): {
         d.id.includes("mkc") ||
         /veda|kalshi|mkc|download/i.test(d.text),
     );
-    return {
-      answer: synthesizeFromDocs(hits.slice(0, 3), raw) || listAchievements(),
-      sources: hits.slice(0, 3).map((d) => d.id),
-    };
+    return applyChannel(
+      {
+        answer: synthesizeFromDocs(hits.slice(0, 3), raw) || listAchievements(),
+        sources: hits.slice(0, 3).map((d) => d.id),
+      },
+      channel,
+    );
   }
 
-  if (/(contact|email|phone|linkedin|reach|hire|connect with)/.test(q)) {
-    return {
-      answer: [
-        "Contact channels from the site:",
-        `• Email: ${cms.resume.email}`,
-        `• Phone: ${cms.resume.phone}`,
-        `• LinkedIn: ${cms.resume.linkedin}`,
-        `• Resume PDF: ${cms.site.social.resume}`,
-        "• Resume page: /resume",
-        `• Notion portfolio: ${cms.site.notion}`,
-      ].join("\n"),
-      sources: ["resume.contact"],
-    };
+  if (/(contact|email|phone|linkedin|reach|connect with)/.test(q) && !/hire him/.test(q)) {
+    return applyChannel(
+      {
+        answer: [
+          "Contact channels from the site:",
+          `Email: ${cms.resume.email}`,
+          `Phone: ${cms.resume.phone}`,
+          `LinkedIn: ${cms.resume.linkedin}`,
+          `Resume PDF: ${cms.site.social.resume}`,
+        ].join("\n"),
+        sources: ["resume.contact"],
+      },
+      channel,
+    );
   }
 
   if (/\b(resume|cv)\b/.test(q) && !/summary|summarize/.test(q)) {
-    return {
-      answer: [
-        "Resume is sourced from the PDF on this site.",
-        `• Download: ${cms.site.social.resume}`,
-        "• Page: /resume",
-        `• ${cms.resume.name} - ${cms.resume.title}`,
-        cms.resume.summary,
-      ].join("\n"),
-      sources: ["resume.profile", "resume.contact"],
-    };
+    return applyChannel(
+      {
+        answer: [
+          "Resume is sourced from the PDF on this site.",
+          `Download: ${cms.site.social.resume}`,
+          `${cms.resume.name}, ${cms.resume.title}.`,
+          cms.resume.summary,
+        ].join("\n"),
+        sources: ["resume.profile", "resume.contact"],
+      },
+      channel,
+    );
+  }
+
+  if (general && /what is|what's|explain|how does|tell me about (rag|mcp|docker|kubernetes|oauth|jwt)/i.test(question)) {
+    return applyChannel(
+      {
+        answer: formatGeneralAnswer(general, spoken),
+        sources: [`general.${general.id}`, general.verifiedNote ? "cms-verified" : "general-only"],
+      },
+      channel,
+    );
   }
 
   const hits = retrieve(raw, 7);
 
-  // Prefer experience when asking what someone did at a company
   let ranked = hits;
   if (/(what did|role at|work(?:ed)? at|at oraczen|at emb|at filmboard|at ibm|do at)/.test(q)) {
     ranked = [...hits].sort((a, b) => {
@@ -574,12 +695,22 @@ export function answerFromPortfolio(question: string): {
   const usable = ranked.filter((h) => h.score >= Math.max(4, top * 0.35));
 
   if (!usable.length || top < 4) {
-    return gentleFail();
+    if (general) {
+      return applyChannel(
+        {
+          answer: formatGeneralAnswer(general, spoken),
+          sources: [`general.${general.id}`, general.verifiedNote ? "cms-verified" : "general-only"],
+        },
+        channel,
+      );
+    }
+    return applyChannel(gentleFail(spoken), channel);
   }
 
   const docs = usable.map((h) => h.doc);
-  return {
-    answer: synthesizeFromDocs(docs, raw),
-    sources: docs.map((d) => d.id),
-  };
+  let answer = synthesizeFromDocs(docs, raw);
+  if (general && !/tushant|oraczen|portfolio/i.test(answer)) {
+    answer = `${formatGeneralAnswer(general, spoken)}\n\n${answer}`;
+  }
+  return applyChannel({ answer, sources: docs.map((d) => d.id) }, channel);
 }
