@@ -5,6 +5,7 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUIStore } from "@/store/ui-store";
 import { useConversationStore } from "@/store/conversation-store";
+import { trackEvent } from "@/lib/analytics";
 import { X, Send, User } from "lucide-react";
 
 type Msg = { role: "user" | "assistant"; content: string };
@@ -53,6 +54,10 @@ export function ChatAgent() {
   const messages = storedTurns.length
     ? storedTurns
     : ([{ role: "assistant" as const, content: greeting }] satisfies Msg[]);
+
+  useEffect(() => {
+    if (open) trackEvent("chat_opened");
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -105,6 +110,7 @@ export function ChatAgent() {
   const ask = async (q: string) => {
     if (!q.trim() || loading) return;
     append({ role: "user", content: q });
+    trackEvent("chat_message_sent");
     setInput("");
     setLoading(true);
     try {

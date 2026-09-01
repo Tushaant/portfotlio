@@ -927,3 +927,113 @@ html.lenis body {
 .voice-pulse {
  animation: voice-pulse 1.6s ease-out infinite;
 }
+
+@keyframes voice-orb-idle {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.03); }
+}
+@keyframes voice-orb-think {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes voice-orb-speak {
+  0%, 100% { transform: scale(1); opacity: 0.55; }
+  50% { transform: scale(1.18); opacity: 0.2; }
+}
+@keyframes voice-orb-listen {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(calc(1 + (var(--voice-level, 0.4) * 0.12))); }
+}
+@keyframes voice-orb-shift {
+  0% { background-position: 0% 40%; }
+  50% { background-position: 80% 60%; }
+  100% { background-position: 0% 40%; }
+}
+
+.voice-orb {
+  position: relative;
+  width: 148px;
+  height: 148px;
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: transparent;
+  --voice-level: 0.4;
+}
+.voice-orb:focus-visible {
+  outline: 2px solid rgb(var(--accent-rgb));
+  outline-offset: 6px;
+}
+.voice-orb:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+.voice-orb__core,
+.voice-orb__ring,
+.voice-orb__glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.voice-orb__core {
+  inset: 14px;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.55), transparent 38%),
+    radial-gradient(circle at 70% 72%, rgba(var(--accent-rgb), 0.85), transparent 52%),
+    linear-gradient(135deg, rgb(var(--accent-rgb)) 0%, #0b1f14 48%, rgb(var(--accent-rgb)) 100%);
+  background-size: 180% 180%;
+  box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.18);
+  animation: voice-orb-idle 4.8s ease-in-out infinite, voice-orb-shift 9s ease-in-out infinite;
+}
+body.hologram-light .voice-orb__core {
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.7), transparent 40%),
+    radial-gradient(circle at 70% 72%, rgba(197, 160, 89, 0.7), transparent 52%),
+    linear-gradient(135deg, #c5a059 0%, #3d2e10 48%, #8a6014 100%);
+  background-size: 180% 180%;
+}
+.voice-orb__glow {
+  inset: -10px;
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.38), transparent 68%);
+  filter: blur(8px);
+  opacity: 0.75;
+}
+.voice-orb__ring {
+  inset: 2px;
+  border: 1px solid rgba(var(--accent-rgb), 0.35);
+  opacity: 0.7;
+}
+.voice-orb--listening .voice-orb__core {
+  animation: voice-orb-listen 0.9s ease-in-out infinite, voice-orb-shift 4s ease-in-out infinite;
+}
+.voice-orb--listening .voice-orb__glow {
+  opacity: 1;
+  transform: scale(calc(1 + var(--voice-level, 0.4) * 0.2));
+}
+.voice-orb--thinking .voice-orb__ring {
+  animation: voice-orb-think 8s linear infinite;
+  border-style: dashed;
+}
+.voice-orb--thinking .voice-orb__core {
+  animation: voice-orb-shift 12s ease-in-out infinite, voice-orb-idle 6s ease-in-out infinite;
+}
+.voice-orb--speaking .voice-orb__ring {
+  animation: voice-orb-speak 1.4s ease-in-out infinite;
+}
+.voice-orb--speaking .voice-orb__glow {
+  opacity: 1;
+  animation: voice-orb-speak 1.4s ease-in-out infinite;
+}
+.voice-orb--error .voice-orb__core {
+  animation: none;
+  background: radial-gradient(circle at 40% 40%, #fbbf24, #7c2d12);
+}
+@media (max-width: 430px) {
+  .voice-orb {
+    width: 128px;
+    height: 128px;
+  }
+}
+
