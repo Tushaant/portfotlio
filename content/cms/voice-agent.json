@@ -1,7 +1,8 @@
 {
-  "status": "coming_soon",
+  "status": "live",
   "title": "Voice Agent",
-  "tagline": "Talk to Tushant's portfolio. Context and system prompt land in the next update.",
+  "tagline": "Don't just read my portfolio. Talk to it.",
+  "systemPromptSource": "src/lib/system-prompt.ts",
   "systemPrompt": "",
   "context": ""
 }

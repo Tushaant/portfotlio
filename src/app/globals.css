@@ -919,3 +919,11 @@ html.lenis body {
 .lenis.lenis-smooth {
  scroll-behavior: auto !important;
 }
+
+@keyframes voice-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.45); }
+  50% { box-shadow: 0 0 0 14px rgba(var(--accent-rgb), 0); }
+}
+.voice-pulse {
+ animation: voice-pulse 1.6s ease-out infinite;
+}

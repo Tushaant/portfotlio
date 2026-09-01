@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUIStore } from "@/store/ui-store";
+import { useConversationStore } from "@/store/conversation-store";
 import { X, Send, User } from "lucide-react";
 
 type Msg = { role: "user" | "assistant"; content: string };
@@ -42,22 +43,22 @@ function UserAvatar() {
 export function ChatAgent() {
   const open = useUIStore((s) => s.agentOpen);
   const setOpen = useUIStore((s) => s.setAgentOpen);
+  const append = useConversationStore((s) => s.append);
+  const storedTurns = useConversationStore((s) => s.turns);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
-  const [messages, setMessages] = useState<Msg[]>([
-    {
-      role: "assistant",
-      content:
-        "Command Center Agent online. I answer from everything on this website: resume, experience, projects, case studies, skills, tech stack, achievements, testimonials, and contact. Ask anything about Tushant's portfolio data.",
-    },
-  ]);
+  const greeting =
+    "I'm Tushant's AI companion. I answer from verified portfolio data: resume, projects, case studies, skills, and contact. Ask anything. If it isn't in the site, I won't invent it.";
+  const messages = storedTurns.length
+    ? storedTurns
+    : ([{ role: "assistant" as const, content: greeting }] satisfies Msg[]);
 
   useEffect(() => {
     if (!open) return;
     const el = listRef.current;
     if (el) el.scrollTop = el.scrollHeight;
-  }, [messages, loading, open]);
+  }, [storedTurns, loading, open]);
 
   /** Keep wheel / touch scroll inside the agent - never bubble to the page. */
   useEffect(() => {
@@ -103,28 +104,26 @@ export function ChatAgent() {
 
   const ask = async (q: string) => {
     if (!q.trim() || loading) return;
-    setMessages((m) => [...m, { role: "user", content: q }]);
+    append({ role: "user", content: q });
     setInput("");
     setLoading(true);
     try {
+      const history = useConversationStore.getState().window();
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: q }),
+        body: JSON.stringify({ message: q, channel: "chat", history }),
       });
       const data = await res.json();
-      setMessages((m) => [
-        ...m,
-        { role: "assistant", content: data.answer || "No signal." },
-      ]);
+      append({
+        role: "assistant",
+        content: data.answer || "No signal.",
+      });
     } catch {
-      setMessages((m) => [
-        ...m,
-        {
-          role: "assistant",
-          content: "Channel interrupted. Retry transmission.",
-        },
-      ]);
+      append({
+        role: "assistant",
+        content: "Something went wrong. Please try again.",
+      });
     } finally {
       setLoading(false);
     }
