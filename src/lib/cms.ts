@@ -6,6 +6,7 @@ import achievements from "../../content/cms/achievements.json";
 import skills from "../../content/cms/skills.json";
 import techStack from "../../content/cms/tech-stack.json";
 import testimonials from "../../content/cms/testimonials.json";
+import voiceAgent from "../../content/cms/voice-agent.json";
 import site from "../../content/cms/site.json";
 
 export type Resume = typeof resume;
@@ -15,6 +16,7 @@ export type CaseStudy = (typeof caseStudies)[number];
 export type Achievement = (typeof achievements)[number];
 export type Skill = (typeof skills)[number];
 export type Testimonial = (typeof testimonials)[number];
+export type VoiceAgentConfig = typeof voiceAgent;
 
 export const cms = {
   resume,
@@ -25,6 +27,7 @@ export const cms = {
   skills,
   techStack,
   testimonials,
+  voiceAgent,
   site,
 };
 

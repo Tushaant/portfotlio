@@ -8,13 +8,14 @@ import { Header } from "@/components/layout/Header";
 import { GlobalMotionBackground } from "@/components/effects/GlobalMotionBackground";
 import { CommandPalette } from "@/components/layout/CommandPalette";
 import { ChatAgent } from "@/components/agent/ChatAgent";
+import { VoiceAgent } from "@/components/agent/VoiceAgent";
 import { FloatingControls } from "@/components/layout/FloatingControls";
 import { ThemeSwitch } from "@/components/ui/ThemeSwitch";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const hologramMode = useUIStore((s) => s.hologramMode);
-  const terminalMode = useUIStore((s) => s.terminalMode);
   const agentOpen = useUIStore((s) => s.agentOpen);
+  const voiceAgentOpen = useUIStore((s) => s.voiceAgentOpen);
   const paletteOpen = useUIStore((s) => s.paletteOpen);
   const lenisRef = useRef<Lenis | null>(null);
 
@@ -40,7 +41,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   // Freeze page scroll while agent or command palette is open
   useEffect(() => {
-    const locked = agentOpen || paletteOpen;
+    const locked = agentOpen || voiceAgentOpen || paletteOpen;
     const lenis = lenisRef.current;
     if (lenis) {
       if (locked) lenis.stop();
@@ -73,14 +74,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
       body.classList.remove("scroll-locked");
       lenisRef.current?.start();
     };
-  }, [agentOpen, paletteOpen]);
+  }, [agentOpen, voiceAgentOpen, paletteOpen]);
 
   useEffect(() => {
     document.body.classList.toggle("hologram-light", hologramMode === "light");
-    document.body.classList.toggle("terminal-mode", terminalMode);
     document.documentElement.style.colorScheme =
       hologramMode === "light" ? "light" : "dark";
-  }, [hologramMode, terminalMode]);
+  }, [hologramMode]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -99,6 +99,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       if (e.key === "Escape") {
         useUIStore.getState().setPaletteOpen(false);
         useUIStore.getState().setAgentOpen(false);
+        useUIStore.getState().setVoiceAgentOpen(false);
       }
     };
     window.addEventListener("keydown", onKey);
@@ -116,6 +117,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <main className="relative z-10">{children}</main>
       <CommandPalette />
       <ChatAgent />
+      <VoiceAgent />
       <FloatingControls />
     </>
   );
