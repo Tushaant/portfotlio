@@ -63,7 +63,7 @@ export function ProjectsSection() {
                   <span
                     className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[10px] tracking-wider ${
                       p.status === "DELIVERED"
-                        ? "bg-green-400/20 text-green-300"
+                        ? "bg-[#FF3CAC]/15 text-[#F472B6]"
                         : "bg-fuchsia-400/20 text-fuchsia-300"
                     }`}
                   >

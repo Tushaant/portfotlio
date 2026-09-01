@@ -26,7 +26,7 @@ export const GENERAL_TOPICS: GeneralTopic[] = [
     match: /\brag\b|retrieval[- ]augmented|vector search|embeddings?\b|ground(ed|ing) (knowledge|response)/i,
     title: "RAG",
     explanation:
-      "RAG, retrieval-augmented generation, is how teams ground a language model in an organization's own knowledge. You ingest documents, chunk them, embed them, retrieve the most relevant pieces, optionally rerank, assemble context, then generate. The business problem is trust: fewer hallucinations, better citations, and answers that can stay fresh without retraining the model. Trade-offs are latency, cost, access control, and retrieval quality. RAG is not magic. It is a product system with evaluation, freshness, and failure modes.",
+      "RAG, retrieval-augmented generation, is how you give a model relevant information at runtime instead of hoping it memorized your enterprise knowledge. You retrieve the best pieces, put them in context, then generate. The product question is whether that actually improves trust, freshness, latency, and operational value, not whether the diagram looks complete.",
     verifiedNote: ragVerified(),
   },
   {
@@ -34,7 +34,7 @@ export const GENERAL_TOPICS: GeneralTopic[] = [
     match: /\bmcp\b|model context protocol/i,
     title: "MCP",
     explanation:
-      "Model Context Protocol is an interoperability idea. It lets an AI client discover tools, resources, and prompts from MCP servers instead of hard-wiring every API. Think of it as a standard way to give an agent context and capabilities, with authorization and permission boundaries. It is not the same as a REST API, and it is not the same as a single function call. In enterprise settings the product questions are identity, least privilege, observability, and governance.",
+      "MCP, Model Context Protocol, is a standard way for an AI application to connect to tools and sources of context. Think of it as a common interface rather than a one-off integration for every system. In enterprises the interesting questions are identity, permissions, and governance, not the acronym itself.",
     verifiedNote: mcpVerified(),
   },
   {
@@ -42,14 +42,46 @@ export const GENERAL_TOPICS: GeneralTopic[] = [
     match: /\bagentic\b|ai agents?\b|multi-agent|tool calling|function calling/i,
     title: "Agentic AI",
     explanation:
-      "Agentic AI is when a model can plan, use tools, and work across a workflow instead of answering one prompt. The product job is to bound that autonomy: clear goals, human-in-the-loop, evaluation, cost, latency, and safe failure. Treat agents as workflow software, not magic.",
+      "Agentic AI is when a system can plan, use tools, and move through a workflow instead of answering a single prompt. The product job is to bound that autonomy: goals, human review, evaluation, cost, and what happens when it is wrong.",
     verifiedNote: cms.skills.some((s) => /agentic/i.test(s.name))
       ? "The portfolio shows Tushant owning a multi-product agentic AI strategy at Oraczen across chat agents, voice agents, lending AI, spend intelligence, and risk intelligence."
       : undefined,
   },
   {
+    id: "knowledge-graph",
+    match: /\bknowledge graphs?\b|\bgraph rag\b|\bgraphrag\b/i,
+    title: "Knowledge Graphs",
+    explanation:
+      "A knowledge graph stores entities and relationships, not just documents. Graph RAG uses those links so retrieval can follow connections, not only nearest-neighbor text. The product value shows up when the question is about how things relate. The cost is modeling discipline and data quality.",
+    verifiedNote: cms.experience.some((j) =>
+      j.responsibilities.some((r) => /knowledge graph/i.test(r)),
+    )
+      ? "Oraczen experience documents introducing a knowledge graph alongside enterprise RAG pipelines integrated with MCP."
+      : undefined,
+  },
+  {
+    id: "observability",
+    match: /\b(ai observability|observability|tracing)\b/i,
+    title: "AI Observability",
+    explanation:
+      "AI observability is how you see what the system did in production: traces, latency, errors, retrieval quality, and outcomes. Without that, evaluation stays a lab exercise.",
+    verifiedNote: cms.experience.some((j) => /Grafana/i.test(j.technologies.join(" ")))
+      ? "Verified Oraczen work includes LLM evaluation with Langfuse, Grafana, and Promptfoo."
+      : undefined,
+  },
+  {
+    id: "voice-ai",
+    match: /\b(voice ai|speech to text|text to speech|realtime voice)\b/i,
+    title: "Voice AI",
+    explanation:
+      "Voice AI is a pipeline: capture audio, turn it into text, reason, then speak back. Interruption, permissions, and latency are product problems, not polish.",
+    verifiedNote: cms.experience.some((j) => /Voice Agents/i.test(j.technologies.join(" ")))
+      ? "Oraczen's documented AI platform strategy includes Voice Agents, and the tech stack lists AssemblyAI, GPT-4o Transcribe, Azure OpenAI Realtime, Agora, and Twilio."
+      : undefined,
+  },
+  {
     id: "llm-eval",
-    match: /\bevaluat(e|ion)\b|langfuse|promptfoo|hallucin|groundedness|observab/i,
+    match: /\bevaluat(e|ion)\b|langfuse|promptfoo|hallucin|groundedness/i,
     title: "AI evaluation",
     explanation:
       "AI evaluation is how you know a product is safe to operate. You measure accuracy, groundedness, latency, error rate, and failure modes. You watch production with tracing and quality gates. You do not ship a demo and hope. The leadership questions are: can we measure it, can we govern it, and can we keep it inside an SLA.",
@@ -105,19 +137,32 @@ export const GENERAL_TOPICS: GeneralTopic[] = [
 ];
 
 export function matchGeneralTopic(question: string): GeneralTopic | null {
-  for (const topic of GENERAL_TOPICS) {
+  const prioritized = [
+    ...GENERAL_TOPICS.filter((t) => t.id === "knowledge-graph"),
+    ...GENERAL_TOPICS.filter((t) => t.id !== "knowledge-graph"),
+  ];
+  for (const topic of prioritized) {
     if (topic.match.test(question)) return topic;
   }
   return null;
 }
 
 export function formatGeneralAnswer(topic: GeneralTopic, spoken: boolean) {
-  const parts = [topic.explanation];
+  const general = spoken
+    ? `In general, ${topic.explanation}`
+    : `In general: ${topic.explanation}`;
+  const parts = [general];
   if (topic.verifiedNote) {
-    parts.push(spoken ? topic.verifiedNote : `Verified in the portfolio: ${topic.verifiedNote}`);
+    parts.push(
+      spoken
+        ? `In Tushant's documented experience, ${topic.verifiedNote}`
+        : `In Tushant's documented experience: ${topic.verifiedNote}`,
+    );
   } else {
     parts.push(
-      "I am keeping that as general industry knowledge, not as a personal implementation claim for Tushant, unless the portfolio verifies it.",
+      spoken
+        ? "I'm keeping that as general professional knowledge, not as Tushant's personal implementation unless the portfolio verifies it."
+        : "I am keeping that as general industry knowledge, not as a personal implementation claim for Tushant, unless the portfolio verifies it.",
     );
   }
   return parts.join(spoken ? " " : "\n\n");

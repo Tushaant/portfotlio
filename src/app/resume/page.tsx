@@ -1,7 +1,7 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { cms } from "@/lib/cms";
 import { InfoBlock, InfoTemplate3D } from "@/components/layout/InfoTemplate3D";
+import { ResumeActions } from "@/components/analytics/ResumeActions";
 
 export const metadata: Metadata = {
  title: "Resume",
@@ -17,23 +17,7 @@ export default function ResumePage() {
  title={r.name}
  subtitle={r.title}
  avatarSrc="/profile/tushant-circle.png"
- actions={
- <>
- <a
- href={cms.site.social.resume}
- className="rounded-full bg-gradient-to-r from-cyan-400 to-blue-600 px-5 py-2.5 text-sm font-medium text-black"
- download
- >
- Download PDF
- </a>
- <Link
- href="/#top"
- className="glass rounded-full px-4 py-2 text-sm text-slate-300"
- >
- ← command center
- </Link>
- </>
- }
+ actions={<ResumeActions />}
  >
  <InfoBlock label="CONTACT">
  <p>

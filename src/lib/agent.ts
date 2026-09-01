@@ -6,6 +6,10 @@ import {
 import { formatGeneralAnswer, matchGeneralTopic } from "./general-knowledge";
 import { resolveSystemPrompt } from "./system-prompt";
 import { toSpoken } from "./voice-runtime";
+import { composeFromBrain } from "./brain";
+import type { AgentChannel, AgentOptions, AgentTurn } from "./agent-types";
+
+export type { AgentChannel, AgentOptions, AgentTurn } from "./agent-types";
 
 const DOCS = buildKnowledgeDocs();
 
@@ -361,7 +365,14 @@ function smartSummary(): string {
   ].join("\n\n");
 }
 
-function synthesizeFromDocs(docs: KnowledgeDoc[], question: string): string {
+function conversationalLead(section: string, title: string) {
+  if (section === "experience") return `This is from Tushant's documented ${title} chapter.`;
+  if (section === "projects") return `On the ${title} product, here's what's verified.`;
+  if (section === "about") return `From the verified profile.`;
+  return `From the ${section} on this site (${title}).`;
+}
+
+function synthesizeFromDocs(docs: KnowledgeDoc[]): string {
   if (!docs.length) {
     return "";
   }
@@ -371,14 +382,14 @@ function synthesizeFromDocs(docs: KnowledgeDoc[], question: string): string {
     const primary = docs[0];
     const related = docs
       .slice(1, 3)
-      .map((d) => `• ${d.title}: ${d.text.split("\n").slice(0, 2).join(" | ")}`);
+      .map((d) => `${d.title}: ${d.text.split("\n")[0]}`);
     return [
-      `From the website (${primary.section}): ${primary.title}`,
-      formatDocAnswer(primary),
-      related.length ? `\nRelated:\n${related.join("\n")}` : "",
+      conversationalLead(primary.section, primary.title),
+      formatDocAnswer(primary, 720),
+      related.length ? `Related on the site: ${related.join(" ")}` : "",
     ]
       .filter(Boolean)
-      .join("\n\n");
+      .join(" ");
   }
 
   // Multiple docs → grouped bullets
@@ -390,7 +401,7 @@ function synthesizeFromDocs(docs: KnowledgeDoc[], question: string): string {
   }
 
   const parts: string[] = [
-    `Here's what the website has for “${question.trim()}”:`,
+    `The verified material that matches that question is this.`,
   ];
   for (const [section, list] of bySection) {
     parts.push(`\n[${section}]`);
@@ -435,13 +446,6 @@ function hireWhy(): { answer: string; sources: string[] } {
   };
 }
 
-export type AgentChannel = "chat" | "voice";
-export type AgentTurn = { role: "user" | "assistant"; content: string };
-export type AgentOptions = {
-  channel?: AgentChannel;
-  history?: AgentTurn[];
-};
-
 function resolveFollowUp(question: string, history?: AgentTurn[]) {
   const q = question.trim();
   if (!history?.length) return q;
@@ -457,7 +461,10 @@ function resolveFollowUp(question: string, history?: AgentTurn[]) {
   return q;
 }
 
-function applyChannel(result: { answer: string; sources: string[] }, channel: AgentChannel) {
+function applyChannel<T extends { answer: string; sources: string[] }>(
+  result: T,
+  channel: AgentChannel,
+) {
   if (channel !== "voice") return result;
   return { ...result, answer: toSpoken(result.answer) };
 }
@@ -469,6 +476,9 @@ export function answerFromPortfolio(
 ): {
   answer: string;
   sources: string[];
+  knowledgeGap?: boolean;
+  topic?: string;
+  intent?: string;
 } {
   const channel: AgentChannel = options.channel ?? "chat";
   const spoken = channel === "voice";
@@ -476,6 +486,11 @@ export function answerFromPortfolio(
 
   const raw = resolveFollowUp(question, options.history).trim();
   const q = raw.toLowerCase();
+
+  const composed = composeFromBrain(raw, channel);
+  if (composed) {
+    return applyChannel(composed, channel);
+  }
 
   if (!q) {
     return applyChannel(
@@ -631,7 +646,7 @@ export function answerFromPortfolio(
     );
     return applyChannel(
       {
-        answer: synthesizeFromDocs(hits.slice(0, 3), raw) || listAchievements(),
+        answer: synthesizeFromDocs(hits.slice(0, 3)) || listAchievements(),
         sources: hits.slice(0, 3).map((d) => d.id),
       },
       channel,
@@ -704,11 +719,11 @@ export function answerFromPortfolio(
         channel,
       );
     }
-    return applyChannel(gentleFail(spoken), channel);
+    return applyChannel({ ...gentleFail(spoken), knowledgeGap: true }, channel);
   }
 
   const docs = usable.map((h) => h.doc);
-  let answer = synthesizeFromDocs(docs, raw);
+  let answer = synthesizeFromDocs(docs);
   if (general && !/tushant|oraczen|portfolio/i.test(answer)) {
     answer = `${formatGeneralAnswer(general, spoken)}\n\n${answer}`;
   }

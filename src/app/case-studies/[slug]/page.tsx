@@ -88,7 +88,7 @@ export default async function CaseStudyPage({ params }: Props) {
           {c.kpis.map((k) => (
             <span
               key={k}
-              className="rounded-full border border-green-400/30 bg-green-400/10 px-3 py-1 text-xs text-green-200"
+              className="rounded-full border border-[#8B5CF6]/30 bg-[#8B5CF6]/10 px-3 py-1 text-xs text-[#C4B5FD]"
             >
               {k}
             </span>

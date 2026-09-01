@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useUIStore } from "@/store/ui-store";
 import { useConversationStore } from "@/store/conversation-store";
 import { trackEvent } from "@/lib/analytics";
+import { AgentScroll } from "@/components/agent/AgentScroll";
 import { X, Send, User } from "lucide-react";
 
 type Msg = { role: "user" | "assistant"; content: string };
@@ -46,9 +47,11 @@ export function ChatAgent() {
   const setOpen = useUIStore((s) => s.setAgentOpen);
   const append = useConversationStore((s) => s.append);
   const storedTurns = useConversationStore((s) => s.turns);
+  const conversationId = useConversationStore((s) => s.conversationId);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const listRef = useRef<HTMLDivElement>(null);
+  const [followBottom, setFollowBottom] = useState(true);
+  const chatStarted = useRef(false);
   const greeting =
     "I'm Tushant's AI companion. I answer from verified portfolio data: resume, projects, case studies, skills, and contact. Ask anything. If it isn't in the site, I won't invent it.";
   const messages = storedTurns.length
@@ -56,80 +59,52 @@ export function ChatAgent() {
     : ([{ role: "assistant" as const, content: greeting }] satisfies Msg[]);
 
   useEffect(() => {
-    if (open) trackEvent("chat_opened");
-  }, [open]);
-
-  useEffect(() => {
     if (!open) return;
-    const el = listRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [storedTurns, loading, open]);
-
-  /** Keep wheel / touch scroll inside the agent - never bubble to the page. */
-  useEffect(() => {
-    if (!open) return;
-
-    const stopPageScroll = (e: WheelEvent | TouchEvent) => {
-      const target = e.target as HTMLElement | null;
-      const panel = target?.closest("[data-agent-panel]");
-      if (!panel) {
-        e.preventDefault();
-        return;
-      }
-      const scroller = panel.querySelector(
-        "[data-agent-scroll]",
-      ) as HTMLElement | null;
-      if (!scroller) return;
-
-      if (e instanceof WheelEvent) {
-        const { scrollTop, scrollHeight, clientHeight } = scroller;
-        const atTop = scrollTop <= 0 && e.deltaY < 0;
-        const atBottom =
-          scrollTop + clientHeight >= scrollHeight - 1 && e.deltaY > 0;
-        if (atTop || atBottom) {
-          e.preventDefault();
-        }
-        e.stopPropagation();
-      }
-    };
-
-    document.addEventListener("wheel", stopPageScroll, {
-      passive: false,
-      capture: true,
-    });
-    document.addEventListener("touchmove", stopPageScroll, {
-      passive: false,
-      capture: true,
-    });
-    return () => {
-      document.removeEventListener("wheel", stopPageScroll, true);
-      document.removeEventListener("touchmove", stopPageScroll, true);
-    };
-  }, [open]);
+    trackEvent("chat_opened", { agentType: "chat", conversationId });
+    if (!chatStarted.current) {
+      chatStarted.current = true;
+      trackEvent("chat_session_started", { agentType: "chat", conversationId });
+    }
+  }, [open, conversationId]);
 
   const ask = async (q: string) => {
     if (!q.trim() || loading) return;
     append({ role: "user", content: q });
-    trackEvent("chat_message_sent");
+    trackEvent("chat_message_sent", {
+      agentType: "chat",
+      conversationId,
+      text: q.slice(0, 240),
+    });
     setInput("");
     setLoading(true);
+    const started = Date.now();
     try {
       const history = useConversationStore.getState().window();
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), 12000);
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
         body: JSON.stringify({ message: q, channel: "chat", history }),
       });
+      window.clearTimeout(timer);
       const data = await res.json();
       append({
         role: "assistant",
-        content: data.answer || "No signal.",
+        content: data.answer || "I'm having a little trouble getting that response. Give me another try.",
+      });
+      trackEvent(data.knowledgeGap ? "knowledge_gap" : "response_success", {
+        agentType: "chat",
+        conversationId,
+        llmLatency: Date.now() - started,
       });
     } catch {
       append({
         role: "assistant",
-        content: "Something went wrong. Please try again.",
+        content: "I'm having a little trouble getting that response. Give me another try.",
       });
+      trackEvent("response_failure", { agentType: "chat", conversationId });
     } finally {
       setLoading(false);
     }
@@ -184,11 +159,11 @@ export function ChatAgent() {
               </button>
             </div>
 
-            <div
-              ref={listRef}
-              data-agent-scroll
-              className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain p-4"
-              style={{ WebkitOverflowScrolling: "touch" }}
+            <AgentScroll
+              follow={followBottom}
+              onFollowChange={setFollowBottom}
+              scrollKey={`${storedTurns.length}-${loading}`}
+              className="space-y-3 p-4"
             >
               {messages.map((m, i) => {
                 const isUser = m.role === "user";
@@ -220,7 +195,7 @@ export function ChatAgent() {
                   </div>
                 </div>
               )}
-            </div>
+            </AgentScroll>
 
             <div className="flex shrink-0 flex-wrap gap-2 border-t border-white/10 px-3 pt-3">
               {STARTERS.map((s) => (

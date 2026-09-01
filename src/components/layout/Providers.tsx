@@ -11,6 +11,7 @@ import { ChatAgent } from "@/components/agent/ChatAgent";
 import { VoiceAgent } from "@/components/agent/VoiceAgent";
 import { FloatingControls } from "@/components/layout/FloatingControls";
 import { ThemeSwitch } from "@/components/ui/ThemeSwitch";
+import { VisitorTracker } from "@/components/analytics/VisitorTracker";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const hologramMode = useUIStore((s) => s.hologramMode);
@@ -118,6 +119,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <CommandPalette />
       <ChatAgent />
       <VoiceAgent />
+      <VisitorTracker />
       <FloatingControls />
     </>
   );
