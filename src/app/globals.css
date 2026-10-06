@@ -4,7 +4,24 @@
  Light: white + metallic gold circuit
 */
 :root {
- --bg: #050505;
+ --bg-primary: #050505;
+ --bg-secondary: #0c0c0f;
+ --surface: #121216;
+ --surface-elevated: #1a1a20;
+ --border: rgba(255, 255, 255, 0.1);
+ --text-primary: #f4f4f5;
+ --text-secondary: #d4d4d8;
+ --text-muted: #a1a1aa;
+ --accent-violet: #8b5cf6;
+ --accent-indigo: #6366f1;
+ --accent-cyan: #22d3ee;
+ --accent-teal: #2dd4bf;
+ --accent-magenta: #ff3cac;
+ --state-idle: #8b7cc8;
+ --state-listening: #22d3ee;
+ --state-thinking: #7c3aed;
+ --state-speaking: #ff3cac;
+ --bg: var(--bg-primary);
  --navy: #0a0a0a;
  --cyan: #22d3ee;
  --blue: #3b82f6;
@@ -943,6 +960,17 @@ html.lenis body {
   .fluid-orb {
     width: 128px;
     height: 128px;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-violet);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 

@@ -4,24 +4,28 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cms } from "@/lib/cms";
 import { cn } from "@/lib/utils";
+import { bulletMatchesLens } from "@/data/profile";
+import { useUIStore } from "@/store/ui-store";
 
 export function JourneySection() {
  const [active, setActive] = useState(cms.experience[0].id);
+ const lens = useUIStore((state) => state.lens);
  const job = cms.experience.find((e) => e.id === active)!;
+ const emphasized = job.responsibilities.filter((line) => bulletMatchesLens(line, lens));
+ const responsibilities = emphasized.length ? emphasized : job.responsibilities;
 
  return (
  <section id="journey" className="relative scroll-mt-24 py-24 md:py-32">
  <div id="timeline" className="absolute -top-24" />
  <div className="mx-auto max-w-7xl px-4 md:px-6">
- <p className="font-mono text-xs tracking-[0.3em] text-cyan-300/70">
- 02 · CAREER JOURNEY
+ <p className="font-mono text-xs tracking-[0.3em] text-[var(--accent-violet)]">
+ Experience
  </p>
  <h2 className="display mt-3 text-3xl md:text-5xl">
- Six stations.{" "}
- <span className="neon-text">One trajectory.</span>
+ Career <span className="neon-text">journey</span>
  </h2>
         <p className="mt-4 max-w-xl text-slate-400">
-          Select a station to open its mission log:
+          The {lens} view emphasizes matching responsibilities. The full record stays on the resume.
         </p>
         <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-slate-400">
           <li className="list-disc list-inside">Responsibilities</li>
@@ -97,7 +101,7 @@ export function JourneySection() {
  RESPONSIBILITIES & IMPACT
  </p>
  <ul className="mt-3 space-y-2">
- {job.responsibilities.map((r) => (
+ {responsibilities.map((r) => (
  <li
  key={r.slice(0, 40)}
  className="border-l border-cyan-400/30 pl-3 text-sm leading-relaxed text-slate-300"

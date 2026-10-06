@@ -1,3 +1,4 @@
+import { executiveBrief } from "@/data/profile";
 import { cms } from "./cms";
 import { matchGeneralTopic } from "./general-knowledge";
 import { VOICE_PROFILES, getVoiceProfile, VOICE_CONFIG } from "./voice-config";
@@ -40,7 +41,7 @@ function architectureAnswer() {
   const model = process.env.OPENAI_API_KEY
     ? "When a server model key is configured, open general-knowledge questions can also go to that model."
     : "Open questions are answered from general knowledge in this assistant, and portfolio retrieval runs only when the question is about Tushant.";
-  return `I'm Tushant's AI portfolio assistant. I use speech recognition to understand you, an intent router to choose a path, and his portfolio knowledge base only when the question is about his work. ${model} A speech renderer prepares the spoken wording, and text to speech plays it back. The microphone stays open while I speak. If you start talking, playback stops and I answer what you just said.`;
+  return `I'm Tushant's AI portfolio assistant. I use speech recognition to understand you, an intent router to choose a path, and his portfolio knowledge base only when the question is about his work. ${model} A speech renderer prepares the spoken wording, and text to speech plays the full reply. Recognition pauses while that reply plays, then listening starts again.`;
 }
 
 function voiceAnswer() {
@@ -180,6 +181,10 @@ export function classifyIntent(question: string): IntentDecision {
   ) {
     const intent = /\b(ship|shipped|built|products)\b/.test(q) ? "PROJECT" : "CAREER";
     return { intent, usePortfolio: true, answer: oraczenShipped() };
+  }
+
+  if (/\b(30[- ]second brief|executive brief|give me the brief|summarize tushant in 30|why (would|is) he (a |be )?(strong )?(principal|director|group product))\b/.test(q)) {
+    return { intent: "PORTFOLIO", usePortfolio: true, answer: executiveBrief.speech };
   }
 
   if (/\b(biggest|greatest|top|best|standout|proudest)\b/.test(q) && /\b(achievement|accomplishment|win|impact)\b/.test(q)) {

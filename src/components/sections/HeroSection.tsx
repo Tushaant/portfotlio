@@ -1,192 +1,67 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { cms } from "@/lib/cms";
-
-const ROLES = [
- "AI Product Manager",
- "Director of Product Management",
- "Agentic AI",
- "LLMs",
- "Enterprise AI",
-];
+import { motion, useReducedMotion } from "framer-motion";
+import { FluidVoiceOrb } from "@/components/agent/FluidVoiceOrb";
+import { heroMetrics, positioning } from "@/data/profile";
+import { useUIStore } from "@/store/ui-store";
 
 export function HeroSection() {
- const [roleIndex, setRoleIndex] = useState(0);
- const [typed, setTyped] = useState("");
- const mx = useMotionValue(0);
- const my = useMotionValue(0);
- const sx = useSpring(mx, { stiffness: 60, damping: 18 });
- const sy = useSpring(my, { stiffness: 60, damping: 18 });
- const tiltX = useTransform(sy, [-0.5, 0.5], [6, -6]);
- const tiltY = useTransform(sx, [-0.5, 0.5], [-8, 8]);
+  const setVoiceOpen = useUIStore((state) => state.setVoiceAgentOpen);
+  const reduce = useReducedMotion();
 
- useEffect(() => {
- let cancelled = false;
- let timer: ReturnType<typeof setTimeout>;
- const word = ROLES[roleIndex];
- let i = 0;
- let deleting = false;
+  return (
+    <section id="top" className="relative overflow-hidden">
+      <div className="mx-auto grid min-h-[100svh] max-w-7xl items-center gap-10 px-4 pb-16 pt-28 md:grid-cols-[1.2fr_0.8fr] md:px-6 md:pt-32">
+        <div>
+          <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">{positioning.brand}</p>
+          <motion.h1
+            initial={reduce ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="display mt-4 text-5xl leading-[1.02] text-[var(--text-primary)] md:text-7xl"
+          >
+            {positioning.name}
+          </motion.h1>
+          <p className="mt-4 max-w-xl text-lg text-[var(--text-secondary)] md:text-xl">{positioning.role}</p>
+          <p className="mt-3 max-w-xl text-base text-[var(--text-muted)] md:text-lg">{positioning.statement}</p>
 
- const tick = () => {
- if (cancelled) return;
- if (!deleting) {
- i += 1;
- setTyped(word.slice(0, i));
- if (i === word.length) {
- deleting = true;
- timer = setTimeout(tick, 1400);
- return;
- }
- } else {
- i -= 1;
- setTyped(word.slice(0, i));
- if (i === 0) {
- deleting = false;
- setRoleIndex((r) => (r + 1) % ROLES.length);
- return;
- }
- }
- timer = setTimeout(tick, deleting ? 28 : 55);
- };
- timer = setTimeout(tick, 200);
- return () => {
- cancelled = true;
- clearTimeout(timer);
- };
- }, [roleIndex]);
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <button
+              type="button"
+              onClick={() => setVoiceOpen(true)}
+              className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--accent-violet)] px-6 text-sm font-medium text-white"
+            >
+              Talk to Tushant AI
+            </button>
+            <Link href="/#journey" className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] px-5 text-sm text-[var(--text-secondary)]">
+              View experience
+            </Link>
+            <Link href="/#case-studies" className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] px-5 text-sm text-[var(--text-secondary)]">
+              View case studies
+            </Link>
+            <a href="/api/resume" className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] px-5 text-sm text-[var(--text-secondary)]">
+              Download resume
+            </a>
+          </div>
 
- useEffect(() => {
- const onMove = (e: MouseEvent) => {
- mx.set(e.clientX / window.innerWidth - 0.5);
- my.set(e.clientY / window.innerHeight - 0.5);
- };
- window.addEventListener("mousemove", onMove);
- return () => window.removeEventListener("mousemove", onMove);
- }, [mx, my]);
+          <dl className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {heroMetrics.map((metric) => (
+              <div key={metric.label} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-3 py-3">
+                <dt className="display text-xl text-[var(--text-primary)]">{metric.value}</dt>
+                <dd className="mt-1 text-xs text-[var(--text-muted)]">
+                  {metric.label}
+                  <span className="mt-1 block text-[11px] text-[var(--text-secondary)]">{metric.where}</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
 
- const ctas = [
- { label: "Resume", href: "/resume" },
- { label: "Projects", href: "/#projects" },
- { label: "Case Studies", href: "/#case-studies" },
- { label: "Contact", href: "/#contact" },
- { label: "LinkedIn", href: cms.site.social.linkedin, external: true },
- { label: "Github", href: "https://github.com/Tushaant", external: true },
- ];
-
- return (
- <section
- id="top"
- className="relative flex min-h-[100svh] items-center overflow-hidden"
- >
- {/* Floating holographic HUD frames - motion everywhere in the banner */}
- <motion.div
- style={{ rotateX: tiltX, rotateY: tiltY }}
- className="pointer-events-none absolute inset-0 perspective-[1200px]"
- >
- <div className="animate-float absolute left-[6%] top-[22%] hidden h-28 w-40 rounded-2xl border border-[color:rgba(var(--accent-rgb),0.3)] bg-[rgba(var(--accent-rgb),0.05)] backdrop-blur-md md:block" />
- <div
- className="animate-float absolute right-[8%] top-[30%] hidden h-36 w-28 rounded-2xl border border-[color:rgba(var(--accent-rgb),0.25)] bg-[rgba(var(--accent-rgb),0.05)] backdrop-blur-md md:block"
- style={{ animationDelay: "1.2s" }}
- />
- <div
- className="animate-float absolute bottom-[18%] left-[18%] hidden h-20 w-52 rounded-xl border border-[color:rgba(var(--accent-rgb),0.2)] bg-[rgba(var(--accent-rgb),0.05)] backdrop-blur-md lg:block"
- style={{ animationDelay: "2s" }}
- />
- <div className="absolute right-[12%] top-[18%] font-mono text-[10px] tracking-widest text-[rgba(var(--accent-rgb),0.5)] animate-pulse-glow">
- NEURAL BRAIN · LINKED
- </div>
- <div
- className="absolute left-[10%] bottom-[22%] font-mono text-[10px] tracking-widest text-[rgba(var(--accent-rgb),0.4)] animate-pulse-glow"
- style={{ animationDelay: "1s" }}
- >
- NODE GRAPH · LIVE
- </div>
- </motion.div>
-
- <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-24 pt-32 md:px-6">
- <motion.p
- initial={{ opacity: 0, y: 12 }}
- animate={{ opacity: 1, y: 0 }}
- className="mb-4 font-mono text-xs tracking-[0.28em] text-cyan-300/80"
- >
- COMMAND CENTER ONLINE · {cms.resume.location}
- </motion.p>
-
- <motion.h1
- initial={{ opacity: 0, y: 24 }}
- animate={{ opacity: 1, y: 0 }}
- transition={{ delay: 0.1 }}
- className="display text-5xl font-bold leading-[1.05] md:text-7xl lg:text-8xl"
- >
- <span className="neon-text">{cms.resume.name}</span>
- </motion.h1>
-
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- transition={{ delay: 0.25 }}
- className="mt-5 flex flex-wrap items-center gap-3"
- >
- <p className="text-lg text-slate-200 md:text-xl">
- {cms.resume.title.split(" and ")[0]}
- <span className="text-slate-500"> / </span>
- Acting Director of Product Management
- </p>
- </motion.div>
-
- <div className="mt-4 h-8 font-mono text-cyan-300">
- <span className="text-slate-500">operating on </span>
- <span>{typed}</span>
- <span className="animate-pulse-glow ml-0.5 inline-block h-5 w-[2px] bg-cyan-300 align-middle" />
- </div>
-
- <motion.p
- initial={{ opacity: 0, y: 12 }}
- animate={{ opacity: 1, y: 0 }}
- transition={{ delay: 0.35 }}
- className="mt-6 max-w-2xl text-base text-slate-400 md:text-lg"
- >
-          Mission Control for AI Products. Agentic systems, enterprise RAG, and
-          P&amp;L-owned platforms that prove product thinking in motion.
- </motion.p>
-
- <motion.div
- initial={{ opacity: 0, y: 16 }}
- animate={{ opacity: 1, y: 0 }}
- transition={{ delay: 0.45 }}
- className="mt-10 flex flex-wrap gap-3"
- >
- {ctas.map((c, i) => (
- <motion.div
- key={c.label}
- className="animate-float"
- style={{ animationDelay: `${i * 0.35}s` }}
- whileHover={{ scale: 1.06 }}
- >
- {c.external ? (
- <a
- href={c.href}
- target="_blank"
- rel="noreferrer"
- className="glass inline-flex rounded-full px-5 py-2.5 text-sm tracking-wide text-cyan-100 transition hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(56,248,255,0.35)]"
- >
- {c.label}
- </a>
- ) : (
- <Link
- href={c.href}
- className="glass inline-flex rounded-full px-5 py-2.5 text-sm tracking-wide text-cyan-100 transition hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(56,248,255,0.35)]"
- >
- {c.label}
- </Link>
- )}
- </motion.div>
- ))}
- </motion.div>
- </div>
- </section>
- );
+        <div className="flex flex-col items-center justify-center">
+          <FluidVoiceOrb state="idle" label="Tushant AI, idle" />
+          <p className="mt-2 text-sm text-[var(--text-muted)]">Talk with Tushant</p>
+        </div>
+      </div>
+    </section>
+  );
 }

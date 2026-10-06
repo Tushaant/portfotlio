@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { cms } from "@/lib/cms";
 import { cn } from "@/lib/utils";
+import { skillEvidence } from "@/data/profile";
 
 type Skill = (typeof cms.skills)[number];
 
@@ -302,11 +303,27 @@ export function SkillsSection() {
             className="skill-card rounded-3xl p-6 md:p-8"
           >
             <p className="font-mono text-[10px] tracking-widest text-[var(--muted)]">
-              PLANET READOUT · {skill.tier}
+              {skillEvidence[skill.id]?.category ?? skill.tier}
             </p>
             <h3 className="display mt-2 text-3xl text-[var(--text)]">
               <span className="neon-text">{skill.name}</span>
             </h3>
+            {skillEvidence[skill.id] ? (
+              <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-3">
+                <div>
+                  <dt className="text-[11px] text-[var(--text-muted)]">Where used</dt>
+                  <dd>{skillEvidence[skill.id].where}</dd>
+                </div>
+                <div>
+                  <dt className="text-[11px] text-[var(--text-muted)]">Project</dt>
+                  <dd>{skillEvidence[skill.id].project}</dd>
+                </div>
+                <div>
+                  <dt className="text-[11px] text-[var(--text-muted)]">Outcome</dt>
+                  <dd>{skillEvidence[skill.id].outcome}</dd>
+                </div>
+              </dl>
+            ) : null}
             <dl className="mt-6 space-y-4 text-sm">
               <div className="metric-chip rounded-2xl p-4">
                 <dt className="text-xs uppercase tracking-wider text-[var(--gold)]">

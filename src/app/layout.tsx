@@ -23,11 +23,11 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
  title: {
- default: "Tushant Sharma · AI Product Command Center",
- template: "%s · Tushant.AI PRODUCT OS",
+ default: "Tushant Sharma | AI Product Leader",
+ template: "%s · Tushant Sharma",
  },
  description:
- "Immersive AI Product Manager portfolio - Agentic AI, LLMs, Enterprise AI. Mission control for products built by Tushant Sharma.",
+ "AI Product Leader with 10+ years of experience building enterprise AI, Agentic AI, SaaS and data-driven products from 0 to 1 and 1 to N.",
  keywords: [
  "AI Product Manager",
  "Agentic AI",
@@ -39,9 +39,9 @@ export const metadata: Metadata = {
  ],
  authors: [{ name: "Tushant Sharma" }],
  openGraph: {
- title: "Tushant Sharma · AI Product Command Center",
+ title: "Tushant Sharma | AI Product Leader",
  description:
- "Futuristic command center portfolio for an AI Product Manager / Acting Director of Product Management.",
+ "AI Product Leader with 10+ years of experience building enterprise AI, Agentic AI, SaaS and data-driven products from 0 to 1 and 1 to N.",
  type: "website",
  },
  metadataBase: new URL("https://tushant-ai-os.vercel.app"),
@@ -63,6 +63,19 @@ export default function RootLayout({
  className={`${orbitron.variable} ${space.variable} ${jetbrains.variable} antialiased`}
  >
  <Providers>{children}</Providers>
+ <script
+ type="application/ld+json"
+ dangerouslySetInnerHTML={{
+ __html: JSON.stringify({
+ "@context": "https://schema.org",
+ "@type": "Person",
+ name: "Tushant Sharma",
+ jobTitle: "AI Product Manager and Acting Director of Product Management",
+ url: "https://portfotlio-zeta.vercel.app/",
+ address: { "@type": "PostalAddress", addressLocality: "Hyderabad", addressCountry: "IN" },
+ }),
+ }}
+ />
  </body>
  </html>
  );
