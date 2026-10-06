@@ -11,7 +11,7 @@ export function TechStackSection() {
   return (
     <section id="technology" className="relative scroll-mt-24 py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">Technology</p>
+        <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">09 · Evidence-backed tech stack</p>
         <h2 className="display mt-3 text-3xl md:text-5xl">Evidence-backed stack</h2>
         <p className="mt-4 max-w-xl text-[var(--text-muted)]">
           Select a tool. Levels stay conservative: product ownership only where a portfolio outcome names the tool, otherwise working knowledge.

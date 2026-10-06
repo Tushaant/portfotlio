@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
 import { cms } from "@/lib/cms";
+import { BriefSection } from "@/components/sections/BriefSection";
 
 function Counter({
  value,
@@ -14,27 +14,10 @@ function Counter({
  prefix?: string;
  suffix?: string;
 }) {
- const ref = useRef<HTMLSpanElement>(null);
- const inView = useInView(ref, { once: true, margin: "-40px" });
- const [n, setN] = useState(0);
-
- useEffect(() => {
- if (!inView) return;
- const start = performance.now();
- const dur = 1400;
- const frame = (t: number) => {
- const p = Math.min(1, (t - start) / dur);
- const eased = 1 - Math.pow(1 - p, 3);
- setN(Number((value * eased).toFixed(value % 1 ? 2 : 0)));
- if (p < 1) requestAnimationFrame(frame);
- };
- requestAnimationFrame(frame);
- }, [inView, value]);
-
  return (
- <span ref={ref} className="display text-3xl md:text-4xl neon-text">
+ <span className="display text-3xl md:text-4xl neon-text">
  {prefix}
- {n}
+ {value}
  {suffix}
  </span>
  );
@@ -43,11 +26,12 @@ function Counter({
 export function AboutSection() {
  const r = cms.resume;
  return (
- <section id="about" className="relative scroll-mt-24 py-24 md:py-32">
+ <section id="profile" className="relative scroll-mt-24 py-24 md:py-32">
+ <div id="about" className="absolute -top-24" />
  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--surface-soft)] to-transparent" />
  <div className="relative mx-auto max-w-7xl px-4 md:px-6">
  <p className="font-mono text-xs tracking-[0.3em] text-cyan-300/70">
- 01 · PROFILE DASHBOARD
+ 02 · PROFILE
  </p>
  <h2 className="display mt-3 text-3xl md:text-5xl">
  System readout of a{" "}
@@ -177,6 +161,7 @@ export function AboutSection() {
  ))}
  </div>
  </div>
+ <BriefSection />
  </div>
  </section>
  );

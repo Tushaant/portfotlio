@@ -5,14 +5,20 @@ import { getSessionId, getVisitorId, trackEvent } from "@/lib/analytics";
 
 const SECTIONS = [
   "top",
-  "about",
-  "journey",
-  "projects",
-  "testimonials",
+  "profile",
+  "impact",
+  "ownership",
   "case-studies",
-  "achievements",
+  "professional-work",
+  "how-i-build",
+  "decisions",
   "skills",
+  "technology",
+  "projects",
   "gallery",
+  "learning",
+  "testimonials",
+  "achievements",
   "contact",
 ];
 

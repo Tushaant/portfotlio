@@ -150,7 +150,7 @@ export function SkillsSection() {
     <section id="skills" className="relative scroll-mt-24 py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <p className="font-mono text-xs tracking-[0.3em] text-cyan-300/70">
-          06 · AI SKILL GALAXY
+          08 · AI SKILL GALAXY
         </p>
         <h2 className="display mt-3 text-3xl md:text-5xl">
           Every skill is a <span className="neon-text">planet</span>

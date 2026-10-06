@@ -8,7 +8,7 @@ export function DecisionsSection() {
   return (
     <section id="decisions" className="scroll-mt-24 py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">Judgement</p>
+        <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">07 · Product decisions</p>
         <h2 className="display mt-3 text-3xl text-[var(--text-primary)] md:text-5xl">Product decisions</h2>
         <p className="mt-4 max-w-2xl text-[var(--text-muted)]">
           Verified items are recorded in the portfolio. Perspective items are how he approaches the question, grounded in those records, not a claim that every option was a formal decision memo.
