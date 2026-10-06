@@ -1,0 +1,91 @@
+{
+  "source": "Tushant AI master knowledge, explicitly provided. Do not add metrics that are not listed here.",
+  "products": [
+    {
+      "id": "dairy-profit-intelligence",
+      "name": "Dairy Profit Intelligence",
+      "aliases": ["dpi", "dairy profit", "farm credit analytics", "farmer analytics"],
+      "client": "Farm Credit East",
+      "kind": "AI and data product",
+      "problem": "Farmers need analytical insight they can actually use, not a static report.",
+      "solution": "An AI and data product that gives farmers analytical insights through Power BI and conversational AI.",
+      "users": ["Farmers"],
+      "capabilities": [
+        "Power BI",
+        "Farmer analytics",
+        "Conversational AI",
+        "Data visualization",
+        "Filters and analytics",
+        "Authentication",
+        "Observability",
+        "AI security testing"
+      ],
+      "outcomes": [],
+      "notes": "No adoption, revenue, or accuracy metric is on record for this product. Do not invent one."
+    },
+    {
+      "id": "ivy",
+      "name": "IVY",
+      "aliases": ["ivy", "farm visit assistant", "farm visit", "voice assistant farm"],
+      "client": "Farm Credit East",
+      "kind": "Voice-based AI assistant",
+      "problem": "Farm Credit East employees need help preparing for farm visits and documenting what happened afterward.",
+      "solution": "A voice assistant for farm-visit preparation, recording, transcription and summarization, integrated into the broader enterprise workflow.",
+      "users": [
+        "Tax",
+        "Appraisal",
+        "Loan Officer",
+        "Business Consultant",
+        "Crop Insurance",
+        "Country Living"
+      ],
+      "capabilities": [
+        "Voice AI",
+        "Conversational AI",
+        "WebRTC",
+        "WSS",
+        "TURN",
+        "Salesforce",
+        "Langfuse",
+        "Playwright",
+        "Postman",
+        "K6",
+        "Voice-agent evaluation"
+      ],
+      "outcomes": [],
+      "notes": "Documented as an enterprise workflow assistant for Farm Credit East employees. Do not invent usage or quality metrics."
+    },
+    {
+      "id": "amey",
+      "name": "AMEY",
+      "aliases": ["amey", "knowledge capture", "ai tutor"],
+      "client": "",
+      "kind": "Knowledge-capture and learning proof of concept",
+      "problem": "Internal knowledge is hard to capture and reuse for learning.",
+      "solution": "A proof of concept for voice-based knowledge capture, an AI tutor, an internal knowledge library, and LMS-style learning, with evaluation and observability in scope.",
+      "users": ["Internal learners and knowledge contributors"],
+      "capabilities": [
+        "Voice interaction",
+        "Knowledge capture",
+        "AI tutor",
+        "Internal knowledge library",
+        "LMS",
+        "AI evaluation",
+        "Observability"
+      ],
+      "outcomes": [],
+      "notes": "This is a proof of concept. Do not describe it as a production rollout or attach metrics."
+    }
+  ],
+  "experienceFraming": {
+    "overallYears": "10+",
+    "productManagementYears": "about 6+"
+  },
+  "conceptualNotHandsOn": [
+    {
+      "id": "databricks",
+      "match": ["databricks", "delta lake"],
+      "say": "Direct implementation experience with Databricks and Delta Lake is not documented. The product concepts are familiar through AI products, analytics, and Power BI, while deeper platform implementation would be a ramp-up area."
+    }
+  ]
+}

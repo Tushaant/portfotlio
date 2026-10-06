@@ -53,7 +53,7 @@ export function ChatAgent() {
   const [followBottom, setFollowBottom] = useState(true);
   const chatStarted = useRef(false);
   const greeting =
-    "I'm Tushant's AI companion. I answer from verified portfolio data: resume, projects, case studies, skills, and contact. Ask anything. If it isn't in the site, I won't invent it.";
+    "I'm Tushant AI. I represent Tushant from verified portfolio knowledge: resume, projects, and the documented AI products. If a detail isn't there, I won't invent it.";
   const messages = storedTurns.length
     ? storedTurns
     : ([{ role: "assistant" as const, content: greeting }] satisfies Msg[]);

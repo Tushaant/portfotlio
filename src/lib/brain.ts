@@ -1,4 +1,6 @@
+import signature from "../../content/brain/signature-products.json";
 import { cms } from "./cms";
+import { UNKNOWN_DETAIL } from "./system-prompt";
 import { formatGeneralAnswer, matchGeneralTopic, type GeneralTopic } from "./general-knowledge";
 import type { AgentChannel } from "./agent-types";
 
@@ -49,18 +51,50 @@ export function composeFromBrain(
     aboutTushant ||
     /\b(your|you have|you work|experience with|worked with|his experience)\b/i.test(q);
 
-  if (/(who are you|what can you do|how do you work)/.test(q) && !/tushant/.test(q)) {
+  if (/(who are you|what can you do|how do you work)/.test(q) && !/tushant is|who is tushant/.test(q)) {
     return {
       answer: spokenWrap(
         channel,
         channel === "voice"
-          ? "I'm Tushant's AI companion. I can talk through his verified work, and I can also explain things like RAG, MCP, or product strategy in plain language. I won't invent experience he doesn't have on record."
-          : "I'm Tushant's AI companion for this portfolio. I answer from verified resume, project, and CMS data, and I can explain general professional topics separately from his documented experience.",
+          ? "I'm Tushant AI, his professional representative on this portfolio. I can walk through his product and AI work, including Dairy Profit Intelligence and the farm visit assistant, and I'll stay inside what's actually documented."
+          : "I'm Tushant AI, the official representative for Tushant Sharma's portfolio. I answer from verified resume, project, and knowledge-base facts, and I separate general professional concepts from his documented experience.",
       ),
       sources: ["system-prompt"],
       intent: "Portfolio Exploration",
       topic: "Portfolio",
     };
+  }
+
+  if (/(thank you|thanks|that's all|that is all|goodbye|bye|we're done|we are done)/.test(q)) {
+    return {
+      answer: spokenWrap(
+        channel,
+        "Thanks for the conversation. Feel free to explore the rest of Tushant's portfolio.",
+      ),
+      sources: ["system-prompt"],
+      intent: "Portfolio Exploration",
+      topic: "Portfolio",
+    };
+  }
+
+  const conceptual = signature.conceptualNotHandsOn.find((item) =>
+    item.match.some((m) => q.includes(m)),
+  );
+  if (conceptual) {
+    return {
+      answer: spokenWrap(channel, `${UNKNOWN_DETAIL} ${conceptual.say}`),
+      sources: ["knowledge.gap", `conceptual.${conceptual.id}`],
+      knowledgeGap: true,
+      intent: "Technical Architecture",
+      topic: "AI Architecture",
+    };
+  }
+
+  const signatureHit = matchSignature(q);
+  if (signatureHit) return signatureAnswer(signatureHit, channel);
+
+  if (/(dairy|farm credit|ivy|amey|farm visit|voice assistant)/.test(q) && /(project|product|built|work)/.test(q)) {
+    return signatureOverview(channel);
   }
 
   if (/(current role|present role|what does he do now|acting director|where does he work now)/.test(q)) {
@@ -146,14 +180,14 @@ function whoIs(channel: AgentChannel): BrainResult {
   const r = cms.resume;
   const job = oraczen();
   const chat = [
-    `${r.name} is a senior product executive with more than ten years leading enterprise AI and SaaS organizations.`,
+    `Tushant Sharma is a product leader with ${signature.experienceFraming.overallYears} years of overall experience, and ${signature.experienceFraming.productManagementYears} years focused on product management.`,
     `He's currently ${r.title} at ${job?.company ?? "Oraczen"}, based in ${r.location}.`,
     job
       ? `The documented scope is director-level: a ${job.metrics.find((m) => /portfolio/i.test(m.label))?.value ?? "$6.4M"} Agentic AI portfolio, P&L accountability, and a $12.4B U.S. banking enterprise client.`
       : r.summary.split(".")[0] + ".",
     `The through-line in the portfolio is enterprise AI product work: agentic systems, RAG, MCP, evaluation, and governance, plus earlier FinTech and SaaS delivery.`,
   ].join(" ");
-  const voice = `Tushant Sharma is a senior product executive with over ten years in enterprise AI and SaaS. Right now he's AI Product Manager and Acting Director of Product Management at Oraczen, based in Hyderabad. The documented scope is pretty enterprise-heavy: a $6.4 million Agentic AI portfolio, P&L accountability, and a large U.S. banking client. His recent focus is scaling AI products, RAG, MCP, and enterprise data foundations.`;
+  const voice = `Tushant Sharma is a product leader with more than ten years overall, and about six plus years focused on product management. Right now he's AI Product Manager and Acting Director of Product Management at Oraczen, in Hyderabad. The documented scope includes a $6.4 million agentic AI portfolio and a large U.S. banking client. Recent product contexts also include Dairy Profit Intelligence, the IVY farm-visit assistant, and AMEY.`;
   return {
     answer: spokenWrap(channel, channel === "voice" ? voice : chat),
     sources: ["resume.profile", "experience.oraczen"],
@@ -319,13 +353,53 @@ function ragVsMcp(channel: AgentChannel): BrainResult {
 function projectsOverview(channel: AgentChannel, aiLens: boolean): BrainResult {
   const highlights = cms.projects.slice(0, 4);
   const names = highlights.map((p) => `${p.title} (${p.category}: ${p.tagline})`).join(". ");
-  const voiceAi = `The recent documented AI work sits at Oraczen: chat agents, voice agents, lending AI, spend and risk intelligence, plus enterprise RAG pipelines integrated with MCP. I don't have a separate public case study named Dairy Profit Intelligence in this CMS, so I won't invent one. The public project grid is mostly earlier SaaS and FinTech delivery, like ${highlights.map((p) => p.title).join(", ")}. I can go deeper on architecture or a specific product if you name it.`;
-  const voiceAll = `There are ${cms.projects.length} delivered products on the site. A few to start with: ${names}. Recent enterprise AI work is documented under Oraczen rather than as those same consumer titles. Tell me which one you want, and I'll stay inside verified details.`;
+  const voiceAi = `The recent AI product work includes three documented contexts. Dairy Profit Intelligence is a Farm Credit East analytics product, with Power BI and conversational AI for farmers. IVY is a voice assistant that helps Farm Credit East employees prepare for and document farm visits. AMEY is a knowledge-capture and learning proof of concept. I can go into the problem, the users, or the technology for any of those. I won't invent metrics that aren't on record.`;
+  const voiceAll = `There are ${cms.projects.length} earlier delivered products on the public grid, including ${highlights.map((p) => p.title).join(", ")}. The enterprise AI work to start with is Dairy Profit Intelligence, IVY, and AMEY. Tell me which one you want.`;
   return {
-    answer: spokenWrap(channel, channel === "voice" || aiLens ? (aiLens ? voiceAi : voiceAll) : `Documented projects: ${names}. Recent AI product work is described in the Oraczen experience, not as a separate unlabeled invention. Ask for a slug if you want the problem, users, and outcomes.`),
-    sources: ["projects", "experience.oraczen"],
+    answer: spokenWrap(
+      channel,
+      aiLens
+        ? voiceAi
+        : channel === "voice"
+          ? voiceAll
+          : `Documented enterprise AI products: Dairy Profit Intelligence, IVY, and AMEY. Earlier delivered products on the site include ${names}. Ask for one if you want the problem, users, and technology.`,
+    ),
+    sources: ["signature.dairy-profit-intelligence", "signature.ivy", "signature.amey", "projects"],
     intent: "Project Deep Dive",
     topic: "Projects",
+  };
+}
+
+function matchSignature(q: string) {
+  return signature.products.find((product) =>
+    product.aliases.some((alias) => q.includes(alias)) || q.includes(product.name.toLowerCase()),
+  );
+}
+
+function signatureAnswer(
+  product: (typeof signature.products)[number],
+  channel: AgentChannel,
+): BrainResult {
+  const users = product.users.slice(0, 6).join(", ");
+  const tech = product.capabilities.slice(0, 8).join(", ");
+  const voice = `${product.name} is ${/^[aeiou]/i.test(product.kind) ? "an" : "a"} ${product.kind}${product.client ? ` for ${product.client}` : ""}. ${product.solution} The people in scope include ${users}. The documented technology covers ${tech}. ${product.notes}`;
+  return {
+    answer: spokenWrap(channel, voice),
+    sources: [`signature.${product.id}`],
+    intent: "Project Deep Dive",
+    topic: product.id === "ivy" ? "Voice AI" : "Enterprise AI",
+  };
+}
+
+function signatureOverview(channel: AgentChannel): BrainResult {
+  return {
+    answer: spokenWrap(
+      channel,
+      "Three documented AI products are worth separating. Dairy Profit Intelligence gives Farm Credit East farmers analytical insight through Power BI and conversational AI. IVY is the voice assistant those employees use to prepare for and document farm visits. AMEY is a knowledge-capture and learning proof of concept. I can go deeper on any one of them.",
+    ),
+    sources: signature.products.map((p) => `signature.${p.id}`),
+    intent: "Project Deep Dive",
+    topic: "Enterprise AI",
   };
 }
 
