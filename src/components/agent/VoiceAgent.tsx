@@ -106,11 +106,15 @@ export function VoiceAgent() {
   const askRef = useRef<(text: string) => void>(() => undefined);
   const briefRef = useRef<() => void>(() => undefined);
 
+  const levelPublish = useRef(0);
+
   const setPhase = useCallback((next: VoiceState) => {
     if (phaseRef.current === next) return;
     phaseRef.current = next;
     setState(next);
     voiceLog("VOICE_STATE", next);
+    const mirrored = next === "interrupted" ? "listening" : next === "muted" ? "idle" : next;
+    useUIStore.getState().setVoicePhase(mirrored);
   }, []);
 
   const applyVoices = useCallback(() => {
@@ -515,7 +519,15 @@ export function VoiceAgent() {
         const tick = () => {
           if (!sessionRef.current || !analyserRef.current) return;
           const levelNow = speechLevel(analyserRef.current, freq);
-          setLevel(Math.min(1, levelNow * 3.2));
+          const nextLevel = Math.min(1, levelNow * 3.2);
+          setLevel(nextLevel);
+          const hearing = phaseRef.current === "listening" || phaseRef.current === "interrupted";
+          const now = performance.now();
+          if (hearing && now - levelPublish.current > 80) {
+            levelPublish.current = now;
+            const previous = useUIStore.getState().voiceLevel;
+            if (Math.abs(previous - nextLevel) > 0.04) useUIStore.setState({ voiceLevel: nextLevel });
+          }
           rafRef.current = requestAnimationFrame(tick);
         };
         tick();
