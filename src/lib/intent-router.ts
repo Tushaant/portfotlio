@@ -40,7 +40,7 @@ function architectureAnswer() {
   const model = process.env.OPENAI_API_KEY
     ? "When a server model key is configured, open general-knowledge questions can also go to that model."
     : "Open questions are answered from general knowledge in this assistant, and portfolio retrieval runs only when the question is about Tushant.";
-  return `I'm Tushant's AI portfolio assistant. I use speech recognition to understand you, an intent router to choose a path, and his portfolio knowledge base only when the question is about his work. ${model} A speech renderer prepares the spoken wording, and text to speech plays it back. If you start talking while I'm speaking, I stop and listen to you.`;
+  return `I'm Tushant's AI portfolio assistant. I use speech recognition to understand you, an intent router to choose a path, and his portfolio knowledge base only when the question is about his work. ${model} A speech renderer prepares the spoken wording, and text to speech plays it back. The microphone stays open while I speak. If you start talking, playback stops and I answer what you just said.`;
 }
 
 function voiceAnswer() {
