@@ -4,7 +4,7 @@ import {
   type KnowledgeDoc,
 } from "./cms";
 import { formatGeneralAnswer, matchGeneralTopic } from "./general-knowledge";
-import { resolveSystemPrompt } from "./system-prompt";
+import { resolveSystemPrompt, UNKNOWN_DETAIL } from "./system-prompt";
 import { toSpoken } from "./voice-runtime";
 import { composeFromBrain } from "./brain";
 import type { AgentChannel, AgentOptions, AgentTurn } from "./agent-types";
@@ -416,11 +416,10 @@ function synthesizeFromDocs(docs: KnowledgeDoc[]): string {
 function gentleFail(spoken: boolean): { answer: string; sources: string[] } {
   const r = cms.resume;
   const answer = spoken
-    ? `I don't have verified information about that in Tushant's portfolio, so I don't want to speculate. I'll pass the question to Tushant. Until then you can reach him at ${r.email}, on LinkedIn, or at ${r.phone}.`
+    ? `${UNKNOWN_DETAIL} You can reach him at ${r.email}, on LinkedIn, or at ${r.phone}.`
     : [
-        "I don't have verified information about that in Tushant's portfolio, so I don't want to speculate.",
-        "I'll send this request to Tushant so he can clear the doubt.",
-        "In the meantime, until the next update, you can connect with him directly:",
+        UNKNOWN_DETAIL,
+        "A related verified path is to ask him directly:",
         `Email: ${r.email}`,
         `LinkedIn: ${r.linkedin}`,
         `Phone: ${r.phone}`,

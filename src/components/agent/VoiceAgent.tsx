@@ -7,6 +7,7 @@ import { useUIStore } from "@/store/ui-store";
 import { useConversationStore } from "@/store/conversation-store";
 import { AgentScroll } from "@/components/agent/AgentScroll";
 import { trackEvent } from "@/lib/analytics";
+import { VOICE_CONFIG } from "@/lib/voice-config";
 import {
   VOICE_GREETING,
   createBrowserTts,
@@ -14,6 +15,8 @@ import {
   getAvailableVoices,
   isSpeechRecognitionSupported,
   selectPreferredMaleVoice,
+  selectVoiceForProfile,
+  profilesWithVoices,
   subscribeVoices,
   type SpeechRecognitionLike,
   type VoiceOption,
@@ -44,6 +47,7 @@ export function VoiceAgent() {
   const [interim, setInterim] = useState("");
   const [supported, setSupported] = useState(true);
   const [voices, setVoices] = useState<VoiceOption[]>([]);
+  const [profileId, setProfileId] = useState(VOICE_CONFIG.VOICE_ID);
   const [selectedVoiceURI, setSelectedVoiceURI] = useState("");
   const [followBottom, setFollowBottom] = useState(true);
   const [level, setLevel] = useState(0);
@@ -62,9 +66,9 @@ export function VoiceAgent() {
     setVoices(list);
     setSelectedVoiceURI((current) => {
       if (current && list.some((v) => v.uri === current)) return current;
-      return selectPreferredMaleVoice(list)?.uri ?? list[0]?.uri ?? "";
+      return selectVoiceForProfile(profileId, list)?.uri ?? selectPreferredMaleVoice(list)?.uri ?? "";
     });
-  }, []);
+  }, [profileId]);
 
   useEffect(() => {
     setSupported(isSpeechRecognitionSupported());
@@ -230,7 +234,7 @@ export function VoiceAgent() {
       setError("Voice input isn't supported in this browser. You can use the Chat Agent instead.");
       return;
     }
-    rec.lang = "en-US";
+    rec.lang = VOICE_CONFIG.VOICE_LANGUAGE;
     rec.interimResults = true;
     rec.continuous = false;
     rec.maxAlternatives = 1;
@@ -355,15 +359,7 @@ export function VoiceAgent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  const voiceChoices = useMemo(() => {
-    const english = voices.filter((v) => v.lang.toLowerCase().startsWith("en"));
-    const pool = english.length ? english : voices;
-    const preferred = selectPreferredMaleVoice(voices);
-    const unique = new Map<string, VoiceOption>();
-    if (preferred) unique.set(preferred.uri, preferred);
-    pool.slice(0, 8).forEach((v) => unique.set(v.uri, v));
-    return [...unique.values()];
-  }, [voices]);
+  const voiceChoices = useMemo(() => profilesWithVoices(voices), [voices]);
 
   const fallback = !supported || error.includes("isn't supported");
 
@@ -394,8 +390,8 @@ export function VoiceAgent() {
           >
             <div className="flex shrink-0 items-center justify-between border-b border-white/10 px-4 py-3">
               <div>
-                <p className="display text-xs tracking-[0.2em] text-amber-300">TUSHANT&apos;S AI COMPANION</p>
-                <p className="text-xs text-[var(--muted)]">Voice · same portfolio brain as chat</p>
+                <p className="display text-xs tracking-[0.2em] text-amber-300">TUSHANT AI</p>
+                <p className="text-xs text-[var(--muted)]">Indian English · same portfolio brain as chat</p>
               </div>
               <button
                 type="button"
@@ -503,15 +499,20 @@ export function VoiceAgent() {
               <label className="flex items-center gap-2 border-t border-white/10 px-4 py-2 text-[10px] uppercase tracking-[0.14em] text-[var(--muted)]">
                 Voice
                 <select
-                  value={selectedVoiceURI}
-                  onChange={(e) => setSelectedVoiceURI(e.target.value)}
+                  value={profileId}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    setProfileId(next as typeof profileId);
+                    const match = selectVoiceForProfile(next, voices);
+                    if (match) setSelectedVoiceURI(match.uri);
+                  }}
                   className="min-h-8 flex-1 rounded-full border border-white/10 bg-transparent px-2 py-1 text-[11px] normal-case tracking-normal text-[var(--text)]"
                   aria-label="Choose speaking voice"
                 >
-                  {voiceChoices.map((v) => (
-                    <option key={v.uri} value={v.uri}>
-                      {v.name}
-                      {v.likelyMale ? " · male" : ""}
+                  {voiceChoices.map(({ profile, voice }) => (
+                    <option key={profile.id} value={profile.id}>
+                      {profile.label}
+                      {voice ? ` · ${voice.name}` : ""}
                     </option>
                   ))}
                 </select>
