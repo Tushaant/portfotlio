@@ -1,4 +1,5 @@
 import dictionary from "../../content/brain/pronunciation.json";
+import { toConversationalAnswer } from "./response-generation";
 
 const ONES = [
   "zero",
@@ -119,6 +120,7 @@ function speakQuantities(text: string): string {
   out = out.replace(/(\d+(?:\.\d+)?)\s*%/g, (_, num: string) => `${speakDecimal(num)} percent`);
   out = out.replace(/<\s*(\d+(?:\.\d+)?)\s*s\b/gi, (_, num: string) => `less than ${speakDecimal(num)} seconds`);
   out = out.replace(/\bP\s?(\d{2})\b/g, (_, n: string) => `P ${speakInteger(Number(n))}`);
+  out = out.replace(/\b(\d+(?:\.\d+)?)\s*B\b/g, (_, num: string) => `${speakDecimal(num)} billion`);
   return out;
 }
 
@@ -138,7 +140,7 @@ export function renderSpeech(displayText: string, maxWords = 100): string {
 }
 
 export function presentAnswer(answer: string, maxSpokenWords = 100) {
-  const displayText = cleanDisplayText(answer);
+  const displayText = cleanDisplayText(toConversationalAnswer(answer));
   return {
     displayText,
     speechText: renderSpeech(displayText, maxSpokenWords),

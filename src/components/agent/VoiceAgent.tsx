@@ -8,7 +8,7 @@ import { useConversationStore } from "@/store/conversation-store";
 import { AgentScroll } from "@/components/agent/AgentScroll";
 import { trackEvent } from "@/lib/analytics";
 import { VOICE_CONFIG } from "@/lib/voice-config";
-import { createTurnDetector, isAgentEcho } from "@/lib/duplex-turn";
+import { createTurnDetector, isAgentEcho, transitionVoicePhase, type VoicePhase } from "@/lib/duplex-turn";
 import {
   VOICE_GREETING,
   cleanTranscript,
@@ -25,13 +25,14 @@ import {
   type VoiceOption,
 } from "@/lib/voice-runtime";
 
-type VoiceState = "idle" | "listening" | "thinking" | "speaking" | "muted" | "error";
+type VoiceState = VoicePhase | "muted";
 
 const STATUS: Record<VoiceState, string> = {
-  idle: "Listening",
-  listening: "Listening",
-  thinking: "Thinking",
-  speaking: "Speaking",
+  idle: "Talk with Tushant",
+  listening: "Listening...",
+  thinking: "Thinking...",
+  speaking: "Speaking...",
+  interrupted: "Listening...",
   muted: "Muted",
   error: "Something went wrong. Try again.",
 };
@@ -73,7 +74,7 @@ export function VoiceAgent() {
   const [muted, setMuted] = useState(false);
 
   const tts = useMemo(() => createBrowserTts(), []);
-  const phaseRef = useRef<VoiceState>("listening");
+  const phaseRef = useRef<VoiceState>("idle");
   const mutedRef = useRef(false);
   const sessionRef = useRef(false);
   const recRef = useRef<SpeechRecognitionLike | null>(null);
@@ -98,6 +99,14 @@ export function VoiceAgent() {
     phaseRef.current = next;
     setState(next);
   }, []);
+
+  const movePhase = useCallback(
+    (event: Parameters<typeof transitionVoicePhase>[1]) => {
+      const current = phaseRef.current === "muted" ? "idle" : phaseRef.current;
+      setPhase(transitionVoicePhase(current, event));
+    },
+    [setPhase],
+  );
 
   const applyVoices = useCallback(() => {
     const list = getAvailableVoices();
@@ -291,9 +300,12 @@ export function VoiceAgent() {
     tts.stop();
     detectorRef.current.disarmAgentSpeech();
     spokenNowRef.current = "";
-    setPhase("listening");
+    movePhase("onset");
+    window.setTimeout(() => {
+      if (phaseRef.current === "interrupted") movePhase("resume");
+    }, 180);
     trackEvent("user_interrupted", { agentType: "voice" });
-  }, [setPhase, tts]);
+  }, [movePhase, tts]);
 
   useEffect(() => {
     bargeRef.current = barge;
@@ -302,7 +314,7 @@ export function VoiceAgent() {
   const askBrain = useCallback(
     async (transcript: string) => {
       const id = ++requestId.current;
-      setPhase("thinking");
+      movePhase("utterance");
       setError("");
       append({ role: "user", content: transcript });
       trackEvent("voice_message_sent", {
@@ -343,7 +355,7 @@ export function VoiceAgent() {
         });
         spokenNowRef.current = speech;
         detectorRef.current.armAgentSpeech(performance.now());
-        setPhase("speaking");
+        movePhase("reply");
         try {
           await tts.speak(speech, { voiceURI: voiceUriRef.current });
         } catch {
@@ -372,7 +384,7 @@ export function VoiceAgent() {
         trackEvent("response_failure", { agentType: "voice" });
       }
     },
-    [append, setPhase, tts],
+    [append, movePhase, setPhase, tts],
   );
 
   useEffect(() => {
@@ -385,7 +397,7 @@ export function VoiceAgent() {
     async (line: string, id: number) => {
       spokenNowRef.current = line;
       detectorRef.current.armAgentSpeech(performance.now());
-      setPhase("speaking");
+      movePhase("reply");
       try {
         await tts.speak(line, { voiceURI: voiceUriRef.current || selectPreferredMaleVoice()?.uri });
       } catch {
@@ -396,7 +408,7 @@ export function VoiceAgent() {
       spokenNowRef.current = "";
       if (!mutedRef.current && sessionRef.current) setPhase("listening");
     },
-    [setPhase, tts],
+    [movePhase, setPhase, tts],
   );
 
   useEffect(() => {
@@ -522,7 +534,7 @@ export function VoiceAgent() {
             <div className="flex shrink-0 items-center justify-between border-b border-white/10 px-4 py-3">
               <div>
                 <p className="display text-xs tracking-[0.2em] text-amber-300">TUSHANT AI</p>
-                <p className="text-xs text-[var(--muted)]">Listening the whole time you are here</p>
+                <p className="text-xs text-[var(--muted)]">Indian English · AI portfolio representative</p>
               </div>
               <div className="flex items-center gap-1">
                 <button
@@ -533,7 +545,7 @@ export function VoiceAgent() {
                   }}
                   className="rounded-lg px-2 py-1 text-[11px] text-[var(--muted)] hover:bg-amber-400/10"
                 >
-                  Chat
+                  Continue with Chat
                 </button>
                 <button
                   type="button"
@@ -552,6 +564,7 @@ export function VoiceAgent() {
                 style={{ ["--voice-level" as string]: String(0.35 + level * 0.65) }}
                 role="img"
                 aria-label={status}
+                data-voice-state={state}
               >
                 <span className="voice-orb__glow" />
                 <span className="voice-orb__ring" />
@@ -567,10 +580,9 @@ export function VoiceAgent() {
                   aria-pressed={muted}
                   aria-label={muted ? "Unmute microphone" : "Mute microphone"}
                   data-voice-mute
-                  className="mt-3 inline-flex min-h-9 items-center gap-1 rounded-full border border-white/10 px-3 text-[11px] text-[var(--muted)]"
+                  className="mt-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-[var(--muted)]"
                 >
                   {muted ? <MicOff className="h-3.5 w-3.5" aria-hidden /> : <Mic className="h-3.5 w-3.5" aria-hidden />}
-                  {muted ? "Unmute" : "Mute"}
                 </button>
               ) : null}
             </div>

@@ -267,32 +267,32 @@ function docsInSection(section: string): KnowledgeDoc[] {
 }
 
 function proseFromDoc(doc: KnowledgeDoc, maxChars = 700): string {
-  const parts: string[] = [];
+  const fields: Record<string, string> = {};
+  const notes: string[] = [];
   for (const raw of doc.text.split("\n")) {
-    const line = raw.trim();
+    const line = raw.trim().replace(/^[-•]\s*/, "");
     if (!line) continue;
-    if (/^(EMAIL|PHONE|LINKEDIN|RESPONSIBILITIES)\s*:/i.test(line)) continue;
     const labeled = line.match(
-      /^(COMPANY|ROLE|PERIOD|LOCATION|STATUS|METRICS|TECHNOLOGIES|LESSON|TYPE|ORG|SKILL|TIER|EXPERIENCE)\s*:\s*(.*)$/i,
+      /^(COMPANY|ROLE|PERIOD|LOCATION|STATUS|METRICS|TECHNOLOGIES|LESSON|TYPE|ORG|SKILL|TIER|EXPERIENCE|EMAIL|PHONE|LINKEDIN|RESPONSIBILITIES)\s*:\s*(.*)$/i,
     );
-    let sentence = line.replace(/^[-•]\s*/, "");
     if (labeled) {
-      const key = labeled[1].toUpperCase();
-      const val = labeled[2].trim();
-      if (!val) continue;
-      if (key === "COMPANY") sentence = `This covers ${val}.`;
-      else if (key === "ROLE") sentence = `The role is ${val}.`;
-      else if (key === "PERIOD") sentence = `The time period is ${val}.`;
-      else if (key === "LOCATION") sentence = `The location is ${val}.`;
-      else if (key === "METRICS") sentence = `Documented figures include ${val}.`;
-      else if (key === "TECHNOLOGIES") sentence = `Technologies called out include ${val}.`;
-      else if (key === "LESSON") sentence = val;
-      else sentence = val;
+      if (labeled[2].trim()) fields[labeled[1].toUpperCase()] = labeled[2].trim();
+      continue;
     }
-    if (parts.join(" ").length + sentence.length > maxChars) break;
-    parts.push(sentence);
+    const heading = line.match(/^([^:]{3,60}):\s+(.+)$/);
+    notes.push(heading ? heading[2] : line);
   }
-  return parts.join(" ");
+  const bits: string[] = [];
+  if (fields.ROLE && fields.COMPANY) {
+    const when = fields.PERIOD ? `, ${fields.PERIOD}` : "";
+    const where = fields.LOCATION ? `, in ${fields.LOCATION}` : "";
+    bits.push(`${fields.ROLE} at ${fields.COMPANY}${when}${where}.`);
+  } else if (doc.title) {
+    bits.push(`${doc.title}.`);
+  }
+  if (notes.length) bits.push(notes.slice(0, 2).join(" "));
+  else if (fields.LESSON) bits.push(fields.LESSON);
+  return bits.join(" ").slice(0, maxChars);
 }
 
 function listProjects(): string {
@@ -383,10 +383,10 @@ function smartSummary(): string {
 }
 
 function conversationalLead(section: string, title: string) {
-  if (section === "experience") return `This is from Tushant's documented ${title} chapter.`;
-  if (section === "projects") return `On the ${title} product, here's what's verified.`;
-  if (section === "about") return `From the verified profile.`;
-  return `From the ${section} on this site (${title}).`;
+  if (section === "experience") return "";
+  if (section === "projects") return `${title}.`;
+  if (section === "about") return "";
+  return "";
 }
 
 function synthesizeFromDocs(docs: KnowledgeDoc[]): string {
@@ -622,7 +622,10 @@ export function answerFromPortfolio(
     );
   }
 
-  if (/(list|show|all).*(achieve|award|certif|troph)|achievements?|certifications?/.test(q)) {
+  if (
+    !/\b(biggest|greatest|top|best|standout|proudest)\b/.test(q) &&
+    (/(list|show|all).*(achieve|award|certif|troph)/.test(q) || /^(achievements|certifications)$/.test(q))
+  ) {
     return emit(
       {
         answer: listAchievements(),

@@ -187,7 +187,7 @@ function whoIs(channel: AgentChannel): BrainResult {
       : r.summary.split(".")[0] + ".",
     `The through-line in the portfolio is enterprise AI product work: agentic systems, RAG, MCP, evaluation, and governance, plus earlier FinTech and SaaS delivery.`,
   ].join(" ");
-  const voice = `Tushant Sharma is a product leader with more than ten years overall, and about six plus years focused on product management. Right now he's AI Product Manager and Acting Director of Product Management at Oraczen, in Hyderabad. The documented scope includes a $6.4 million agentic AI portfolio and a large U.S. banking client. Recent product contexts also include Dairy Profit Intelligence, the IVY farm-visit assistant, and AMEY.`;
+  const voice = `Tushant is a product leader with more than ten years of experience, about six of them in product management. He builds enterprise AI and GenAI products, and he currently leads product at Oraczen in Hyderabad, including a $6.4M agentic portfolio for a large U.S. bank. That work includes chat agents, voice agents, lending AI, spend intelligence, and risk intelligence. He also shipped Dairy Profit Intelligence, IVY, and AMEY, and he has led cross-functional teams.`;
   return {
     answer: spokenWrap(channel, channel === "voice" ? voice : chat),
     sources: ["resume.profile", "experience.oraczen"],

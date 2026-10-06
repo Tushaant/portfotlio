@@ -97,6 +97,13 @@ export const GENERAL_TOPICS: GeneralTopic[] = [
       "Authentication answers who you are. Authorization answers what you may do. A session is how the app keeps that state. JWT is a token format for claims. SSO lets people sign in across apps through one identity provider. OAuth is an authorization framework. OIDC is the identity layer on top of OAuth. In products, get token lifetime, rotation, revocation, least privilege, and audit logs right before you talk about features.",
   },
   {
+    id: "data-lake",
+    match: /\bdata lakes?\b/i,
+    title: "Data lake",
+    explanation:
+      "A data lake stores large amounts of raw data in its original form, so teams can explore it later without forcing every source into a rigid warehouse schema first. The product problem is governance. Without ownership, quality checks, and access control, a lake turns into a swamp.",
+  },
+  {
     id: "docker",
     match: /\bdocker\b|containers?\b|dockerfile/i,
     title: "Docker",
