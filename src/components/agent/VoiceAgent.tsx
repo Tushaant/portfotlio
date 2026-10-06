@@ -8,7 +8,7 @@ import { useConversationStore } from "@/store/conversation-store";
 import { AgentScroll } from "@/components/agent/AgentScroll";
 import { trackEvent } from "@/lib/analytics";
 import { VOICE_CONFIG } from "@/lib/voice-config";
-import { createTurnDetector, isAgentEcho, transitionVoicePhase, type VoicePhase } from "@/lib/duplex-turn";
+import { classifyHeard, createTurnDetector, isAgentEcho, transitionVoicePhase, type VoicePhase } from "@/lib/duplex-turn";
 import {
   VOICE_GREETING,
   cleanTranscript,
@@ -241,17 +241,22 @@ export function VoiceAgent() {
       committedRef.current = cleanTranscript(finalText);
       interimRef.current = live.trim();
       const shown = cleanTranscript(`${committedRef.current} ${interimRef.current}`);
-      if (!shown || isAgentEcho(shown, spokenNowRef.current)) {
+      const agentTalking = phaseRef.current === "speaking" || phaseRef.current === "thinking";
+      const heard = classifyHeard(shown, agentTalking ? spokenNowRef.current : "");
+      if (!shown || heard !== "user") {
+        if (agentTalking) {
+          committedRef.current = "";
+          interimRef.current = "";
+        }
         setInterim("");
         window.clearTimeout(sttBargeTimer.current);
         return;
       }
       setInterim(shown);
       detectorRef.current.noteTranscript(performance.now());
-      const agentTalking = phaseRef.current === "speaking" || phaseRef.current === "thinking";
-      if (agentTalking && shown.length >= 3) {
+      if (agentTalking) {
         window.clearTimeout(sttBargeTimer.current);
-        sttBargeTimer.current = window.setTimeout(() => bargeRef.current(), 120);
+        sttBargeTimer.current = window.setTimeout(() => bargeRef.current(), 160);
       }
       scheduleEndpoint();
     };
@@ -354,7 +359,11 @@ export function VoiceAgent() {
           llmLatency: Date.now() - started,
         });
         spokenNowRef.current = speech;
-        detectorRef.current.armAgentSpeech(performance.now());
+        committedRef.current = "";
+        interimRef.current = "";
+        setInterim("");
+        window.clearTimeout(sttBargeTimer.current);
+        detectorRef.current.armAgentSpeech();
         movePhase("reply");
         try {
           await tts.speak(speech, { voiceURI: voiceUriRef.current });
@@ -396,7 +405,11 @@ export function VoiceAgent() {
   const speakLine = useCallback(
     async (line: string, id: number) => {
       spokenNowRef.current = line;
-      detectorRef.current.armAgentSpeech(performance.now());
+      committedRef.current = "";
+      interimRef.current = "";
+      setInterim("");
+      window.clearTimeout(sttBargeTimer.current);
+      detectorRef.current.armAgentSpeech();
       movePhase("reply");
       try {
         await tts.speak(line, { voiceURI: voiceUriRef.current || selectPreferredMaleVoice()?.uri });
@@ -452,10 +465,7 @@ export function VoiceAgent() {
           if (!sessionRef.current || !analyserRef.current) return;
           const levelNow = speechLevel(analyserRef.current, freq);
           setLevel(Math.min(1, levelNow * 3.2));
-          if (!mutedRef.current) {
-            const sample = detectorRef.current.push(levelNow, performance.now());
-            if (sample.barge) bargeRef.current();
-          }
+          if (!mutedRef.current) detectorRef.current.push(levelNow, performance.now());
           rafRef.current = requestAnimationFrame(tick);
         };
         tick();
