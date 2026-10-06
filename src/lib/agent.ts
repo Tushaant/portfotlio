@@ -4,6 +4,7 @@ import {
   type KnowledgeDoc,
 } from "./cms";
 import { formatGeneralAnswer, matchGeneralTopic } from "./general-knowledge";
+import { interruptionLead } from "./duplex-turn";
 import { classifyIntent } from "./intent-router";
 import { presentAnswer } from "./speech-renderer";
 import { resolveSystemPrompt } from "./system-prompt";
@@ -472,10 +473,19 @@ export function answerFromPortfolio(
   const channel: AgentChannel = options.channel ?? "chat";
   const spoken = channel === "voice";
   resolveSystemPrompt(cms.voiceAgent.systemPrompt);
+  const emit = <T extends { answer: string; sources: string[]; intent?: string }>(
+    result: T,
+    _channel?: AgentChannel,
+  ) => {
+    void _channel;
+    const lead = channel === "voice" ? interruptionLead(question) : "";
+    const answer = lead && !/^\s*yes\b/i.test(result.answer) ? `${lead} ${result.answer}` : result.answer;
+    return applyChannel({ ...result, answer }, channel);
+  };
 
   const decision = classifyIntent(question);
   if (decision.answer) {
-    return applyChannel(
+    return emit(
       {
         answer: decision.answer,
         sources: [`intent.${decision.intent}`],
@@ -491,11 +501,11 @@ export function answerFromPortfolio(
 
   const composed = composeFromBrain(raw, channel);
   if (composed) {
-    return applyChannel({ ...composed, intent: decision.intent }, channel);
+    return emit({ ...composed, intent: decision.intent }, channel);
   }
 
   if (!q) {
-    return applyChannel(
+    return emit(
       {
         answer: spoken
           ? "Ask me about Tushant's work, products, leadership, or how he thinks about AI. I only speak from verified portfolio data."
@@ -507,7 +517,7 @@ export function answerFromPortfolio(
   }
 
   if (/(who are you|what can you|help|commands|how do you work)/.test(q)) {
-    return applyChannel(
+    return emit(
       {
         answer: spoken
           ? "I'm Tushant's AI companion for this portfolio. I can talk through his verified experience, products, and how he thinks about AI product work. If I don't have it in the portfolio, I won't invent it."
@@ -528,7 +538,7 @@ export function answerFromPortfolio(
       q,
     )
   ) {
-    return applyChannel(hireWhy(), channel);
+    return emit(hireWhy(), channel);
   }
 
   const general = matchGeneralTopic(raw);
@@ -537,7 +547,7 @@ export function answerFromPortfolio(
     /(current role|present role|what does he do now|acting director)/.test(q)
   ) {
     const job = cms.experience.find((j) => j.active) ?? cms.experience[0];
-    return applyChannel(
+    return emit(
       {
         answer: job
           ? `${cms.resume.name} is currently ${job.role} at ${job.company} (${job.period}), based in ${job.location}. Headline metrics on record: ${job.metrics.map((m) => `${m.label} ${m.value}`).join(", ")}.`
@@ -553,7 +563,7 @@ export function answerFromPortfolio(
       q,
     )
   ) {
-    return applyChannel(
+    return emit(
       { answer: smartSummary(), sources: ["resume.profile", "resume.contact"] },
       channel,
     );
@@ -567,7 +577,7 @@ export function answerFromPortfolio(
     q === "what projects" ||
     /what (projects|products) (has|did|does)/.test(q)
   ) {
-    return applyChannel(
+    return emit(
       { answer: listProjects(), sources: docsInSection("projects").map((d) => d.id) },
       channel,
     );
@@ -578,7 +588,7 @@ export function answerFromPortfolio(
       q,
     )
   ) {
-    return applyChannel(
+    return emit(
       {
         answer: listCaseStudies(),
         sources: docsInSection("case-studies").map((d) => d.id),
@@ -592,7 +602,7 @@ export function answerFromPortfolio(
       q,
     )
   ) {
-    return applyChannel(
+    return emit(
       { answer: listSkills(), sources: docsInSection("skills").map((d) => d.id) },
       channel,
     );
@@ -603,7 +613,7 @@ export function answerFromPortfolio(
       q,
     )
   ) {
-    return applyChannel(
+    return emit(
       {
         answer: listExperience(),
         sources: docsInSection("experience").map((d) => d.id),
@@ -613,7 +623,7 @@ export function answerFromPortfolio(
   }
 
   if (/(list|show|all).*(achieve|award|certif|troph)|achievements?|certifications?/.test(q)) {
-    return applyChannel(
+    return emit(
       {
         answer: listAchievements(),
         sources: docsInSection("achievements").map((d) => d.id),
@@ -623,7 +633,7 @@ export function answerFromPortfolio(
   }
 
   if (/(list|show|all).*testimonial|testimonial|recommendation|what (do )?clients? say|reviews?/.test(q)) {
-    return applyChannel(
+    return emit(
       {
         answer: listTestimonials(),
         sources: docsInSection("testimonials").map((d) => d.id),
@@ -633,7 +643,7 @@ export function answerFromPortfolio(
   }
 
   if (/(tech(nology)? stack|tools? (he |tushant )?uses?|what (tech|tools) does)/.test(q)) {
-    return applyChannel(
+    return emit(
       { answer: listTechStack(), sources: ["tech-stack"] },
       channel,
     );
@@ -646,7 +656,7 @@ export function answerFromPortfolio(
         d.id.includes("mkc") ||
         /veda|kalshi|mkc|download/i.test(d.text),
     );
-    return applyChannel(
+    return emit(
       {
         answer: synthesizeFromDocs(hits.slice(0, 3)) || listAchievements(),
         sources: hits.slice(0, 3).map((d) => d.id),
@@ -656,7 +666,7 @@ export function answerFromPortfolio(
   }
 
   if (/(contact|email|phone|linkedin|reach|connect with)/.test(q) && !/hire him/.test(q)) {
-    return applyChannel(
+    return emit(
       {
         answer: [
           "Contact channels from the site:",
@@ -672,7 +682,7 @@ export function answerFromPortfolio(
   }
 
   if (/\b(resume|cv)\b/.test(q) && !/summary|summarize/.test(q)) {
-    return applyChannel(
+    return emit(
       {
         answer: [
           "Resume is sourced from the PDF on this site.",
@@ -687,7 +697,7 @@ export function answerFromPortfolio(
   }
 
   if (general && /what is|what's|explain|how does|tell me about (rag|mcp|docker|kubernetes|oauth|jwt)/i.test(question)) {
-    return applyChannel(
+    return emit(
       {
         answer: formatGeneralAnswer(general, spoken),
         sources: [`general.${general.id}`, general.verifiedNote ? "cms-verified" : "general-only"],
@@ -713,7 +723,7 @@ export function answerFromPortfolio(
 
   if (!usable.length || top < 4) {
     if (general) {
-      return applyChannel(
+      return emit(
         {
           answer: formatGeneralAnswer(general, spoken),
           sources: [`general.${general.id}`, general.verifiedNote ? "cms-verified" : "general-only"],
@@ -721,7 +731,7 @@ export function answerFromPortfolio(
         channel,
       );
     }
-    return applyChannel({ ...gentleFail(), intent: decision.intent }, channel);
+    return emit({ ...gentleFail(), intent: decision.intent }, channel);
   }
 
   const docs = usable.map((h) => h.doc);
@@ -729,5 +739,5 @@ export function answerFromPortfolio(
   if (general && !/tushant|oraczen|portfolio/i.test(answer)) {
     answer = `${formatGeneralAnswer(general, spoken)}\n\n${answer}`;
   }
-  return applyChannel({ answer, sources: docs.map((d) => d.id), intent: decision.intent }, channel);
+  return emit({ answer, sources: docs.map((d) => d.id), intent: decision.intent }, channel);
 }
