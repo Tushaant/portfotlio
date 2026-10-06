@@ -1,7 +1,8 @@
 /**
  * Turn-taking for a full-duplex browser session.
- * Energy, pauses, and echo checks live here so barge-in does not depend on a button.
- * A short spike (keyboard, breath, click) must not count as speech.
+ * Speaker audio leaks into the microphone, so energy alone must not cancel playback.
+ * Barge-in waits for words that are not the line currently being spoken.
+ * A short spike, breath, or the agent's own "yes" must not take the turn.
  */
 
 export type VoicePhase = "idle" | "listening" | "thinking" | "speaking" | "interrupted" | "error";
@@ -28,7 +29,7 @@ export type TurnDetector = {
   push: (level: number, now: number) => TurnSample;
   noteTranscript: (now: number) => void;
   readyToAnswer: (now: number, hasText: boolean) => boolean;
-  armAgentSpeech: (now: number) => void;
+  armAgentSpeech: () => void;
   disarmAgentSpeech: () => void;
   agentIsSpeaking: () => boolean;
 };
@@ -36,8 +37,6 @@ export type TurnDetector = {
 const MIN_LEVEL = 0.05;
 const FLOOR_GAIN = 3.5;
 const ONSET_MS = 150;
-const BARGE_MS = 230;
-const BARGE_GRACE_MS = 280;
 const ENDPOINT_MS = 680;
 const POST_VOICE_MS = 260;
 
@@ -47,8 +46,6 @@ export function createTurnDetector(): TurnDetector {
   let lastVoicedAt = 0;
   let lastTranscriptAt = 0;
   let agentSpeech = false;
-  let agentArmedAt = 0;
-  let barged = false;
   let lastAt = 0;
 
   const threshold = () => Math.max(MIN_LEVEL, floor * FLOOR_GAIN);
@@ -57,7 +54,7 @@ export function createTurnDetector(): TurnDetector {
     push(level, now) {
       const dt = lastAt ? Math.min(80, Math.max(0, now - lastAt)) : 16;
       lastAt = now;
-      const hot = level >= threshold();
+      const hot = !agentSpeech && level >= threshold();
       if (hot) {
         voicedRun += dt;
         lastVoicedAt = now;
@@ -65,18 +62,8 @@ export function createTurnDetector(): TurnDetector {
         voicedRun = 0;
         if (!agentSpeech) floor = floor * 0.96 + Math.max(0, level) * 0.04;
       }
-      const voiced = voicedRun >= ONSET_MS;
-      let barge = false;
-      if (
-        agentSpeech &&
-        !barged &&
-        now - agentArmedAt >= BARGE_GRACE_MS &&
-        voicedRun >= BARGE_MS
-      ) {
-        barged = true;
-        barge = true;
-      }
-      return { barge, voiced };
+      const voiced = !agentSpeech && voicedRun >= ONSET_MS;
+      return { barge: false, voiced };
     },
     noteTranscript(now) {
       lastTranscriptAt = now;
@@ -87,15 +74,12 @@ export function createTurnDetector(): TurnDetector {
       if (lastVoicedAt && now - lastVoicedAt < POST_VOICE_MS) return false;
       return true;
     },
-    armAgentSpeech(now) {
+    armAgentSpeech() {
       agentSpeech = true;
-      agentArmedAt = now;
-      barged = false;
       voicedRun = 0;
     },
     disarmAgentSpeech() {
       agentSpeech = false;
-      barged = false;
       voicedRun = 0;
     },
     agentIsSpeaking() {
@@ -104,21 +88,67 @@ export function createTurnDetector(): TurnDetector {
   };
 }
 
-function tokens(text: string) {
+const FILLERS = new Set([
+  "yes",
+  "yeah",
+  "yep",
+  "ya",
+  "ok",
+  "okay",
+  "hmm",
+  "uh",
+  "um",
+  "ah",
+  "oh",
+  "hi",
+  "hello",
+  "right",
+  "exactly",
+  "so",
+  "and",
+  "the",
+  "a",
+]);
+
+function normalizeHeard(text: string) {
   return text
     .toLowerCase()
     .replace(/[^a-z0-9\s]/g, " ")
-    .split(/\s+/)
-    .filter((word) => word.length > 2);
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-/** True when the recognizer is hearing the agent, not the visitor. */
+/** True when the recognizer is hearing the agent, including a short "yes". */
 export function isAgentEcho(heard: string, agentText: string) {
-  const heardWords = tokens(heard);
-  const agentWords = new Set(tokens(agentText));
-  if (heardWords.length < 4 || agentWords.size < 4) return false;
-  const overlap = heardWords.filter((word) => agentWords.has(word)).length;
-  return overlap / heardWords.length >= 0.72;
+  const h = normalizeHeard(heard);
+  const a = normalizeHeard(agentText);
+  if (!h || !a) return false;
+  if (a.includes(h)) return true;
+  const words = h.split(" ").filter(Boolean);
+  if (!words.length) return false;
+  if (words.every((word) => a.includes(word))) return true;
+  const agentStartsYes = /^(yes|yeah|ok|okay|exactly|right)\b/.test(a);
+  if (agentStartsYes && /^(yes|yeah|yep|ya|ok|okay|exactly|right)\b/.test(h) && words.length <= 3) return true;
+  return false;
+}
+
+export type HeardKind = "echo" | "noise" | "user";
+
+/**
+ * While the agent is speaking, only novel words count as the visitor.
+ * "Yes" played through the speaker is echo. "Wait" or "IVY" is the visitor.
+ */
+export function classifyHeard(heard: string, agentText: string): HeardKind {
+  const h = normalizeHeard(heard);
+  if (!h || h.length < 2) return "noise";
+  if (agentText && isAgentEcho(h, agentText)) return "echo";
+  const words = h.split(" ").filter(Boolean);
+  if (agentText) {
+    const novel = words.filter((word) => word.length > 2 && !normalizeHeard(agentText).includes(word));
+    return novel.length ? "user" : "echo";
+  }
+  const meaningful = words.filter((word) => !FILLERS.has(word) && word.length > 2);
+  return meaningful.length ? "user" : "noise";
 }
 
 /** Short lead for a spoken correction. Empty when the turn is not an interruption. */
