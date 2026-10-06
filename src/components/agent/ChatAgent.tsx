@@ -92,7 +92,7 @@ export function ChatAgent() {
       const data = await res.json();
       append({
         role: "assistant",
-        content: data.answer || "I'm having a little trouble getting that response. Give me another try.",
+        content: data.displayText || data.answer || "I'm having a little trouble getting that response. Give me another try.",
       });
       trackEvent(data.knowledgeGap ? "knowledge_gap" : "response_success", {
         agentType: "chat",

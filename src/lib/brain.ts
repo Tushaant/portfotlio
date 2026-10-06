@@ -187,7 +187,7 @@ function whoIs(channel: AgentChannel): BrainResult {
       : r.summary.split(".")[0] + ".",
     `The through-line in the portfolio is enterprise AI product work: agentic systems, RAG, MCP, evaluation, and governance, plus earlier FinTech and SaaS delivery.`,
   ].join(" ");
-  const voice = `Tushant Sharma is a product leader with more than ten years overall, and about six plus years focused on product management. Right now he's AI Product Manager and Acting Director of Product Management at Oraczen, in Hyderabad. The documented scope includes a $6.4 million agentic AI portfolio and a large U.S. banking client. Recent product contexts also include Dairy Profit Intelligence, the IVY farm-visit assistant, and AMEY.`;
+  const voice = `Tushant is a product leader with more than ten years of experience, about six of them in product management. He builds enterprise AI and GenAI products, and he currently leads product at Oraczen in Hyderabad, including a $6.4M agentic portfolio for a large U.S. bank. That work includes chat agents, voice agents, lending AI, spend intelligence, and risk intelligence. He also shipped Dairy Profit Intelligence, IVY, and AMEY, and he has led cross-functional teams.`;
   return {
     answer: spokenWrap(channel, channel === "voice" ? voice : chat),
     sources: ["resume.profile", "experience.oraczen"],
@@ -319,11 +319,9 @@ function hire(channel: AgentChannel): BrainResult {
 function generalFirst(topic: GeneralTopic, channel: AgentChannel, connect: boolean): BrainResult {
   const base = formatGeneralAnswer(topic, channel === "voice");
   const extra =
-    connect && topic.verifiedNote
-      ? ""
-      : connect
-        ? " I don't have a verified personal implementation claim for Tushant on that specific toolset beyond what's in the resume."
-        : "";
+    connect && !topic.verifiedNote
+      ? " I don't have a verified personal implementation claim for Tushant on that specific toolset beyond what's in the resume."
+      : "";
   return {
     answer: spokenWrap(channel, base + extra),
     sources: [`general.${topic.id}`, topic.verifiedNote ? "cms-verified" : "general-only"],
@@ -382,7 +380,11 @@ function signatureAnswer(
 ): BrainResult {
   const users = product.users.slice(0, 6).join(", ");
   const tech = product.capabilities.slice(0, 8).join(", ");
-  const voice = `${product.name} is ${/^[aeiou]/i.test(product.kind) ? "an" : "a"} ${product.kind}${product.client ? ` for ${product.client}` : ""}. ${product.solution} The people in scope include ${users}. The documented technology covers ${tech}. ${product.notes}`;
+  const note = product.notes
+    .split(/(?<=\.)\s+/)
+    .filter((sentence) => !/^do not\b/i.test(sentence.trim()))
+    .join(" ");
+  const voice = `${product.name} is ${/^[aeiou]/i.test(product.kind) ? "an" : "a"} ${product.kind}${product.client ? ` for ${product.client}` : ""}. ${product.solution} The people in scope include ${users}. The documented technology covers ${tech}. ${note}`;
   return {
     answer: spokenWrap(channel, voice),
     sources: [`signature.${product.id}`],
