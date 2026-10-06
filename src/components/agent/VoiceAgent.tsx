@@ -6,6 +6,7 @@ import { Mic, MicOff, X } from "lucide-react";
 import { useUIStore } from "@/store/ui-store";
 import { useConversationStore } from "@/store/conversation-store";
 import { AgentScroll } from "@/components/agent/AgentScroll";
+import { FluidVoiceOrb } from "@/components/agent/FluidVoiceOrb";
 import { trackEvent } from "@/lib/analytics";
 import { VOICE_CONFIG } from "@/lib/voice-config";
 import { acceptsUserAudio, createTurnGate, voiceLog, type HalfPhase } from "@/lib/half-duplex";
@@ -502,17 +503,7 @@ export function VoiceAgent() {
             </div>
 
             <div className="flex shrink-0 flex-col items-center px-4 pt-6">
-              <div
-                className={`voice-orb voice-orb--${state === "muted" || state === "error" ? "idle" : state}`}
-                style={{ ["--voice-level" as string]: String(state === "speaking" ? 0.85 : 0.35 + level * 0.65) }}
-                role="img"
-                aria-label={status}
-                data-voice-state={state}
-              >
-                <span className="voice-orb__glow" />
-                <span className="voice-orb__ring" />
-                <span className="voice-orb__core" />
-              </div>
+              <FluidVoiceOrb state={state} level={level} label={status} />
               <p className="mt-4 text-sm text-amber-200/90" aria-live="polite" data-voice-status>
                 {status}
               </p>
