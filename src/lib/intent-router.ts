@@ -64,7 +64,7 @@ function oraczenShipped() {
   const platform = job.responsibilities.find((r) => /AI Platform Strategy/i.test(r)) ?? "";
   const span = platform.match(/spanning ([^.]+)/i)?.[1];
   const products = (span ? span.split(",") : ["Chat Agents", "Voice Agents", "Lending AI", "Spend Intelligence", "Risk Intelligence"])
-    .map((part) => part.replace(/^and\s+/i, "").trim())
+    .map((part) => part.trim().replace(/^and\s+/i, ""))
     .filter((part) => part && !/requirement gathering/i.test(part));
   const portfolio = job.metrics.find((m) => /portfolio/i.test(m.label))?.value ?? "$6.4M";
   const list = products.join(", ").replace(/, ([^,]+)$/, ", and $1");
