@@ -7,7 +7,7 @@ import { useUIStore } from "@/store/ui-store";
 export function BriefSection() {
   const setVoiceOpen = useUIStore((state) => state.setVoiceAgentOpen);
   return (
-    <section id="brief" className="scroll-mt-24 py-20 md:py-28">
+    <div id="brief" className="scroll-mt-24 pt-16">
       <div className="mx-auto max-w-3xl px-4 md:px-6">
         <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">Brief</p>
         <h2 className="display mt-3 text-3xl text-[var(--text-primary)] md:text-5xl">{executiveBrief.title}</h2>
@@ -28,6 +28,6 @@ export function BriefSection() {
           Ask Tushant AI for the 30-second brief. The assistant reads it from the same profile as this page.
         </p>
       </div>
-    </section>
+    </div>
   );
 }

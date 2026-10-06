@@ -4,7 +4,7 @@ export function OwnershipSection() {
   return (
     <section id="ownership" className="scroll-mt-24 py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">Scope</p>
+        <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">04 · What I own</p>
         <h2 className="display mt-3 text-3xl text-[var(--text-primary)] md:text-5xl">What I own</h2>
         <p className="mt-4 max-w-2xl text-[var(--text-muted)]">
           Director-level scope recorded at Oraczen: strategy, P&L, the roadmap, the team, quality, governance, and the executive relationship. All of it points at a business outcome.

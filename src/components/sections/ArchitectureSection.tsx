@@ -10,7 +10,7 @@ export function ArchitectureSection() {
   return (
     <section id="how-i-build" className="scroll-mt-24 py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">Operating model</p>
+        <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">06 · How I build AI products</p>
         <h2 className="display mt-3 text-3xl text-[var(--text-primary)] md:text-5xl">How I build AI products</h2>
         <p className="mt-4 max-w-2xl text-[var(--text-muted)]">
           Each layer is clickable. Applied notes come from the portfolio. The short definition is how the layer is used in product work.

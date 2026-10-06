@@ -33,7 +33,7 @@ export function HeroSection() {
             >
               Talk to Tushant AI
             </button>
-            <Link href="/#journey" className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] px-5 text-sm text-[var(--text-secondary)]">
+            <Link href="/#professional-work" className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] px-5 text-sm text-[var(--text-secondary)]">
               View experience
             </Link>
             <Link href="/#case-studies" className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] px-5 text-sm text-[var(--text-secondary)]">

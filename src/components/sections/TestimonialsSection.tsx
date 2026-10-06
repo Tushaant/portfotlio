@@ -134,7 +134,7 @@ export function TestimonialsSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--surface-soft)] to-transparent" />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6">
         <p className="font-mono text-xs tracking-[0.3em] text-[rgba(var(--accent-rgb),0.8)]">
-          03B · SIGNAL LOG
+          12 · TESTIMONIALS
         </p>
         <h2 className="display mt-3 text-3xl md:text-5xl">
           Client <span className="neon-text">testimonials</span>

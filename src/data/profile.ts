@@ -446,10 +446,10 @@ export const flagshipStudies = [
 ] as const;
 
 export const researchStudies = [
-  "lenskart-virtual-try-on",
-  "amazon-minitv-growth",
   "gumroad-creator-commerce",
+  "amazon-minitv-growth",
   "astrotalk-india-traction",
+  "lenskart-virtual-try-on",
 ] as const;
 
 export function profileContradictions() {
