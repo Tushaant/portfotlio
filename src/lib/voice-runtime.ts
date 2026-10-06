@@ -1,8 +1,12 @@
+import { getVoiceProfile, VOICE_CONFIG, VOICE_PROFILES, type VoiceProfile, type VoiceProfileId } from "./voice-config";
+
 export type VoiceOption = {
   uri: string;
   name: string;
   lang: string;
   likelyMale: boolean;
+  likelyFemale: boolean;
+  indianEnglish: boolean;
 };
 
 export type SpeakOptions = {
@@ -19,31 +23,67 @@ export type TtsEngine = {
 };
 
 const MALE_HINT =
-  /\b(male|man|david|daniel|mark|james|alex|fred|arthur|thomas|ravi|aaron|george|ryan|andrew|christopher|eric|steffan|tony|guy|daniel|gordon|lee|nathan|oliver|tom|paul|richard|roger|brian|bruce|albert|wayne|google uk english male|microsoft david|microsoft mark)\b/i;
+  /\b(male|man|david|daniel|mark|james|alex|fred|arthur|thomas|ravi|hemant|prabhat|aditya|aarav|arjun|aaron|george|ryan|andrew|christopher|eric|steffan|tony|guy|gordon|lee|nathan|oliver|tom|paul|richard|roger|brian|bruce)\b/i;
 const FEMALE_HINT =
-  /\b(female|woman|zira|samantha|karen|moira|tessa|veena|fiona|susan|hazel|heather|linda|victoria|catherine|aria|jenny|sara|google uk english female|microsoft zira)\b/i;
+  /\b(female|woman|zira|samantha|karen|moira|tessa|veena|heera|swara|fiona|susan|hazel|heather|linda|victoria|catherine|aria|jenny|sara|neerja|aditi)\b/i;
 
 export function getAvailableVoices(): VoiceOption[] {
   if (typeof window === "undefined" || !window.speechSynthesis) return [];
-  return window.speechSynthesis.getVoices().map((v) => ({
-    uri: v.voiceURI,
-    name: v.name,
-    lang: v.lang,
-    likelyMale: MALE_HINT.test(`${v.name} ${v.lang}`) && !FEMALE_HINT.test(v.name),
-  }));
+  return window.speechSynthesis.getVoices().map((v) => {
+    const blob = `${v.name} ${v.lang}`;
+    const likelyFemale = FEMALE_HINT.test(blob);
+    return {
+      uri: v.voiceURI,
+      name: v.name,
+      lang: v.lang,
+      likelyFemale,
+      likelyMale: MALE_HINT.test(blob) && !likelyFemale,
+      indianEnglish: /^en-IN/i.test(v.lang),
+    };
+  });
 }
 
+function scoreVoice(voice: VoiceOption, profile: VoiceProfile) {
+  const english = /^en/i.test(voice.lang);
+  if (!english) return -1;
+  let score = 1;
+  const indian = voice.indianEnglish;
+  if (profile.locale === "en-IN") score += indian ? 8 : 0;
+  else score += indian ? 0 : 3;
+  if (profile.gender === "male") {
+    if (voice.likelyMale) score += 6;
+    if (voice.likelyFemale) score -= 8;
+    if (!voice.likelyMale && !voice.likelyFemale) score += profile.locale === "en-IN" && indian ? 3 : 1;
+  } else {
+    if (voice.likelyFemale) score += 6;
+    if (voice.likelyMale) score -= 8;
+  }
+  if (profile.locale !== "en-IN" && /en-US/i.test(voice.lang)) score += 2;
+  return score;
+}
+
+export function selectVoiceForProfile(
+  profileId: VoiceProfileId | string = VOICE_CONFIG.VOICE_ID,
+  voices = getAvailableVoices(),
+): VoiceOption | null {
+  const profile = getVoiceProfile(profileId);
+  const ranked = voices
+    .map((voice) => ({ voice, score: scoreVoice(voice, profile) }))
+    .filter((row) => row.score > 0)
+    .sort((a, b) => b.score - a.score);
+  return ranked[0]?.voice ?? null;
+}
+
+/** Default portfolio voice: Indian Professional Male, with a natural English fallback. */
 export function selectPreferredMaleVoice(voices = getAvailableVoices()): VoiceOption | null {
-  const english = voices.filter((v) => /^en/i.test(v.lang));
-  const pool = english.length ? english : voices;
-  return (
-    pool.find((v) => v.likelyMale && /en-US/i.test(v.lang)) ||
-    pool.find((v) => v.likelyMale) ||
-    pool.find((v) => /en-US/i.test(v.lang) && !FEMALE_HINT.test(v.name)) ||
-    pool.find((v) => /^en/i.test(v.lang) && !FEMALE_HINT.test(v.name)) ||
-    pool[0] ||
-    null
-  );
+  return selectVoiceForProfile(VOICE_CONFIG.VOICE_ID, voices);
+}
+
+export function profilesWithVoices(voices = getAvailableVoices()) {
+  return VOICE_PROFILES.map((profile) => ({
+    profile,
+    voice: selectVoiceForProfile(profile.id, voices),
+  })).filter((row) => row.voice);
 }
 
 function findSynthVoice(uri?: string) {
@@ -78,14 +118,15 @@ export function createBrowserTts(): TtsEngine {
       }
       stop();
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "en-US";
-      utterance.rate = 0.98;
-      utterance.pitch = 0.95;
+      const profile = getVoiceProfile(VOICE_CONFIG.VOICE_ID);
+      utterance.lang = profile.language;
+      utterance.rate = VOICE_CONFIG.VOICE_SPEED;
+      utterance.pitch = profile.gender === "male" ? 0.96 : 1;
       utterance.volume = 1;
       const voice = findSynthVoice(options.voiceURI || selectedURI);
       if (voice) {
         utterance.voice = voice;
-        utterance.lang = voice.lang || "en-US";
+        utterance.lang = voice.lang || profile.language;
       }
       current = utterance;
       utterance.onstart = () => options.onStart?.();
@@ -189,4 +230,4 @@ export function toSpoken(text: string, maxWords = 110) {
 }
 
 export const VOICE_GREETING =
-  "Hi, welcome. I'm Tushant's AI companion. It's great to have you here. You can ask me about his work, his product experience, or even dive into things like AI, RAG, MCP, or enterprise product strategy. Whenever you're ready, just start talking.";
+  "Hi, welcome. I'm Tushant AI, the professional representative for Tushant Sharma. You can ask about his product work, the AI products he's built, or how he approaches a role. Whenever you're ready, just start talking.";
