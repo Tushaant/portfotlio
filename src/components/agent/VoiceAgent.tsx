@@ -8,7 +8,7 @@ import { useConversationStore } from "@/store/conversation-store";
 import { AgentScroll } from "@/components/agent/AgentScroll";
 import { trackEvent } from "@/lib/analytics";
 import { VOICE_CONFIG } from "@/lib/voice-config";
-import { classifyHeard, createTurnDetector, isAgentEcho, transitionVoicePhase, type VoicePhase } from "@/lib/duplex-turn";
+import { acceptsUserAudio, createTurnGate, voiceLog, type HalfPhase } from "@/lib/half-duplex";
 import {
   VOICE_GREETING,
   cleanTranscript,
@@ -25,14 +25,13 @@ import {
   type VoiceOption,
 } from "@/lib/voice-runtime";
 
-type VoiceState = VoicePhase | "muted";
+type VoiceState = HalfPhase | "muted" | "error";
 
 const STATUS: Record<VoiceState, string> = {
   idle: "Talk with Tushant",
   listening: "Listening...",
   thinking: "Thinking...",
   speaking: "Speaking...",
-  interrupted: "Listening...",
   muted: "Muted",
   error: "Something went wrong. Try again.",
 };
@@ -62,7 +61,7 @@ export function VoiceAgent() {
   const conversationId = useConversationStore((s) => s.conversationId);
   const markVoiceGreeted = useConversationStore((s) => s.markVoiceGreeted);
 
-  const [state, setState] = useState<VoiceState>("listening");
+  const [state, setState] = useState<VoiceState>("idle");
   const [error, setError] = useState("");
   const [interim, setInterim] = useState("");
   const [supported, setSupported] = useState(true);
@@ -74,39 +73,30 @@ export function VoiceAgent() {
   const [muted, setMuted] = useState(false);
 
   const tts = useMemo(() => createBrowserTts(), []);
+  const gate = useMemo(() => createTurnGate(), []);
   const phaseRef = useRef<VoiceState>("idle");
   const mutedRef = useRef(false);
   const sessionRef = useRef(false);
   const recRef = useRef<SpeechRecognitionLike | null>(null);
-  const requestId = useRef(0);
   const abortRef = useRef<AbortController | null>(null);
   const endpointTimer = useRef(0);
   const restartTimer = useRef(0);
-  const sttBargeTimer = useRef(0);
   const committedRef = useRef("");
   const interimRef = useRef("");
   const confidenceRef = useRef<number | null>(null);
-  const spokenNowRef = useRef("");
   const voiceUriRef = useRef("");
-  const detectorRef = useRef(createTurnDetector());
   const analyserRef = useRef<AnalyserNode | null>(null);
   const rafRef = useRef(0);
   const micStreamRef = useRef<MediaStream | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const greetedRef = useRef(false);
+  const listenRef = useRef<() => void>(() => undefined);
+  const askRef = useRef<(text: string) => void>(() => undefined);
 
   const setPhase = useCallback((next: VoiceState) => {
     phaseRef.current = next;
     setState(next);
   }, []);
-
-  const movePhase = useCallback(
-    (event: Parameters<typeof transitionVoicePhase>[1]) => {
-      const current = phaseRef.current === "muted" ? "idle" : phaseRef.current;
-      setPhase(transitionVoicePhase(current, event));
-    },
-    [setPhase],
-  );
 
   const applyVoices = useCallback(() => {
     const list = getAvailableVoices();
@@ -145,7 +135,6 @@ export function VoiceAgent() {
   const stopRecognition = useCallback(() => {
     window.clearTimeout(restartTimer.current);
     window.clearTimeout(endpointTimer.current);
-    window.clearTimeout(sttBargeTimer.current);
     const rec = recRef.current;
     recRef.current = null;
     if (!rec) return;
@@ -165,54 +154,24 @@ export function VoiceAgent() {
 
   const teardown = useCallback(() => {
     sessionRef.current = false;
-    requestId.current += 1;
     abortRef.current?.abort();
+    const active = gate.current();
+    if (active) gate.finish(active);
     tts.stop();
     stopRecognition();
     stopMic();
-    detectorRef.current.disarmAgentSpeech();
     committedRef.current = "";
     interimRef.current = "";
-    spokenNowRef.current = "";
     setInterim("");
     setError("");
     setMuted(false);
     mutedRef.current = false;
     setPhase("idle");
-  }, [setPhase, stopMic, stopRecognition, tts]);
-
-  const beginRecognitionRef = useRef<() => void>(() => undefined);
-  const bargeRef = useRef<() => void>(() => undefined);
-  const submitRef = useRef<(text: string) => void>(() => undefined);
-
-  const scheduleEndpoint = useCallback(() => {
-    window.clearTimeout(endpointTimer.current);
-    endpointTimer.current = window.setTimeout(() => {
-      const text = cleanTranscript(`${committedRef.current} ${interimRef.current}`);
-      const echo = isAgentEcho(text, spokenNowRef.current);
-      if (!sessionRef.current || mutedRef.current || echo || utteranceIsNoise(text, confidenceRef.current)) {
-        if (echo) {
-          committedRef.current = "";
-          interimRef.current = "";
-          setInterim("");
-        }
-        return;
-      }
-      if (!detectorRef.current.readyToAnswer(performance.now(), Boolean(text))) {
-        scheduleEndpoint();
-        return;
-      }
-      committedRef.current = "";
-      interimRef.current = "";
-      setInterim("");
-      stopRecognition();
-      submitRef.current(text);
-      window.setTimeout(() => beginRecognitionRef.current(), 80);
-    }, 160);
-  }, [stopRecognition]);
+  }, [gate, setPhase, stopMic, stopRecognition, tts]);
 
   const beginRecognition = useCallback(() => {
-    if (!sessionRef.current || mutedRef.current || !isSpeechRecognitionSupported()) return;
+    if (!sessionRef.current || mutedRef.current || phaseRef.current !== "listening") return;
+    if (!isSpeechRecognitionSupported()) return;
     stopRecognition();
     const rec = createSpeechRecognition();
     if (!rec) {
@@ -226,8 +185,22 @@ export function VoiceAgent() {
     rec.continuous = true;
     rec.maxAlternatives = 1;
     recRef.current = rec;
+    voiceLog("STT_START", "pending");
+
+    const takeFinal = (raw: string) => {
+      if (!acceptsUserAudio(phaseRef.current === "listening" ? "listening" : "speaking")) return;
+      const text = cleanTranscript(raw);
+      if (!text || utteranceIsNoise(text, confidenceRef.current)) return;
+      committedRef.current = "";
+      interimRef.current = "";
+      setInterim("");
+      setPhase("thinking");
+      stopRecognition();
+      askRef.current(text);
+    };
 
     rec.onresult = (event) => {
+      if (phaseRef.current !== "listening") return;
       let finalText = "";
       let live = "";
       for (let i = 0; i < event.results.length; i += 1) {
@@ -241,28 +214,18 @@ export function VoiceAgent() {
       committedRef.current = cleanTranscript(finalText);
       interimRef.current = live.trim();
       const shown = cleanTranscript(`${committedRef.current} ${interimRef.current}`);
-      const agentTalking = phaseRef.current === "speaking" || phaseRef.current === "thinking";
-      const heard = classifyHeard(shown, agentTalking ? spokenNowRef.current : "");
-      if (!shown || heard !== "user") {
-        if (agentTalking) {
-          committedRef.current = "";
-          interimRef.current = "";
-        }
-        setInterim("");
-        window.clearTimeout(sttBargeTimer.current);
-        return;
-      }
+      if (!shown) return;
       setInterim(shown);
-      detectorRef.current.noteTranscript(performance.now());
-      if (agentTalking) {
-        window.clearTimeout(sttBargeTimer.current);
-        sttBargeTimer.current = window.setTimeout(() => bargeRef.current(), 160);
-      }
-      scheduleEndpoint();
+      voiceLog("STT_PARTIAL", "pending", shown);
+      window.clearTimeout(endpointTimer.current);
+      endpointTimer.current = window.setTimeout(() => {
+        if (phaseRef.current !== "listening") return;
+        takeFinal(committedRef.current || interimRef.current);
+      }, 700);
     };
 
     rec.onerror = (event) => {
-      if (!sessionRef.current || mutedRef.current) return;
+      if (!sessionRef.current || mutedRef.current || phaseRef.current !== "listening") return;
       if (event.error === "not-allowed") {
         setPhase("error");
         setError("I can't access your microphone. You can continue through chat instead.");
@@ -272,55 +235,69 @@ export function VoiceAgent() {
         setError("Speech recognition lost its network connection. I'm still listening.");
       }
       window.clearTimeout(restartTimer.current);
-      restartTimer.current = window.setTimeout(() => beginRecognitionRef.current(), 300);
+      restartTimer.current = window.setTimeout(() => listenRef.current(), 300);
     };
 
     rec.onend = () => {
-      if (!sessionRef.current || mutedRef.current || recRef.current !== rec) return;
+      if (!sessionRef.current || mutedRef.current || phaseRef.current !== "listening") return;
+      if (recRef.current !== rec) return;
       window.clearTimeout(restartTimer.current);
-      restartTimer.current = window.setTimeout(() => beginRecognitionRef.current(), 200);
+      restartTimer.current = window.setTimeout(() => listenRef.current(), 200);
     };
 
     try {
       rec.start();
-      if (phaseRef.current !== "speaking" && phaseRef.current !== "thinking" && phaseRef.current !== "error") {
-        setPhase("listening");
-      }
     } catch {
       window.clearTimeout(restartTimer.current);
-      restartTimer.current = window.setTimeout(() => beginRecognitionRef.current(), 400);
+      restartTimer.current = window.setTimeout(() => listenRef.current(), 400);
     }
-  }, [scheduleEndpoint, setPhase, stopRecognition]);
+  }, [setPhase, stopRecognition]);
 
   useEffect(() => {
-    beginRecognitionRef.current = beginRecognition;
+    listenRef.current = beginRecognition;
   }, [beginRecognition]);
 
-  const barge = useCallback(() => {
-    if (!sessionRef.current || mutedRef.current) return;
-    if (phaseRef.current !== "speaking" && phaseRef.current !== "thinking") return;
-    window.clearTimeout(sttBargeTimer.current);
-    requestId.current += 1;
-    abortRef.current?.abort();
-    tts.stop();
-    detectorRef.current.disarmAgentSpeech();
-    spokenNowRef.current = "";
-    movePhase("onset");
-    window.setTimeout(() => {
-      if (phaseRef.current === "interrupted") movePhase("resume");
-    }, 180);
-    trackEvent("user_interrupted", { agentType: "voice" });
-  }, [movePhase, tts]);
-
-  useEffect(() => {
-    bargeRef.current = barge;
-  }, [barge]);
+  const playLine = useCallback(
+    async (turnId: string, line: string) => {
+      setPhase("speaking");
+      voiceLog("TTS_START", turnId);
+      voiceLog("TTS_CHUNK", turnId, line);
+      voiceLog("AUDIO_PLAY_START", turnId);
+      let result: "played" | "ignored" | "stopped" = "stopped";
+      try {
+        result = await tts.speak(line, { voiceURI: voiceUriRef.current, turnId });
+      } catch {
+        setError("I could not speak that answer aloud. You can still read it here.");
+        result = "stopped";
+      }
+      voiceLog("AUDIO_PLAY_COMPLETE", turnId);
+      voiceLog("TTS_COMPLETE", turnId);
+      if (turnId !== "greeting") {
+        voiceLog("TURN_COMPLETE", turnId);
+        gate.finish(turnId);
+      }
+      if (!sessionRef.current || mutedRef.current || result === "ignored") return;
+      setPhase("listening");
+      beginRecognition();
+    },
+    [beginRecognition, gate, setPhase, tts],
+  );
 
   const askBrain = useCallback(
     async (transcript: string) => {
-      const id = ++requestId.current;
-      movePhase("utterance");
+      const turnId = gate.claim(transcript);
+      if (!turnId) {
+        if (sessionRef.current && !mutedRef.current && phaseRef.current === "thinking") {
+          setPhase("listening");
+          beginRecognition();
+        }
+        return;
+      }
+      setPhase("thinking");
+      stopRecognition();
       setError("");
+      voiceLog("TURN", turnId);
+      voiceLog("STT_FINAL", turnId, transcript);
       append({ role: "user", content: transcript });
       trackEvent("voice_message_sent", {
         agentType: "voice",
@@ -328,6 +305,7 @@ export function VoiceAgent() {
         text: transcript.slice(0, 240),
       });
       const started = Date.now();
+      voiceLog("LLM_START", turnId);
       try {
         const history = useConversationStore.getState().window();
         abortRef.current?.abort();
@@ -347,7 +325,7 @@ export function VoiceAgent() {
           speechText?: string;
           knowledgeGap?: boolean;
         };
-        if (id !== requestId.current || !sessionRef.current) return;
+        if (!sessionRef.current || gate.current() !== turnId) return;
         const answer = String(
           data.displayText || data.answer || "I'm having a little trouble getting that response. Give me another try.",
         );
@@ -358,71 +336,28 @@ export function VoiceAgent() {
           conversationId: useConversationStore.getState().conversationId,
           llmLatency: Date.now() - started,
         });
-        spokenNowRef.current = speech;
-        committedRef.current = "";
-        interimRef.current = "";
-        setInterim("");
-        window.clearTimeout(sttBargeTimer.current);
-        detectorRef.current.armAgentSpeech();
-        movePhase("reply");
-        try {
-          await tts.speak(speech, { voiceURI: voiceUriRef.current });
-        } catch {
-          if (id !== requestId.current) return;
-          setError("I could not speak that answer aloud. You can still read it here.");
-          detectorRef.current.disarmAgentSpeech();
-          spokenNowRef.current = "";
-          setPhase("listening");
+        voiceLog("LLM_COMPLETE", turnId);
+        await playLine(turnId, speech);
+      } catch (err) {
+        if (!sessionRef.current || gate.current() !== turnId) return;
+        if (err instanceof DOMException && err.name === "AbortError") {
+          gate.finish(turnId);
           return;
         }
-        if (id !== requestId.current) return;
-        if (isAgentEcho(cleanTranscript(`${committedRef.current} ${interimRef.current}`), speech)) {
-          committedRef.current = "";
-          interimRef.current = "";
-          setInterim("");
-        }
-        detectorRef.current.disarmAgentSpeech();
-        spokenNowRef.current = "";
-        setError("");
-        setPhase(mutedRef.current ? "muted" : "listening");
-      } catch (err) {
-        if (id !== requestId.current) return;
-        if (err instanceof DOMException && err.name === "AbortError") return;
+        gate.finish(turnId);
         setError("I'm having a little trouble getting that response. Give me another try.");
         setPhase("error");
         trackEvent("response_failure", { agentType: "voice" });
       }
     },
-    [append, movePhase, setPhase, tts],
+    [append, beginRecognition, gate, playLine, setPhase, stopRecognition],
   );
 
   useEffect(() => {
-    submitRef.current = (text: string) => {
+    askRef.current = (text: string) => {
       void askBrain(text);
     };
   }, [askBrain]);
-
-  const speakLine = useCallback(
-    async (line: string, id: number) => {
-      spokenNowRef.current = line;
-      committedRef.current = "";
-      interimRef.current = "";
-      setInterim("");
-      window.clearTimeout(sttBargeTimer.current);
-      detectorRef.current.armAgentSpeech();
-      movePhase("reply");
-      try {
-        await tts.speak(line, { voiceURI: voiceUriRef.current || selectPreferredMaleVoice()?.uri });
-      } catch {
-        /* greeting stays on screen */
-      }
-      if (id !== requestId.current) return;
-      detectorRef.current.disarmAgentSpeech();
-      spokenNowRef.current = "";
-      if (!mutedRef.current && sessionRef.current) setPhase("listening");
-    },
-    [movePhase, setPhase, tts],
-  );
 
   useEffect(() => {
     if (!open) {
@@ -437,7 +372,6 @@ export function VoiceAgent() {
     }
     sessionRef.current = true;
     greetedRef.current = voiceGreeted;
-    setPhase("listening");
     trackEvent("voice_opened", { agentType: "voice" });
     trackEvent("voice_session_started", { agentType: "voice", conversationId });
 
@@ -460,24 +394,23 @@ export function VoiceAgent() {
         ctx.createMediaStreamSource(stream).connect(analyser);
         analyserRef.current = analyser;
         const freq = new Uint8Array(analyser.frequencyBinCount);
-        detectorRef.current = createTurnDetector();
         const tick = () => {
           if (!sessionRef.current || !analyserRef.current) return;
           const levelNow = speechLevel(analyserRef.current, freq);
           setLevel(Math.min(1, levelNow * 3.2));
-          if (!mutedRef.current) detectorRef.current.push(levelNow, performance.now());
           rafRef.current = requestAnimationFrame(tick);
         };
         tick();
-        beginRecognitionRef.current();
         if (!greetedRef.current) {
           greetedRef.current = true;
           markVoiceGreeted();
           append({ role: "assistant", content: VOICE_GREETING });
-          const id = ++requestId.current;
-          window.setTimeout(() => {
-            if (!cancelled && sessionRef.current) void speakLine(VOICE_GREETING, id);
-          }, 160);
+          await playLine("greeting", VOICE_GREETING);
+          return;
+        }
+        if (!cancelled && sessionRef.current) {
+          setPhase("listening");
+          beginRecognition();
         }
       } catch {
         if (cancelled) return;
@@ -502,11 +435,11 @@ export function VoiceAgent() {
       track.enabled = !next;
     });
     if (next) {
-      requestId.current += 1;
       abortRef.current?.abort();
+      const active = gate.current();
+      if (active) gate.finish(active);
       tts.stop();
       stopRecognition();
-      detectorRef.current.disarmAgentSpeech();
       setInterim("");
       setPhase("muted");
       return;
@@ -517,7 +450,7 @@ export function VoiceAgent() {
 
   const voiceChoices = useMemo(() => profilesWithVoices(voices), [voices]);
   const fallback = !supported || error.includes("isn't supported");
-  const status = state === "error" ? STATUS.error : STATUS[state];
+  const status = STATUS[state];
 
   return (
     <AnimatePresence>
@@ -570,8 +503,8 @@ export function VoiceAgent() {
 
             <div className="flex shrink-0 flex-col items-center px-4 pt-6">
               <div
-                className={`voice-orb voice-orb--${state === "muted" ? "idle" : state}`}
-                style={{ ["--voice-level" as string]: String(0.35 + level * 0.65) }}
+                className={`voice-orb voice-orb--${state === "muted" || state === "error" ? "idle" : state}`}
+                style={{ ["--voice-level" as string]: String(state === "speaking" ? 0.85 : 0.35 + level * 0.65) }}
                 role="img"
                 aria-label={status}
                 data-voice-state={state}
@@ -611,7 +544,7 @@ export function VoiceAgent() {
                   <p className="mt-1 text-sm leading-relaxed whitespace-pre-wrap text-[var(--text)]">{m.content}</p>
                 </div>
               ))}
-              {interim ? (
+              {interim && state === "listening" ? (
                 <div className="text-right">
                   <p className="text-[10px] uppercase tracking-[0.16em] text-amber-300">Hearing</p>
                   <p className="mt-1 text-sm italic text-[var(--muted)]">{interim}</p>

@@ -11,11 +11,14 @@ export type VoiceOption = {
 
 export type SpeakOptions = {
   voiceURI?: string;
+  turnId?: string;
   onStart?: () => void;
 };
 
+export type PlaybackResult = "played" | "ignored" | "stopped";
+
 export type TtsEngine = {
-  speak: (text: string, options?: SpeakOptions) => Promise<void>;
+  speak: (text: string, options?: SpeakOptions) => Promise<PlaybackResult>;
   stop: () => void;
   getVoices: () => VoiceOption[];
   getPreferredVoice: () => VoiceOption | null;
@@ -99,24 +102,35 @@ function findSynthVoice(uri?: string) {
     : null;
 }
 
-/** Browser SpeechSynthesis. Swap this factory later for ElevenLabs without changing UI. */
+/** One browser utterance at a time. A second speak call does not cancel the first. */
 export function createBrowserTts(): TtsEngine {
   let current: SpeechSynthesisUtterance | null = null;
   let selectedURI = "";
+  let keepAlive = 0;
+
+  const clearKeepAlive = () => {
+    if (!keepAlive) return;
+    window.clearInterval(keepAlive);
+    keepAlive = 0;
+  };
 
   const stop = () => {
+    clearKeepAlive();
     current = null;
     if (typeof window === "undefined") return;
     window.speechSynthesis.cancel();
   };
 
   const speak = (text: string, options: SpeakOptions = {}) =>
-    new Promise<void>((resolve, reject) => {
+    new Promise<PlaybackResult>((resolve, reject) => {
       if (typeof window === "undefined" || !window.speechSynthesis) {
         reject(new Error("unsupported"));
         return;
       }
-      stop();
+      if (current) {
+        resolve("ignored");
+        return;
+      }
       const utterance = new SpeechSynthesisUtterance(text);
       const profile = getVoiceProfile(VOICE_CONFIG.VOICE_ID);
       utterance.lang = profile.language;
@@ -129,29 +143,37 @@ export function createBrowserTts(): TtsEngine {
         utterance.lang = voice.lang || profile.language;
       }
       current = utterance;
-      utterance.onstart = () => options.onStart?.();
-      utterance.onend = () => {
+      let settled = false;
+      const finish = (result: PlaybackResult) => {
+        if (settled) return;
+        settled = true;
         if (current === utterance) current = null;
-        resolve();
+        clearKeepAlive();
+        resolve(result);
       };
+      utterance.onstart = () => options.onStart?.();
+      utterance.onend = () => finish("played");
       utterance.onerror = (event) => {
-        if (current === utterance) current = null;
         const err = (event as SpeechSynthesisErrorEvent).error;
-        if (
-          err === "interrupted" ||
-          err === "canceled" ||
-          err === "not-allowed" ||
-          err === "synthesis-failed" ||
-          err === "synthesis-unavailable"
-        ) {
-          resolve();
+        if (err === "interrupted" || err === "canceled") {
+          finish("stopped");
           return;
         }
+        if (err === "not-allowed" || err === "synthesis-failed" || err === "synthesis-unavailable") {
+          finish("played");
+          return;
+        }
+        if (current === utterance) current = null;
+        clearKeepAlive();
         reject(new Error(err || "tts-error"));
       };
-      window.setTimeout(() => {
-        window.speechSynthesis.speak(utterance);
-      }, 40);
+      window.speechSynthesis.speak(utterance);
+      keepAlive = window.setInterval(() => {
+        const synth = window.speechSynthesis;
+        if (!synth.speaking || synth.paused) return;
+        synth.pause();
+        synth.resume();
+      }, 12000);
     });
 
   return {
