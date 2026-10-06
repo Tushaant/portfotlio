@@ -68,7 +68,11 @@ function oraczenShipped() {
     .filter((part) => part && !/requirement gathering/i.test(part));
   const portfolio = job.metrics.find((m) => /portfolio/i.test(m.label))?.value ?? "$6.4M";
   const list = products.join(", ").replace(/, ([^,]+)$/, ", and $1");
-  return `At Oraczen, Tushant shipped ${list}. That work also includes enterprise retrieval with MCP and a knowledge graph for a large U.S. banking client. The documented portfolio is ${portfolio}.`;
+  return `At Oraczen, Tushant is ${job.role}, ${job.period}. He leads ${list}, along with enterprise retrieval and MCP for a large U.S. banking client. He owns a ${portfolio} portfolio there.`;
+}
+
+function biggestAchievement() {
+  return "The outcome that stands out is his Oraczen scope: a $6.4M agentic AI portfolio for a $12.4B U.S. banking client, with accuracy around 92-95% and P95 latency <1.5s. He has also taken consumer products to scale, including more than a million downloads for Major Kalshi Classes.";
 }
 
 function generalKnowledgeAnswer(q: string): string | null {
@@ -170,8 +174,16 @@ export function classifyIntent(question: string): IntentDecision {
     return { intent: "CONTACT", usePortfolio: false, answer: contactAnswer() };
   }
 
-  if (/\boraczen\b/.test(q) && /\b(ship|shipped|built|build|deliver|launched|products)\b/.test(q)) {
-    return { intent: "PROJECT", usePortfolio: true, answer: oraczenShipped() };
+  if (
+    /\boraczen\b/.test(q) &&
+    /\b(ship|shipped|built|build|deliver|launched|products|work|worked|working|role|do|did)\b/.test(q)
+  ) {
+    const intent = /\b(ship|shipped|built|products)\b/.test(q) ? "PROJECT" : "CAREER";
+    return { intent, usePortfolio: true, answer: oraczenShipped() };
+  }
+
+  if (/\b(biggest|greatest|top|best|standout|proudest)\b/.test(q) && /\b(achievement|accomplishment|win|impact)\b/.test(q)) {
+    return { intent: "PORTFOLIO", usePortfolio: true, answer: biggestAchievement() };
   }
 
   if (/\b(ivy|amey|dairy profit|farm visit)\b/.test(q)) {
@@ -186,7 +198,7 @@ export function classifyIntent(question: string): IntentDecision {
     return { intent: "TECHNICAL", usePortfolio: true };
   }
   if (topic && !mentionsHim(q)) {
-    return { intent: "TECHNICAL", usePortfolio: false, answer: topic.explanation };
+    return { intent: "GENERAL_KNOWLEDGE", usePortfolio: false, answer: topic.explanation };
   }
 
   const general = generalKnowledgeAnswer(q);

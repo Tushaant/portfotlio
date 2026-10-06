@@ -1009,9 +1009,13 @@ body.hologram-light .voice-orb__core {
 .voice-orb--listening .voice-orb__core {
   animation: voice-orb-listen 0.9s ease-in-out infinite, voice-orb-shift 4s ease-in-out infinite;
 }
-.voice-orb--listening .voice-orb__glow {
+.voice-orb--listening .voice-orb__glow,
+.voice-orb--interrupted .voice-orb__glow {
   opacity: 1;
   transform: scale(calc(1 + var(--voice-level, 0.4) * 0.2));
+}
+.voice-orb--interrupted .voice-orb__core {
+  animation: voice-orb-listen 0.9s ease-in-out infinite, voice-orb-shift 4s ease-in-out infinite;
 }
 .voice-orb--thinking .voice-orb__ring {
   animation: voice-orb-think 8s linear infinite;

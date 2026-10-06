@@ -4,6 +4,21 @@
  * A short spike (keyboard, breath, click) must not count as speech.
  */
 
+export type VoicePhase = "idle" | "listening" | "thinking" | "speaking" | "interrupted" | "error";
+
+export type VoiceEvent = "session" | "utterance" | "reply" | "onset" | "resume" | "end" | "fail";
+
+export function transitionVoicePhase(current: VoicePhase, event: VoiceEvent): VoicePhase {
+  if (event === "end") return "idle";
+  if (event === "fail") return "error";
+  if (event === "session") return "listening";
+  if (event === "onset") return current === "speaking" || current === "thinking" ? "interrupted" : current;
+  if (event === "resume") return "listening";
+  if (event === "utterance") return "thinking";
+  if (event === "reply") return "speaking";
+  return current;
+}
+
 export type TurnSample = {
   barge: boolean;
   voiced: boolean;
