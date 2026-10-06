@@ -148,22 +148,8 @@ export function matchGeneralTopic(question: string): GeneralTopic | null {
 }
 
 export function formatGeneralAnswer(topic: GeneralTopic, spoken: boolean) {
-  const general = spoken
-    ? `In general, ${topic.explanation}`
-    : `In general: ${topic.explanation}`;
-  const parts = [general];
-  if (topic.verifiedNote) {
-    parts.push(
-      spoken
-        ? `In Tushant's documented experience, ${topic.verifiedNote}`
-        : `In Tushant's documented experience: ${topic.verifiedNote}`,
-    );
-  } else {
-    parts.push(
-      spoken
-        ? "I'm keeping that as general professional knowledge, not as Tushant's personal implementation unless the portfolio verifies it."
-        : "I am keeping that as general industry knowledge, not as a personal implementation claim for Tushant, unless the portfolio verifies it.",
-    );
-  }
-  return parts.join(spoken ? " " : "\n\n");
+  if (!topic.verifiedNote) return topic.explanation;
+  return spoken
+    ? `${topic.verifiedNote} ${topic.explanation}`
+    : `${topic.verifiedNote}\n\n${topic.explanation}`;
 }

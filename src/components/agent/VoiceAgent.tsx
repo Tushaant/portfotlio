@@ -10,6 +10,7 @@ import { trackEvent } from "@/lib/analytics";
 import { VOICE_CONFIG } from "@/lib/voice-config";
 import {
   VOICE_GREETING,
+  cleanTranscript,
   createBrowserTts,
   createSpeechRecognition,
   getAvailableVoices,
@@ -18,6 +19,7 @@ import {
   selectVoiceForProfile,
   profilesWithVoices,
   subscribeVoices,
+  utteranceIsNoise,
   type SpeechRecognitionLike,
   type VoiceOption,
 } from "@/lib/voice-runtime";
@@ -56,6 +58,11 @@ export function VoiceAgent() {
   const recRef = useRef<SpeechRecognitionLike | null>(null);
   const requestId = useRef(0);
   const listeningRef = useRef(false);
+  const abortRef = useRef<AbortController | null>(null);
+  const pauseTimer = useRef(0);
+  const committedRef = useRef("");
+  const interimRef = useRef("");
+  const confidenceRef = useRef<number | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const rafRef = useRef(0);
   const micStreamRef = useRef<MediaStream | null>(null);
@@ -125,6 +132,7 @@ export function VoiceAgent() {
 
   const cleanupRecognition = useCallback(() => {
     listeningRef.current = false;
+    window.clearTimeout(pauseTimer.current);
     const rec = recRef.current;
     recRef.current = null;
     stopMicMeter();
@@ -145,8 +153,12 @@ export function VoiceAgent() {
 
   const stopAll = useCallback(() => {
     requestId.current += 1;
+    window.clearTimeout(pauseTimer.current);
+    abortRef.current?.abort();
     tts.stop();
     cleanupRecognition();
+    committedRef.current = "";
+    interimRef.current = "";
     setInterim("");
     setError("");
     setState("idle");
@@ -167,26 +179,34 @@ export function VoiceAgent() {
       if (complex) await new Promise((r) => setTimeout(r, 420));
       const started = Date.now();
       try {
-        const history = useConversationStore.getState().window();
-        const controller = new AbortController();
-        const timer = window.setTimeout(() => controller.abort(), 12000);
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          signal: controller.signal,
-          body: JSON.stringify({
-            message: transcript,
-            channel: "voice",
-            history,
-          }),
-        });
-        window.clearTimeout(timer);
-        const data = (await res.json()) as { answer?: string; knowledgeGap?: boolean };
-        if (id !== requestId.current) return;
-        const answer = String(
-          data.answer || "I'm having a little trouble getting that response. Give me another try.",
-        );
-        append({ role: "assistant", content: answer });
+      const history = useConversationStore.getState().window();
+      abortRef.current?.abort();
+      const controller = new AbortController();
+      abortRef.current = controller;
+      const timer = window.setTimeout(() => controller.abort(), 12000);
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
+        body: JSON.stringify({
+          message: transcript,
+          channel: "voice",
+          history,
+        }),
+      });
+      window.clearTimeout(timer);
+      const data = (await res.json()) as {
+        answer?: string;
+        displayText?: string;
+        speechText?: string;
+        knowledgeGap?: boolean;
+      };
+      if (id !== requestId.current) return;
+      const answer = String(
+        data.displayText || data.answer || "I'm having a little trouble getting that response. Give me another try.",
+      );
+      const speech = String(data.speechText || answer);
+      append({ role: "assistant", content: answer });
         trackEvent(data.knowledgeGap ? "knowledge_gap" : "response_success", {
           agentType: "voice",
           conversationId: useConversationStore.getState().conversationId,
@@ -194,7 +214,7 @@ export function VoiceAgent() {
         });
         setState("speaking");
         try {
-          await tts.speak(answer, { voiceURI: selectedVoiceURI });
+          await tts.speak(speech, { voiceURI: selectedVoiceURI });
         } catch {
           if (id !== requestId.current) return;
           setError("I could not speak that answer aloud. You can still read it here or continue in chat.");
@@ -222,12 +242,38 @@ export function VoiceAgent() {
       return;
     }
     requestId.current += 1;
+    abortRef.current?.abort();
     tts.stop();
     cleanupRecognition();
+    committedRef.current = "";
+    interimRef.current = "";
+    confidenceRef.current = null;
     setError("");
     setInterim("");
 
     const rec = createSpeechRecognition();
+    const finishUtterance = (raw: string) => {
+      const uttered = cleanTranscript(raw);
+      window.clearTimeout(pauseTimer.current);
+      if (!rec || utteranceIsNoise(uttered, confidenceRef.current)) {
+        setInterim("");
+        return;
+      }
+      listeningRef.current = false;
+      recRef.current = null;
+      rec.onresult = null;
+      rec.onerror = null;
+      rec.onend = null;
+      try {
+        rec.stop();
+      } catch {
+        /* already stopping */
+      }
+      stopMicMeter();
+      setInterim("");
+      void askBrain(uttered);
+    };
+
     if (!rec) {
       setSupported(false);
       setState("error");
@@ -236,7 +282,7 @@ export function VoiceAgent() {
     }
     rec.lang = VOICE_CONFIG.VOICE_LANGUAGE;
     rec.interimResults = true;
-    rec.continuous = false;
+    rec.continuous = true;
     rec.maxAlternatives = 1;
     recRef.current = rec;
     listeningRef.current = true;
@@ -244,30 +290,36 @@ export function VoiceAgent() {
     setState("listening");
     await startMicMeter();
 
+    const scheduleBoundary = () => {
+      window.clearTimeout(pauseTimer.current);
+      pauseTimer.current = window.setTimeout(() => {
+        const raw = committedRef.current || interimRef.current;
+        committedRef.current = "";
+        interimRef.current = "";
+        finishUtterance(raw);
+      }, 850);
+    };
+
     rec.onresult = (event) => {
       let live = "";
       let finalText = "";
       for (let i = event.resultIndex; i < event.results.length; i += 1) {
-        const piece = event.results[i][0]?.transcript ?? "";
-        if (event.results[i].isFinal) finalText += piece;
-        else live += piece;
+        const alt = event.results[i][0];
+        const piece = alt?.transcript ?? "";
+        if (event.results[i].isFinal) {
+          finalText += piece;
+          if (typeof alt?.confidence === "number") confidenceRef.current = alt.confidence;
+        } else {
+          live += piece;
+        }
       }
-      setInterim(live.trim());
-      const uttered = finalText.trim();
-      if (!uttered) return;
-      setInterim("");
-      listeningRef.current = false;
-      rec.onresult = null;
-      rec.onerror = null;
-      rec.onend = null;
-      recRef.current = null;
-      try {
-        rec.stop();
-      } catch {
-        /* already stopping */
+      if (finalText.trim()) {
+        committedRef.current = cleanTranscript(`${committedRef.current} ${finalText}`);
       }
-      stopMicMeter();
-      void askBrain(uttered);
+      interimRef.current = live.trim();
+      const shown = cleanTranscript(`${committedRef.current} ${interimRef.current}`);
+      setInterim(shown);
+      if (shown) scheduleBoundary();
     };
 
     rec.onerror = (event) => {
@@ -296,6 +348,13 @@ export function VoiceAgent() {
     };
 
     rec.onend = () => {
+      const pending = cleanTranscript(committedRef.current || interimRef.current);
+      if (listeningRef.current && pending && !utteranceIsNoise(pending, confidenceRef.current)) {
+        committedRef.current = "";
+        interimRef.current = "";
+        finishUtterance(pending);
+        return;
+      }
       stopMicMeter();
       if (listeningRef.current) {
         listeningRef.current = false;
@@ -327,6 +386,62 @@ export function VoiceAgent() {
     }
     void listen();
   }, [cleanupRecognition, listen, state]);
+
+  useEffect(() => {
+    if (state !== "speaking") return;
+    let cancelled = false;
+    let frames = 0;
+    let stream: MediaStream | null = null;
+    let ctx: AudioContext | null = null;
+    let raf = 0;
+    const arm = window.setTimeout(() => {
+      void (async () => {
+        if (cancelled || !navigator.mediaDevices?.getUserMedia) return;
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            audio: { echoCancellation: true, noiseSuppression: true },
+          });
+          if (cancelled) {
+            stream.getTracks().forEach((track) => track.stop());
+            return;
+          }
+          ctx = new AudioContext();
+          const analyser = ctx.createAnalyser();
+          analyser.fftSize = 512;
+          ctx.createMediaStreamSource(stream).connect(analyser);
+          const data = new Uint8Array(analyser.fftSize);
+          const tick = () => {
+            if (cancelled) return;
+            analyser.getByteTimeDomainData(data);
+            let sum = 0;
+            for (const n of data) {
+              const v = (n - 128) / 128;
+              sum += v * v;
+            }
+            const rms = Math.sqrt(sum / data.length);
+            frames = rms > 0.22 ? frames + 1 : 0;
+            if (frames >= 8) {
+              cancelled = true;
+              trackEvent("user_interrupted", { agentType: "voice" });
+              void listen();
+              return;
+            }
+            raf = requestAnimationFrame(tick);
+          };
+          tick();
+        } catch {
+          /* barge-in needs a microphone; the orb still interrupts */
+        }
+      })();
+    }, 400);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(arm);
+      cancelAnimationFrame(raf);
+      stream?.getTracks().forEach((track) => track.stop());
+      void ctx?.close().catch(() => undefined);
+    };
+  }, [listen, state]);
 
   useEffect(() => {
     if (!open) {

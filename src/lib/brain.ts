@@ -319,11 +319,9 @@ function hire(channel: AgentChannel): BrainResult {
 function generalFirst(topic: GeneralTopic, channel: AgentChannel, connect: boolean): BrainResult {
   const base = formatGeneralAnswer(topic, channel === "voice");
   const extra =
-    connect && topic.verifiedNote
-      ? ""
-      : connect
-        ? " I don't have a verified personal implementation claim for Tushant on that specific toolset beyond what's in the resume."
-        : "";
+    connect && !topic.verifiedNote
+      ? " I don't have a verified personal implementation claim for Tushant on that specific toolset beyond what's in the resume."
+      : "";
   return {
     answer: spokenWrap(channel, base + extra),
     sources: [`general.${topic.id}`, topic.verifiedNote ? "cms-verified" : "general-only"],
@@ -382,7 +380,11 @@ function signatureAnswer(
 ): BrainResult {
   const users = product.users.slice(0, 6).join(", ");
   const tech = product.capabilities.slice(0, 8).join(", ");
-  const voice = `${product.name} is ${/^[aeiou]/i.test(product.kind) ? "an" : "a"} ${product.kind}${product.client ? ` for ${product.client}` : ""}. ${product.solution} The people in scope include ${users}. The documented technology covers ${tech}. ${product.notes}`;
+  const note = product.notes
+    .split(/(?<=\.)\s+/)
+    .filter((sentence) => !/^do not\b/i.test(sentence.trim()))
+    .join(" ");
+  const voice = `${product.name} is ${/^[aeiou]/i.test(product.kind) ? "an" : "a"} ${product.kind}${product.client ? ` for ${product.client}` : ""}. ${product.solution} The people in scope include ${users}. The documented technology covers ${tech}. ${note}`;
   return {
     answer: spokenWrap(channel, voice),
     sources: [`signature.${product.id}`],

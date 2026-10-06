@@ -4,8 +4,9 @@ import {
   type KnowledgeDoc,
 } from "./cms";
 import { formatGeneralAnswer, matchGeneralTopic } from "./general-knowledge";
-import { resolveSystemPrompt, UNKNOWN_DETAIL } from "./system-prompt";
-import { toSpoken } from "./voice-runtime";
+import { classifyIntent } from "./intent-router";
+import { presentAnswer } from "./speech-renderer";
+import { resolveSystemPrompt } from "./system-prompt";
 import { composeFromBrain } from "./brain";
 import type { AgentChannel, AgentOptions, AgentTurn } from "./agent-types";
 
@@ -264,17 +265,33 @@ function docsInSection(section: string): KnowledgeDoc[] {
   return DOCS.filter((d) => d.section === section);
 }
 
-function formatDocAnswer(doc: KnowledgeDoc, maxChars = 900): string {
-  const lines = doc.text
-    .split("\n")
-    .map((l) => l.trim())
-    .filter(Boolean);
-  let out = "";
-  for (const line of lines) {
-    if (out.length + line.length > maxChars) break;
-    out += (out ? "\n" : "") + line;
+function proseFromDoc(doc: KnowledgeDoc, maxChars = 700): string {
+  const parts: string[] = [];
+  for (const raw of doc.text.split("\n")) {
+    const line = raw.trim();
+    if (!line) continue;
+    if (/^(EMAIL|PHONE|LINKEDIN|RESPONSIBILITIES)\s*:/i.test(line)) continue;
+    const labeled = line.match(
+      /^(COMPANY|ROLE|PERIOD|LOCATION|STATUS|METRICS|TECHNOLOGIES|LESSON|TYPE|ORG|SKILL|TIER|EXPERIENCE)\s*:\s*(.*)$/i,
+    );
+    let sentence = line.replace(/^[-•]\s*/, "");
+    if (labeled) {
+      const key = labeled[1].toUpperCase();
+      const val = labeled[2].trim();
+      if (!val) continue;
+      if (key === "COMPANY") sentence = `This covers ${val}.`;
+      else if (key === "ROLE") sentence = `The role is ${val}.`;
+      else if (key === "PERIOD") sentence = `The time period is ${val}.`;
+      else if (key === "LOCATION") sentence = `The location is ${val}.`;
+      else if (key === "METRICS") sentence = `Documented figures include ${val}.`;
+      else if (key === "TECHNOLOGIES") sentence = `Technologies called out include ${val}.`;
+      else if (key === "LESSON") sentence = val;
+      else sentence = val;
+    }
+    if (parts.join(" ").length + sentence.length > maxChars) break;
+    parts.push(sentence);
   }
-  return out || doc.text.slice(0, maxChars);
+  return parts.join(" ");
 }
 
 function listProjects(): string {
@@ -361,7 +378,6 @@ function smartSummary(): string {
       .map((m) => `${m.label} ${m.prefix || ""}${m.value}${m.suffix || ""}`)
       .join("; ")}.`,
     `He has ${cms.projects.length} documented projects, ${cms.caseStudies.length} case studies, ${cms.skills.length} skill domains, and ${cms.testimonials.length} client testimonials on this site.`,
-    `Contact: ${r.email} · ${r.phone} · ${r.linkedin}`,
   ].join("\n\n");
 }
 
@@ -373,58 +389,23 @@ function conversationalLead(section: string, title: string) {
 }
 
 function synthesizeFromDocs(docs: KnowledgeDoc[]): string {
-  if (!docs.length) {
-    return "";
-  }
-
-  // Single strong doc → full structured answer
-  if (docs.length === 1 || (docs[0] && docs.slice(1).every((d) => d.section !== docs[0].section))) {
-    const primary = docs[0];
-    const related = docs
-      .slice(1, 3)
-      .map((d) => `${d.title}: ${d.text.split("\n")[0]}`);
-    return [
-      conversationalLead(primary.section, primary.title),
-      formatDocAnswer(primary, 720),
-      related.length ? `Related on the site: ${related.join(" ")}` : "",
-    ]
-      .filter(Boolean)
-      .join(" ");
-  }
-
-  // Multiple docs → grouped bullets
-  const bySection = new Map<string, KnowledgeDoc[]>();
-  for (const d of docs) {
-    const list = bySection.get(d.section) || [];
-    list.push(d);
-    bySection.set(d.section, list);
-  }
-
-  const parts: string[] = [
-    `The verified material that matches that question is this.`,
-  ];
-  for (const [section, list] of bySection) {
-    parts.push(`\n[${section}]`);
-    for (const d of list.slice(0, 3)) {
-      const snippet = formatDocAnswer(d, 420);
-      parts.push(`• ${d.title}\n${snippet}`);
-    }
-  }
-  return parts.join("\n");
+  if (!docs.length) return "";
+  const primary = docs[0];
+  const lead = conversationalLead(primary.section, primary.title);
+  const body = [primary, ...docs.slice(1, 2)]
+    .map((doc) => proseFromDoc(doc, 480))
+    .filter(Boolean)
+    .join(" ");
+  return [lead, body].filter(Boolean).join(" ");
 }
 
-function gentleFail(spoken: boolean): { answer: string; sources: string[] } {
-  const r = cms.resume;
-  const answer = spoken
-    ? `${UNKNOWN_DETAIL} You can reach him at ${r.email}, on LinkedIn, or at ${r.phone}.`
-    : [
-        UNKNOWN_DETAIL,
-        "A related verified path is to ask him directly:",
-        `Email: ${r.email}`,
-        `LinkedIn: ${r.linkedin}`,
-        `Phone: ${r.phone}`,
-      ].join("\n");
-  return { answer, sources: ["resume.contact", "agent-fallback"] };
+function gentleFail(): { answer: string; sources: string[]; knowledgeGap: true } {
+  return {
+    answer:
+      "I don't have that information available right now. I can tell you about Tushant's experience, projects, or AI work.",
+    sources: ["agent-fallback"],
+    knowledgeGap: true,
+  };
 }
 
 function hireWhy(): { answer: string; sources: string[] } {
@@ -448,24 +429,31 @@ function hireWhy(): { answer: string; sources: string[] } {
 function resolveFollowUp(question: string, history?: AgentTurn[]) {
   const q = question.trim();
   if (!history?.length) return q;
+  if (/\b(oraczen|ivy|amey|japan|mcp|rag|kubernetes|tushant|voice|married|contact)\b/i.test(q)) return q;
   const short = q.split(/\s+/).length <= 8;
   const lastUser = [...history].reverse().find((t) => t.role === "user");
   const lastAssistant = [...history].reverse().find((t) => t.role === "assistant");
-  if (short && lastUser && /^(and |what about|why|how|his |her |that |this |the |continue|more)/i.test(q)) {
+  if (short && lastUser && /^(and |what about|why|how|his |her |that |this |continue|more)/i.test(q)) {
     return `${lastUser.content}. Follow-up: ${q}`;
   }
-  if (short && lastAssistant && /\b(that|this|it|those|he|his)\b/i.test(q)) {
+  if (short && lastAssistant && /\b(that|this|it|those)\b/i.test(q) && !/\b(he|his)\b/i.test(q)) {
     return `${lastAssistant.content.slice(0, 180)}. Follow-up: ${q}`;
   }
   return q;
 }
 
-function applyChannel<T extends { answer: string; sources: string[] }>(
+function applyChannel<T extends { answer: string; sources: string[]; intent?: string }>(
   result: T,
   channel: AgentChannel,
 ) {
-  if (channel !== "voice") return result;
-  return { ...result, answer: toSpoken(result.answer) };
+  const spokenWords = channel === "voice" ? 90 : 170;
+  const presented = presentAnswer(result.answer, spokenWords);
+  return {
+    ...result,
+    answer: presented.displayText,
+    displayText: presented.displayText,
+    speechText: presented.speechText,
+  };
 }
 
 /** Portfolio site agent. Chat and Voice share this brain. */
@@ -478,17 +466,32 @@ export function answerFromPortfolio(
   knowledgeGap?: boolean;
   topic?: string;
   intent?: string;
+  displayText: string;
+  speechText: string;
 } {
   const channel: AgentChannel = options.channel ?? "chat";
   const spoken = channel === "voice";
   resolveSystemPrompt(cms.voiceAgent.systemPrompt);
 
-  const raw = resolveFollowUp(question, options.history).trim();
+  const decision = classifyIntent(question);
+  if (decision.answer) {
+    return applyChannel(
+      {
+        answer: decision.answer,
+        sources: [`intent.${decision.intent}`],
+        intent: decision.intent,
+        knowledgeGap: decision.intent === "UNKNOWN",
+      },
+      channel,
+    );
+  }
+
+  const raw = (decision.usePortfolio ? resolveFollowUp(question, options.history) : question).trim();
   const q = raw.toLowerCase();
 
   const composed = composeFromBrain(raw, channel);
   if (composed) {
-    return applyChannel(composed, channel);
+    return applyChannel({ ...composed, intent: decision.intent }, channel);
   }
 
   if (!q) {
@@ -718,7 +721,7 @@ export function answerFromPortfolio(
         channel,
       );
     }
-    return applyChannel({ ...gentleFail(spoken), knowledgeGap: true }, channel);
+    return applyChannel({ ...gentleFail(), intent: decision.intent }, channel);
   }
 
   const docs = usable.map((h) => h.doc);
@@ -726,5 +729,5 @@ export function answerFromPortfolio(
   if (general && !/tushant|oraczen|portfolio/i.test(answer)) {
     answer = `${formatGeneralAnswer(general, spoken)}\n\n${answer}`;
   }
-  return applyChannel({ answer, sources: docs.map((d) => d.id) }, channel);
+  return applyChannel({ answer, sources: docs.map((d) => d.id), intent: decision.intent }, channel);
 }
