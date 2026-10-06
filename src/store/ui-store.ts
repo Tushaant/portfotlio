@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import { primeSpeechOutput } from "@/lib/voice-runtime";
 
 export type PortfolioLens = "executive" | "product" | "technical";
 
@@ -29,7 +30,10 @@ export const useUIStore = create<UIState>((set) => ({
   setPreloaderDone: (v) => set({ preloaderDone: v }),
   setPaletteOpen: (v) => set({ paletteOpen: v }),
   setAgentOpen: (v) => set({ agentOpen: v }),
-  setVoiceAgentOpen: (v) => set({ voiceAgentOpen: v }),
+  setVoiceAgentOpen: (v) => {
+    if (v) primeSpeechOutput();
+    set({ voiceAgentOpen: v });
+  },
   setLens: (v) => set({ lens: v }),
   toggleHologram: () =>
     set((s) => ({

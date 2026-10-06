@@ -14,6 +14,9 @@ import {
   VOICE_GREETING,
   cleanTranscript,
   createBrowserTts,
+  getSessionAudioContext,
+  logMobileAudio,
+  releaseSessionAudioContext,
   createSpeechRecognition,
   getAvailableVoices,
   isSpeechRecognitionSupported,
@@ -128,7 +131,7 @@ export function VoiceAgent() {
     analyserRef.current = null;
     micStreamRef.current?.getTracks().forEach((track) => track.stop());
     micStreamRef.current = null;
-    void audioCtxRef.current?.close().catch(() => undefined);
+    releaseSessionAudioContext();
     audioCtxRef.current = null;
     setLevel(0);
   }, []);
@@ -387,7 +390,20 @@ export function VoiceAgent() {
           return;
         }
         micStreamRef.current = stream;
-        const ctx = new AudioContext();
+        const ctx = getSessionAudioContext();
+        if (!ctx) throw new Error("audio-context-unavailable");
+        if (ctx.state === "suspended") {
+          try {
+            await ctx.resume();
+          } catch (error) {
+            console.error("[AUDIO_ERROR] AudioContext.resume rejected", error);
+          }
+        }
+        logMobileAudio({
+          event: "mic-attached",
+          audioContextState: ctx.state,
+          destination: "audioContext.destination",
+        });
         audioCtxRef.current = ctx;
         const analyser = ctx.createAnalyser();
         analyser.fftSize = 1024;
