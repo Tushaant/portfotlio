@@ -13,7 +13,7 @@ export default function ResumePage() {
  const r = cms.resume;
  return (
  <InfoTemplate3D
- eyebrow="RESUME · PDF SOURCE ONLY"
+ eyebrow="RESUME"
  title={r.name}
  subtitle={r.title}
  avatarSrc="/profile/tushant-circle.png"
@@ -93,9 +93,7 @@ export default function ResumePage() {
  </InfoBlock>
 
  <p className="text-center text-xs text-slate-500">
- All resume fields above are parsed from{" "}
-        <code className="text-cyan-400/80">Tushant_Sharma_Resume.pdf</code>.
-        No fabricated content.
+ This page and the downloaded PDF are generated from the same profile as the portfolio. No extra claims are added.
  </p>
  </InfoTemplate3D>
  );

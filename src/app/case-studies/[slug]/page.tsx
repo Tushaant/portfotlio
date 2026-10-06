@@ -45,7 +45,12 @@ export default async function CaseStudyPage({ params }: Props) {
         ))}
       </div>
 
-      <InfoBlock label="CHALLENGE">{c.challenge}</InfoBlock>
+      {c.slug === "agentic-ai-banking-platform" ? (
+        <InfoBlock label="BUSINESS CONTEXT">
+          Oraczen, May 2025 to present. $6.4M agentic portfolio for a $12.4B U.S. banking enterprise. {c.summary}
+        </InfoBlock>
+      ) : null}
+      <InfoBlock label={c.slug === "agentic-ai-banking-platform" ? "CUSTOMER PROBLEM" : "CHALLENGE"}>{c.challenge}</InfoBlock>
       <InfoBlock label="RESEARCH">{c.research}</InfoBlock>
       <InfoBlock label="DISCOVERY">{c.discovery}</InfoBlock>
       <InfoBlock label="STAKEHOLDERS">
@@ -55,7 +60,7 @@ export default async function CaseStudyPage({ params }: Props) {
           ))}
         </ul>
       </InfoBlock>
-      <InfoBlock label="PRIORITIZATION">{c.prioritization}</InfoBlock>
+      <InfoBlock label={c.slug === "agentic-ai-banking-platform" ? "PRODUCT STRATEGY" : "PRIORITIZATION"}>{c.prioritization}</InfoBlock>
       <InfoBlock label="ROADMAP">
         <ol className="list-decimal space-y-1 pl-5">
           {c.roadmap.map((r) => (
@@ -82,8 +87,8 @@ export default async function CaseStudyPage({ params }: Props) {
           ))}
         </ul>
       </InfoBlock>
-      <InfoBlock label="LAUNCH">{c.launch}</InfoBlock>
-      <InfoBlock label="KPIs">
+      <InfoBlock label={c.slug === "agentic-ai-banking-platform" ? "EXECUTION AND GOVERNANCE" : "LAUNCH"}>{c.launch}</InfoBlock>
+      <InfoBlock label={c.slug === "agentic-ai-banking-platform" ? "EVALUATION" : "KPIs"}>
         <div className="flex flex-wrap gap-2">
           {c.kpis.map((k) => (
             <span

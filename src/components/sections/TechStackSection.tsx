@@ -1,52 +1,64 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
 import { cms } from "@/lib/cms";
+import { techEvidence } from "@/data/profile";
 
 export function TechStackSection() {
- return (
- <section className="relative scroll-mt-24 py-24 md:py-32">
- <div className="mx-auto max-w-7xl px-4 md:px-6">
- <p className="font-mono text-xs tracking-[0.3em] text-cyan-300/70">
- 07 · TECH STACK
- </p>
- <h2 className="display mt-3 text-3xl md:text-5xl">
- Holographic <span className="neon-text">toolkit</span>
- </h2>
- <p className="mt-4 max-w-xl text-slate-400">
-          Technologies as holographic chips, grouped exactly as they appear on
-          the resume PDF.
- </p>
+  const [selected, setSelected] = useState("RAG");
+  const evidence = techEvidence(selected);
 
- <div className="mt-12 space-y-8">
- {Object.entries(cms.techStack).map(([group, items], gi) => (
- <div key={group}>
- <h3 className="mb-3 font-mono text-xs tracking-[0.2em] text-slate-500">
- {group.toUpperCase()}
- </h3>
- <div className="flex flex-wrap gap-2.5">
- {(items as string[]).map((item, i) => (
- <motion.span
- key={item}
- initial={{ opacity: 0, y: 10 }}
- whileInView={{ opacity: 1, y: 0 }}
- viewport={{ once: true }}
- transition={{ delay: (gi * 0.02 + i) * 0.02 }}
- whileHover={{
- y: -4,
- boxShadow: "0 0 28px rgba(56,248,255,0.35)",
- }}
- className="glass inline-flex cursor-default items-center rounded-xl px-3.5 py-2 text-sm text-slate-200"
- >
- <span className="mr-2 h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#38F8FF]" />
- {item}
- </motion.span>
- ))}
- </div>
- </div>
- ))}
- </div>
- </div>
- </section>
- );
+  return (
+    <section id="technology" className="relative scroll-mt-24 py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">Technology</p>
+        <h2 className="display mt-3 text-3xl md:text-5xl">Evidence-backed stack</h2>
+        <p className="mt-4 max-w-xl text-[var(--text-muted)]">
+          Select a tool. Levels stay conservative: product ownership only where a portfolio outcome names the tool, otherwise working knowledge.
+        </p>
+        <article className="mt-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5">
+          <p className="text-xs tracking-[0.16em] text-[var(--accent-indigo)]">{evidence.level}</p>
+          <h3 className="mt-2 text-xl text-[var(--text-primary)]">{selected}</h3>
+          <dl className="mt-4 grid gap-3 text-sm md:grid-cols-3">
+            <div>
+              <dt className="text-[var(--text-muted)]">Where</dt>
+              <dd>{evidence.where}</dd>
+            </div>
+            <div>
+              <dt className="text-[var(--text-muted)]">Used for</dt>
+              <dd>{evidence.usedFor}</dd>
+            </div>
+            <div>
+              <dt className="text-[var(--text-muted)]">Project</dt>
+              <dd>{evidence.project}</dd>
+            </div>
+          </dl>
+        </article>
+        <div className="mt-10 space-y-8">
+          {Object.entries(cms.techStack).map(([group, items]) => (
+            <div key={group}>
+              <h3 className="mb-3 text-xs tracking-[0.2em] text-[var(--text-muted)]">{group.toUpperCase()}</h3>
+              <div className="flex flex-wrap gap-2">
+                {(items as string[]).map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() => setSelected(item)}
+                    aria-pressed={selected === item}
+                    className={`rounded-full border px-3 py-2 text-sm ${
+                      selected === item
+                        ? "border-[var(--accent-violet)] text-[var(--text-primary)]"
+                        : "border-[var(--border)] text-[var(--text-secondary)]"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }

@@ -49,14 +49,14 @@ export function ContactSection() {
  return (
  <section id="contact" className="relative scroll-mt-24 py-24 md:py-32">
  <div className="mx-auto max-w-7xl px-4 md:px-6">
- <p className="font-mono text-xs tracking-[0.3em] text-cyan-300/70">
- 09 · COMMUNICATION CONSOLE
+ <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">
+ Contact
  </p>
  <h2 className="display mt-3 text-3xl md:text-5xl">
- Open a <span className="neon-text">channel</span>
+ Let&apos;s build something useful
  </h2>
  <p className="mt-4 max-w-xl text-slate-400">
- Send a message, download the resume, or connect directly.
+ Open to conversations around AI product leadership, enterprise AI, product strategy, and high-impact product opportunities.
  </p>
 
  <div className="mt-12 grid gap-6 lg:grid-cols-2">
