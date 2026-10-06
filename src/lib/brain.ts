@@ -380,7 +380,11 @@ function signatureAnswer(
 ): BrainResult {
   const users = product.users.slice(0, 6).join(", ");
   const tech = product.capabilities.slice(0, 8).join(", ");
-  const voice = `${product.name} is ${/^[aeiou]/i.test(product.kind) ? "an" : "a"} ${product.kind}${product.client ? ` for ${product.client}` : ""}. ${product.solution} The people in scope include ${users}. The documented technology covers ${tech}. ${product.notes}`;
+  const note = product.notes
+    .split(/(?<=\.)\s+/)
+    .filter((sentence) => !/^do not\b/i.test(sentence.trim()))
+    .join(" ");
+  const voice = `${product.name} is ${/^[aeiou]/i.test(product.kind) ? "an" : "a"} ${product.kind}${product.client ? ` for ${product.client}` : ""}. ${product.solution} The people in scope include ${users}. The documented technology covers ${tech}. ${note}`;
   return {
     answer: spokenWrap(channel, voice),
     sources: [`signature.${product.id}`],
