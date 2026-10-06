@@ -185,6 +185,8 @@ export function createSpeechRecognition() {
   return Ctor ? new Ctor() : null;
 }
 
+export type SpeechAlt = { transcript: string; confidence?: number };
+
 export type SpeechRecognitionLike = {
   lang: string;
   interimResults: boolean;
@@ -193,10 +195,31 @@ export type SpeechRecognitionLike = {
   start: () => void;
   stop: () => void;
   abort: () => void;
-  onresult: ((ev: Event & { resultIndex: number; results: { length: number; [i: number]: { isFinal: boolean; [j: number]: { transcript: string } } } }) => void) | null;
+  onresult:
+    | ((ev: Event & {
+        resultIndex: number;
+        results: { length: number; [i: number]: { isFinal: boolean; [j: number]: SpeechAlt } };
+      }) => void)
+    | null;
   onerror: ((ev: Event & { error: string }) => void) | null;
   onend: (() => void) | null;
 };
+
+export function cleanTranscript(text: string) {
+  return text
+    .replace(/\s+/g, " ")
+    .replace(/^(um+|uh+|hmm+|er+)\b[,.\s]*/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+export function utteranceIsNoise(text: string, confidence: number | null) {
+  if (!text || text.length < 2) return true;
+  const words = text.split(/\s+/).filter(Boolean);
+  if (words.length === 1 && /^(um+|uh+|hmm+|er+)$/i.test(words[0])) return true;
+  if (confidence !== null && confidence > 0 && confidence < 0.35 && words.length < 3) return true;
+  return false;
+}
 
 export function getSpeechRecognitionCtor(): (new () => SpeechRecognitionLike) | null {
   if (typeof window === "undefined") return null;

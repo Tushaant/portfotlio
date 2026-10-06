@@ -319,11 +319,9 @@ function hire(channel: AgentChannel): BrainResult {
 function generalFirst(topic: GeneralTopic, channel: AgentChannel, connect: boolean): BrainResult {
   const base = formatGeneralAnswer(topic, channel === "voice");
   const extra =
-    connect && topic.verifiedNote
-      ? ""
-      : connect
-        ? " I don't have a verified personal implementation claim for Tushant on that specific toolset beyond what's in the resume."
-        : "";
+    connect && !topic.verifiedNote
+      ? " I don't have a verified personal implementation claim for Tushant on that specific toolset beyond what's in the resume."
+      : "";
   return {
     answer: spokenWrap(channel, base + extra),
     sources: [`general.${topic.id}`, topic.verifiedNote ? "cms-verified" : "general-only"],
