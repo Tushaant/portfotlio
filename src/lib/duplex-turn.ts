@@ -110,6 +110,9 @@ const FILLERS = new Set([
   "a",
 ]);
 
+/** Words that start a correction even when they are only one or two letters. */
+const INTERRUPTS = new Set(["no", "nah", "wait", "stop", "hold", "actually", "sorry", "wrong"]);
+
 function normalizeHeard(text: string) {
   return text
     .toLowerCase()
@@ -118,17 +121,25 @@ function normalizeHeard(text: string) {
     .trim();
 }
 
-/** True when the recognizer is hearing the agent, including a short "yes". */
+function wordsOf(text: string) {
+  return normalizeHeard(text).split(" ").filter(Boolean);
+}
+
+/** True when every heard word is a whole word of the line being spoken. */
 export function isAgentEcho(heard: string, agentText: string) {
-  const h = normalizeHeard(heard);
-  const a = normalizeHeard(agentText);
-  if (!h || !a) return false;
-  if (a.includes(h)) return true;
-  const words = h.split(" ").filter(Boolean);
-  if (!words.length) return false;
-  if (words.every((word) => a.includes(word))) return true;
-  const agentStartsYes = /^(yes|yeah|ok|okay|exactly|right)\b/.test(a);
-  if (agentStartsYes && /^(yes|yeah|yep|ya|ok|okay|exactly|right)\b/.test(h) && words.length <= 3) return true;
+  const heardWords = wordsOf(heard);
+  const agentWords = wordsOf(agentText);
+  if (!heardWords.length || !agentWords.length) return false;
+  const agentSet = new Set(agentWords);
+  if (heardWords.every((word) => agentSet.has(word))) return true;
+  const agentStartsYes = ["yes", "yeah", "ok", "okay", "exactly", "right"].includes(agentWords[0]);
+  if (
+    agentStartsYes &&
+    heardWords.length <= 3 &&
+    heardWords.every((word) => FILLERS.has(word) || agentSet.has(word))
+  ) {
+    return true;
+  }
   return false;
 }
 
@@ -139,15 +150,17 @@ export type HeardKind = "echo" | "noise" | "user";
  * "Yes" played through the speaker is echo. "Wait" or "IVY" is the visitor.
  */
 export function classifyHeard(heard: string, agentText: string): HeardKind {
-  const h = normalizeHeard(heard);
-  if (!h || h.length < 2) return "noise";
-  if (agentText && isAgentEcho(h, agentText)) return "echo";
-  const words = h.split(" ").filter(Boolean);
+  const heardWords = wordsOf(heard);
+  if (!heardWords.length) return "noise";
+  if (agentText && isAgentEcho(heard, agentText)) return "echo";
   if (agentText) {
-    const novel = words.filter((word) => word.length > 2 && !normalizeHeard(agentText).includes(word));
-    return novel.length ? "user" : "echo";
+    const agentSet = new Set(wordsOf(agentText));
+    const novel = heardWords.filter((word) => !agentSet.has(word) && !FILLERS.has(word));
+    if (novel.some((word) => INTERRUPTS.has(word) || word.length > 2)) return "user";
+    return "echo";
   }
-  const meaningful = words.filter((word) => !FILLERS.has(word) && word.length > 2);
+  if (heardWords.some((word) => INTERRUPTS.has(word))) return "user";
+  const meaningful = heardWords.filter((word) => !FILLERS.has(word) && word.length > 2);
   return meaningful.length ? "user" : "noise";
 }
 

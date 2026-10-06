@@ -10,6 +10,8 @@ import { FluidVoiceOrb } from "@/components/agent/FluidVoiceOrb";
 import { trackEvent } from "@/lib/analytics";
 import { VOICE_CONFIG } from "@/lib/voice-config";
 import { acceptsUserAudio, createTurnGate, voiceLog, type HalfPhase } from "@/lib/half-duplex";
+import { classifyHeard } from "@/lib/duplex-turn";
+import { executiveBrief } from "@/data/profile";
 import {
   VOICE_GREETING,
   cleanTranscript,
@@ -36,6 +38,7 @@ const STATUS: Record<VoiceState, string> = {
   listening: "Listening...",
   thinking: "Thinking...",
   speaking: "Speaking...",
+  interrupted: "Listening...",
   muted: "Muted",
   error: "Something went wrong. Try again.",
 };
@@ -57,6 +60,8 @@ function speechLevel(analyser: AnalyserNode, freq: Uint8Array) {
 
 export function VoiceAgent() {
   const open = useUIStore((s) => s.voiceAgentOpen);
+  const voiceCue = useUIStore((s) => s.voiceCue);
+  const setBriefSpeaking = useUIStore((s) => s.setBriefSpeaking);
   const setOpen = useUIStore((s) => s.setVoiceAgentOpen);
   const setChatOpen = useUIStore((s) => s.setAgentOpen);
   const turns = useConversationStore((s) => s.turns);
@@ -94,12 +99,18 @@ export function VoiceAgent() {
   const micStreamRef = useRef<MediaStream | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const greetedRef = useRef(false);
+  const readyRef = useRef(false);
+  const agentLineRef = useRef("");
+  const bargedRef = useRef(false);
   const listenRef = useRef<() => void>(() => undefined);
   const askRef = useRef<(text: string) => void>(() => undefined);
+  const briefRef = useRef<() => void>(() => undefined);
 
   const setPhase = useCallback((next: VoiceState) => {
+    if (phaseRef.current === next) return;
     phaseRef.current = next;
     setState(next);
+    voiceLog("VOICE_STATE", next);
   }, []);
 
   const applyVoices = useCallback(() => {
@@ -158,6 +169,9 @@ export function VoiceAgent() {
 
   const teardown = useCallback(() => {
     sessionRef.current = false;
+    readyRef.current = false;
+    bargedRef.current = false;
+    agentLineRef.current = "";
     abortRef.current?.abort();
     const active = gate.current();
     if (active) gate.finish(active);
@@ -170,11 +184,14 @@ export function VoiceAgent() {
     setError("");
     setMuted(false);
     mutedRef.current = false;
+    setBriefSpeaking(false);
     setPhase("idle");
-  }, [gate, setPhase, stopMic, stopRecognition, tts]);
+  }, [gate, setBriefSpeaking, setPhase, stopMic, stopRecognition, tts]);
 
   const beginRecognition = useCallback(() => {
-    if (!sessionRef.current || mutedRef.current || phaseRef.current !== "listening") return;
+    if (!sessionRef.current || mutedRef.current) return;
+    const phase = phaseRef.current;
+    if (phase === "idle" || phase === "error" || phase === "muted") return;
     if (!isSpeechRecognitionSupported()) return;
     stopRecognition();
     const rec = createSpeechRecognition();
@@ -189,25 +206,58 @@ export function VoiceAgent() {
     rec.continuous = true;
     rec.maxAlternatives = 1;
     recRef.current = rec;
-    voiceLog("STT_START", "pending");
+    committedRef.current = "";
+    interimRef.current = "";
+    voiceLog("STT", "pending", "start");
 
     const takeFinal = (raw: string) => {
-      if (!acceptsUserAudio(phaseRef.current === "listening" ? "listening" : "speaking")) return;
+      if (!acceptsUserAudio(phaseRef.current as HalfPhase)) return;
       const text = cleanTranscript(raw);
-      if (!text || utteranceIsNoise(text, confidenceRef.current)) return;
+      if (!text) return;
+      const interrupt = /^(no|nah|wait|stop|hold|actually|sorry|wrong)\b/i.test(text);
+      if (!interrupt && utteranceIsNoise(text, confidenceRef.current)) {
+        if (phaseRef.current === "interrupted") setPhase("listening");
+        return;
+      }
+      const kind = classifyHeard(text, "");
+      if (kind !== "user") {
+        if (phaseRef.current === "interrupted") setPhase("listening");
+        return;
+      }
       committedRef.current = "";
       interimRef.current = "";
       setInterim("");
+      bargedRef.current = false;
+      voiceLog("STT", "final", text);
+      setPhase("listening");
       setPhase("thinking");
       stopRecognition();
       askRef.current(text);
     };
 
+    const bargeIn = () => {
+      if (bargedRef.current) return;
+      if (phaseRef.current !== "speaking" && phaseRef.current !== "thinking") return;
+      bargedRef.current = true;
+      voiceLog("VAD", "onset", "user speech detected");
+      voiceLog("BARGE_IN", gate.current() ?? "speaking", "triggered");
+      const active = gate.current();
+      if (active) gate.finish(active);
+      abortRef.current?.abort();
+      tts.stop();
+      agentLineRef.current = "";
+      setBriefSpeaking(false);
+      voiceLog("TTS", "abort", "abort");
+      voiceLog("AUDIO", "playback", "playback stopped");
+      setPhase("interrupted");
+    };
+
     rec.onresult = (event) => {
-      if (phaseRef.current !== "listening") return;
+      const phaseNow = phaseRef.current;
+      if (phaseNow === "idle" || phaseNow === "error" || phaseNow === "muted") return;
       let finalText = "";
       let live = "";
-      for (let i = 0; i < event.results.length; i += 1) {
+      for (let i = event.resultIndex; i < event.results.length; i += 1) {
         const alt = event.results[i][0];
         const piece = alt?.transcript ?? "";
         if (event.results[i].isFinal) {
@@ -215,26 +265,40 @@ export function VoiceAgent() {
           if (typeof alt?.confidence === "number") confidenceRef.current = alt.confidence;
         } else live += piece;
       }
-      committedRef.current = cleanTranscript(finalText);
+      if (finalText) {
+        committedRef.current = cleanTranscript(`${committedRef.current} ${finalText}`);
+      }
       interimRef.current = live.trim();
       const shown = cleanTranscript(`${committedRef.current} ${interimRef.current}`);
       if (!shown) return;
+      const kind = classifyHeard(shown, agentLineRef.current);
+      if ((phaseNow === "speaking" || phaseNow === "thinking") && kind !== "user") return;
+      if (kind === "user" && (phaseNow === "speaking" || phaseNow === "thinking")) {
+        bargeIn();
+      }
+      if (!acceptsUserAudio(phaseRef.current as HalfPhase)) return;
       setInterim(shown);
-      voiceLog("STT_PARTIAL", "pending", shown);
+      voiceLog("STT", "partial", shown);
+      const finalNow = Boolean(finalText) && !interimRef.current;
       window.clearTimeout(endpointTimer.current);
+      if (finalNow) {
+        takeFinal(committedRef.current);
+        return;
+      }
       endpointTimer.current = window.setTimeout(() => {
-        if (phaseRef.current !== "listening") return;
+        if (!acceptsUserAudio(phaseRef.current as HalfPhase)) return;
         takeFinal(committedRef.current || interimRef.current);
       }, 700);
     };
 
     rec.onerror = (event) => {
-      if (!sessionRef.current || mutedRef.current || phaseRef.current !== "listening") return;
+      if (!sessionRef.current || mutedRef.current) return;
       if (event.error === "not-allowed") {
         setPhase("error");
         setError("I can't access your microphone. You can continue through chat instead.");
         return;
       }
+      if (event.error === "aborted" || event.error === "no-speech") return;
       if (event.error === "network") {
         setError("Speech recognition lost its network connection. I'm still listening.");
       }
@@ -243,8 +307,10 @@ export function VoiceAgent() {
     };
 
     rec.onend = () => {
-      if (!sessionRef.current || mutedRef.current || phaseRef.current !== "listening") return;
+      if (!sessionRef.current || mutedRef.current) return;
       if (recRef.current !== rec) return;
+      const phaseNow = phaseRef.current;
+      if (phaseNow === "idle" || phaseNow === "error" || phaseNow === "muted") return;
       window.clearTimeout(restartTimer.current);
       restartTimer.current = window.setTimeout(() => listenRef.current(), 200);
     };
@@ -255,7 +321,7 @@ export function VoiceAgent() {
       window.clearTimeout(restartTimer.current);
       restartTimer.current = window.setTimeout(() => listenRef.current(), 400);
     }
-  }, [setPhase, stopRecognition]);
+  }, [gate, setBriefSpeaking, setPhase, stopRecognition, tts]);
 
   useEffect(() => {
     listenRef.current = beginRecognition;
@@ -263,10 +329,13 @@ export function VoiceAgent() {
 
   const playLine = useCallback(
     async (turnId: string, line: string) => {
+      if (!sessionRef.current || bargedRef.current) return;
+      agentLineRef.current = line;
       setPhase("speaking");
-      voiceLog("TTS_START", turnId);
-      voiceLog("TTS_CHUNK", turnId, line);
-      voiceLog("AUDIO_PLAY_START", turnId);
+      if (turnId === "brief") setBriefSpeaking(true);
+      if (!recRef.current) beginRecognition();
+      voiceLog("TTS", turnId, "start");
+      voiceLog("AUDIO_PLAYBACK", turnId, "start");
       let result: "played" | "ignored" | "stopped" = "stopped";
       try {
         result = await tts.speak(line, { voiceURI: voiceUriRef.current, turnId });
@@ -274,17 +343,29 @@ export function VoiceAgent() {
         setError("I could not speak that answer aloud. You can still read it here.");
         result = "stopped";
       }
-      voiceLog("AUDIO_PLAY_COMPLETE", turnId);
-      voiceLog("TTS_COMPLETE", turnId);
-      if (turnId !== "greeting") {
-        voiceLog("TURN_COMPLETE", turnId);
+      if (turnId === "brief") setBriefSpeaking(false);
+      if (bargedRef.current || result === "stopped") {
+        voiceLog("AUDIO_PLAYBACK", turnId, "stopped");
+        return;
+      }
+      agentLineRef.current = "";
+      if (result !== "played") {
+        if (sessionRef.current && !mutedRef.current) {
+          setPhase("listening");
+          beginRecognition();
+        }
+        return;
+      }
+      voiceLog("AUDIO_PLAYBACK", turnId, "complete");
+      voiceLog("TTS", turnId, "complete");
+      if (turnId !== "greeting" && turnId !== "brief") {
         gate.finish(turnId);
       }
-      if (!sessionRef.current || mutedRef.current || result === "ignored") return;
+      if (!sessionRef.current || mutedRef.current || result !== "played") return;
       setPhase("listening");
       beginRecognition();
     },
-    [beginRecognition, gate, setPhase, tts],
+    [beginRecognition, gate, setBriefSpeaking, setPhase, tts],
   );
 
   const askBrain = useCallback(
@@ -298,10 +379,10 @@ export function VoiceAgent() {
         return;
       }
       setPhase("thinking");
-      stopRecognition();
+      if (!recRef.current) beginRecognition();
       setError("");
-      voiceLog("TURN", turnId);
-      voiceLog("STT_FINAL", turnId, transcript);
+      voiceLog("LLM", turnId, "start");
+      voiceLog("STT", turnId, transcript);
       append({ role: "user", content: transcript });
       trackEvent("voice_message_sent", {
         agentType: "voice",
@@ -340,7 +421,7 @@ export function VoiceAgent() {
           conversationId: useConversationStore.getState().conversationId,
           llmLatency: Date.now() - started,
         });
-        voiceLog("LLM_COMPLETE", turnId);
+        voiceLog("LLM", turnId, "complete");
         await playLine(turnId, speech);
       } catch (err) {
         if (!sessionRef.current || gate.current() !== turnId) return;
@@ -354,7 +435,7 @@ export function VoiceAgent() {
         trackEvent("response_failure", { agentType: "voice" });
       }
     },
-    [append, beginRecognition, gate, playLine, setPhase, stopRecognition],
+    [append, beginRecognition, gate, playLine, setPhase],
   );
 
   useEffect(() => {
@@ -362,6 +443,26 @@ export function VoiceAgent() {
       void askBrain(text);
     };
   }, [askBrain]);
+
+  useEffect(() => {
+    briefRef.current = () => {
+      if (!sessionRef.current || !readyRef.current) return;
+      abortRef.current?.abort();
+      const active = gate.current();
+      if (active) gate.finish(active);
+      tts.stop();
+      bargedRef.current = false;
+      agentLineRef.current = "";
+      append({ role: "assistant", content: executiveBrief.text });
+      void playLine("brief", executiveBrief.speech);
+    };
+  }, [append, gate, playLine, tts]);
+
+  useEffect(() => {
+    if (!open || voiceCue !== "brief" || !readyRef.current) return;
+    useUIStore.setState({ voiceCue: null });
+    briefRef.current();
+  }, [open, voiceCue]);
 
   useEffect(() => {
     if (!open) {
@@ -418,6 +519,15 @@ export function VoiceAgent() {
           rafRef.current = requestAnimationFrame(tick);
         };
         tick();
+        readyRef.current = true;
+        if (cancelled || !sessionRef.current) return;
+        const intent = useUIStore.getState().voiceCue ?? "talk";
+        useUIStore.setState({ voiceCue: null });
+        if (intent === "brief") {
+          append({ role: "assistant", content: executiveBrief.text });
+          await playLine("brief", executiveBrief.speech);
+          return;
+        }
         if (!greetedRef.current) {
           greetedRef.current = true;
           markVoiceGreeted();

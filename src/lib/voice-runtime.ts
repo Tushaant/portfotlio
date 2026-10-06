@@ -34,6 +34,7 @@ export function audioDevice() {
 }
 
 export function logMobileAudio(fields: Record<string, unknown>) {
+  if (process.env.NODE_ENV === "production") return;
   const device = audioDevice();
   console.info(
     `[MOBILE_AUDIO] ${JSON.stringify({
@@ -121,7 +122,7 @@ export function primeSpeechOutput() {
   };
   console.info("[TTS] unlock mimeType=speechSynthesis/utterance bytes=1 codec=browser-tts channels=1");
   synth.speak(unlock);
-  console.info("[AUDIO] unlock speak() requested");
+  logMobileAudio({ event: "unlock-requested", playRequested: true });
   logMobileAudio({
     event: "prime",
     mimeType: "speechSynthesis/utterance",
@@ -226,6 +227,7 @@ export function createBrowserTts(): TtsEngine {
   let current: SpeechSynthesisUtterance | null = null;
   let selectedURI = "";
   let keepAlive = 0;
+  let generation = 0;
 
   const clearKeepAlive = () => {
     if (!keepAlive) return;
@@ -234,6 +236,7 @@ export function createBrowserTts(): TtsEngine {
   };
 
   const stop = () => {
+    generation += 1;
     clearKeepAlive();
     current = null;
     if (typeof window === "undefined") return;
@@ -262,9 +265,11 @@ export function createBrowserTts(): TtsEngine {
         utterance.lang = voice.lang || profile.language;
       }
       current = utterance;
+      const gen = generation;
       let active = utterance;
       let settled = false;
       let startWatch = 0;
+      const stale = () => gen !== generation;
       const finish = (result: PlaybackResult) => {
         if (settled) return;
         settled = true;
@@ -294,17 +299,16 @@ export function createBrowserTts(): TtsEngine {
         speaking: window.speechSynthesis.speaking,
         pending: window.speechSynthesis.pending,
       });
-      console.info(`[TTS] ${JSON.stringify({ event: "speak", turnId: options.turnId ?? "", ...describe() })}`);
+      logMobileAudio({ event: "speak", turnId: options.turnId ?? "", ...describe() });
       utterance.onstart = () => {
+        if (stale()) return;
         started = true;
-        console.info(`[AUDIO] playback started ${JSON.stringify(describe())}`);
         logMobileAudio({ event: "playback-start", playRequested: true, playStarted: true, ...describe() });
         options.onStart?.();
       };
       utterance.onend = () => {
-        console.info(`[AUDIO] playback ended ${JSON.stringify(describe())}`);
-        logMobileAudio({ event: "playback-end", playStarted: started, ...describe() });
-        finish("played");
+        logMobileAudio({ event: "playback-end", playStarted: started, stopped: stale(), ...describe() });
+        finish(stale() ? "stopped" : "played");
       };
       const queueUtterance = (next: SpeechSynthesisUtterance) => {
         const context = getSessionAudioContext();
@@ -320,6 +324,10 @@ export function createBrowserTts(): TtsEngine {
         window.speechSynthesis.speak(next);
       };
       utterance.onerror = (event) => {
+        if (stale()) {
+          finish("stopped");
+          return;
+        }
         const err = (event as SpeechSynthesisErrorEvent).error || "unknown";
         console.error("[AUDIO_ERROR] speechSynthesis", err);
         logMobileAudio({ event: "playback-error", playRequested: true, playStarted: started, error: err, ...describe() });
@@ -340,7 +348,7 @@ export function createBrowserTts(): TtsEngine {
           again.onerror = utterance.onerror;
           active = again;
           current = again;
-          console.info("[AUDIO] retry speak() after not-allowed");
+          logMobileAudio({ event: "retry-not-allowed", turnId: options.turnId ?? "" });
           queueUtterance(again);
           return;
         }
