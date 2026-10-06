@@ -22,7 +22,7 @@ export function GlobalMotionBackground() {
  className="pointer-events-none fixed inset-0 -z-20 overflow-hidden"
  aria-hidden
  >
- <div className="absolute inset-0 opacity-[0.92]">
+ <div className={`absolute inset-0 ${light ? "opacity-[0.2]" : "opacity-[0.92]"}`}>
  <MotionScene />
  </div>
 
@@ -42,7 +42,7 @@ export function GlobalMotionBackground() {
  <div
  className={`absolute inset-0 ${
  light
- ? "bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0.55)_62%,rgba(255,255,255,0.88)_100%)]"
+ ? "bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.82)_0%,rgba(255,255,255,0.9)_58%,rgba(255,255,255,0.96)_100%)]"
  : "bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.35)_50%,rgba(0,0,0,0.82)_100%)]"
  }`}
  />

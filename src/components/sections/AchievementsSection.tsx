@@ -92,10 +92,10 @@ export function AchievementsSection() {
     <section id="achievements" className="relative scroll-mt-24 py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <p className="font-mono text-xs tracking-[0.3em] text-[rgba(var(--accent-rgb),0.8)]">
-          05 · TROPHY ROOM
+          13 · SELECTED SCALE & ACHIEVEMENTS
         </p>
         <h2 className="display mt-3 text-3xl md:text-5xl">
-          Unlocked <span className="neon-text">achievements</span>
+          Selected scale <span className="neon-text">& achievements</span>
         </h2>
         <p className="mt-4 max-w-2xl text-slate-400">
           Highlighted mobile scale: Veda Academy at 1L+ downloads and Major

@@ -5,9 +5,10 @@ import { executiveBrief } from "@/data/profile";
 import { useUIStore } from "@/store/ui-store";
 
 export function BriefSection() {
-  const setVoiceOpen = useUIStore((state) => state.setVoiceAgentOpen);
+  const requestVoice = useUIStore((state) => state.requestVoice);
+  const speaking = useUIStore((state) => state.briefSpeaking);
   return (
-    <section id="brief" className="scroll-mt-24 py-20 md:py-28">
+    <div id="brief" className="scroll-mt-24 pt-16">
       <div className="mx-auto max-w-3xl px-4 md:px-6">
         <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">Brief</p>
         <h2 className="display mt-3 text-3xl text-[var(--text-primary)] md:text-5xl">{executiveBrief.title}</h2>
@@ -15,10 +16,11 @@ export function BriefSection() {
         <div className="mt-8 flex flex-wrap gap-3">
           <button
             type="button"
-            onClick={() => setVoiceOpen(true)}
+            onClick={() => requestVoice("brief")}
+            aria-pressed={speaking}
             className="inline-flex min-h-11 items-center rounded-full bg-[var(--accent-violet)] px-5 text-sm text-white"
           >
-            Listen to brief
+            {speaking ? "Speaking..." : "Listen to brief"}
           </button>
           <Link href="/resume" className="inline-flex min-h-11 items-center rounded-full border border-[var(--border)] px-5 text-sm text-[var(--text-secondary)]">
             View resume
@@ -28,6 +30,6 @@ export function BriefSection() {
           Ask Tushant AI for the 30-second brief. The assistant reads it from the same profile as this page.
         </p>
       </div>
-    </section>
+    </div>
   );
 }

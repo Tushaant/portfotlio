@@ -55,7 +55,7 @@ export function Header() {
     >
       <div
         className={cn(
-          "mx-auto grid max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 md:px-6 rounded-2xl transition-all duration-300",
+          "mx-auto grid w-full min-w-0 max-w-7xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-4 md:px-6 rounded-2xl transition-all duration-300",
           scrolled
             ? "header-solid mx-3 md:mx-auto shadow-[0_8px_40px_rgba(0,0,0,0.45)]"
             : "bg-transparent",
@@ -63,7 +63,7 @@ export function Header() {
       >
         <Link
           href="/#top"
-          className="group flex items-center gap-2.5 justify-self-start py-2"
+          className="group flex min-w-0 items-center gap-2.5 justify-self-start py-2"
         >
           <motion.span
             className="relative flex h-9 w-9 overflow-hidden rounded-full border border-[color:rgba(var(--accent-rgb),0.55)] bg-[var(--surface)]"

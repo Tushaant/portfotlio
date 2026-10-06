@@ -11,10 +11,10 @@ export function ProjectsSection() {
     <section id="projects" className="relative scroll-mt-24 py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <p className="font-mono text-xs tracking-[0.3em] text-cyan-300/70">
-          03 · DELIVERED PROJECTS
+          10 · PRODUCTS
         </p>
         <h2 className="display mt-3 text-3xl md:text-5xl">
-          {cms.projects.length} shipped{" "}
+          {cms.projects.length}{" "}
           <span className="neon-text">products</span>
         </h2>
         <p className="mt-4 max-w-2xl text-slate-400">

@@ -50,7 +50,7 @@ export function ContactSection() {
  <section id="contact" className="relative scroll-mt-24 py-24 md:py-32">
  <div className="mx-auto max-w-7xl px-4 md:px-6">
  <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">
- Contact
+ 14 · Contact
  </p>
  <h2 className="display mt-3 text-3xl md:text-5xl">
  Let&apos;s build something useful

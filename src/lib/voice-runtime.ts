@@ -17,6 +17,126 @@ export type SpeakOptions = {
 
 export type PlaybackResult = "played" | "ignored" | "stopped";
 
+type HeldAudio = {
+  context: AudioContext;
+  hold: OscillatorNode | null;
+};
+
+let heldAudio: HeldAudio | null = null;
+
+export function audioDevice() {
+  if (typeof navigator === "undefined") return { mobile: false, platform: "desktop" };
+  const ua = navigator.userAgent || "";
+  const iOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  if (iOS) return { mobile: true, platform: "iOS" };
+  if (/Android/i.test(ua)) return { mobile: true, platform: "Android" };
+  return { mobile: false, platform: "desktop" };
+}
+
+export function logMobileAudio(fields: Record<string, unknown>) {
+  if (process.env.NODE_ENV === "production") return;
+  const device = audioDevice();
+  console.info(
+    `[MOBILE_AUDIO] ${JSON.stringify({
+      device: device.mobile ? "mobile" : "desktop",
+      platform: device.platform,
+      ...fields,
+    })}`,
+  );
+}
+
+/** One context for the voice session. Created from the tap that opens voice. */
+export function getSessionAudioContext() {
+  if (typeof window === "undefined") return null;
+  if (heldAudio && heldAudio.context.state !== "closed") return heldAudio.context;
+  const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  if (!Ctx) return null;
+  const context = new Ctx();
+  let hold: OscillatorNode | null = null;
+  if (audioDevice().mobile) {
+    hold = context.createOscillator();
+    const gain = context.createGain();
+    gain.gain.value = 0;
+    hold.frequency.value = 440;
+    hold.connect(gain);
+    gain.connect(context.destination);
+    hold.start();
+  }
+  heldAudio = { context, hold };
+  logMobileAudio({ event: "audio-context-created", audioContextState: context.state, destination: "audioContext.destination" });
+  return context;
+}
+
+export function releaseSessionAudioContext() {
+  const current = heldAudio;
+  heldAudio = null;
+  if (!current || current.context.state === "closed") return;
+  try {
+    current.hold?.stop();
+  } catch {
+    /* already stopped */
+  }
+  void current.context.close().catch(() => undefined);
+}
+
+/**
+ * Must run inside the tap that opens the voice session.
+ * speechSynthesis.speak() after an await is blocked on iOS unless this ran in the gesture.
+ */
+export function primeSpeechOutput() {
+  if (typeof window === "undefined" || !window.speechSynthesis) {
+    logMobileAudio({ event: "prime", error: "speechSynthesis-missing", playRequested: false, playStarted: false });
+    return;
+  }
+  const synth = window.speechSynthesis;
+  const context = getSessionAudioContext();
+  if (context && context.state === "suspended") {
+    void context.resume().then(
+      () => logMobileAudio({ event: "audio-context-resume", audioContextState: context.state }),
+      (error: unknown) => console.error("[AUDIO_ERROR] AudioContext.resume rejected", error),
+    );
+  }
+  const session = (navigator as Navigator & { audioSession?: { type: string } }).audioSession;
+  if (session && audioDevice().mobile) {
+    try {
+      session.type = "play-and-record";
+    } catch (error) {
+      console.error("[AUDIO_ERROR] audioSession", error);
+    }
+  }
+  try {
+    synth.resume();
+  } catch (error) {
+    console.error("[AUDIO_ERROR] speechSynthesis.resume rejected", error);
+  }
+  const unlock = new SpeechSynthesisUtterance(" ");
+  unlock.volume = 0;
+  unlock.rate = 2;
+  unlock.lang = "en-US";
+  unlock.onstart = () => logMobileAudio({ event: "unlock-start", playStarted: true, audioContextState: context?.state ?? "none" });
+  unlock.onend = () => logMobileAudio({ event: "unlock-end", playStarted: true });
+  unlock.onerror = (event) => {
+    const reason = (event as SpeechSynthesisErrorEvent).error || "unlock-error";
+    console.error("[AUDIO_ERROR] unlock utterance", reason);
+    logMobileAudio({ event: "unlock-error", playStarted: false, error: reason });
+  };
+  console.info("[TTS] unlock mimeType=speechSynthesis/utterance bytes=1 codec=browser-tts channels=1");
+  synth.speak(unlock);
+  logMobileAudio({ event: "unlock-requested", playRequested: true });
+  logMobileAudio({
+    event: "prime",
+    mimeType: "speechSynthesis/utterance",
+    bytes: 1,
+    codec: "browser-tts",
+    audioContextState: context?.state ?? "none",
+    paused: synth.paused,
+    speaking: synth.speaking,
+    pending: synth.pending,
+    playRequested: true,
+    audioSession: session?.type ?? "unavailable",
+  });
+}
+
 export type TtsEngine = {
   speak: (text: string, options?: SpeakOptions) => Promise<PlaybackResult>;
   stop: () => void;
@@ -107,6 +227,7 @@ export function createBrowserTts(): TtsEngine {
   let current: SpeechSynthesisUtterance | null = null;
   let selectedURI = "";
   let keepAlive = 0;
+  let generation = 0;
 
   const clearKeepAlive = () => {
     if (!keepAlive) return;
@@ -115,6 +236,7 @@ export function createBrowserTts(): TtsEngine {
   };
 
   const stop = () => {
+    generation += 1;
     clearKeepAlive();
     current = null;
     if (typeof window === "undefined") return;
@@ -143,20 +265,91 @@ export function createBrowserTts(): TtsEngine {
         utterance.lang = voice.lang || profile.language;
       }
       current = utterance;
+      const gen = generation;
+      let active = utterance;
       let settled = false;
+      let startWatch = 0;
+      const stale = () => gen !== generation;
       const finish = (result: PlaybackResult) => {
         if (settled) return;
         settled = true;
-        if (current === utterance) current = null;
+        window.clearTimeout(startWatch);
+        if (current === active) current = null;
         clearKeepAlive();
         resolve(result);
       };
-      utterance.onstart = () => options.onStart?.();
-      utterance.onend = () => finish("played");
+      const device = audioDevice();
+      const voices = window.speechSynthesis.getVoices();
+      if (!voice && device.mobile && !voices.some((item) => /^en-IN/i.test(item.lang))) {
+        utterance.lang = /^en/i.test(utterance.lang) ? "en-US" : utterance.lang;
+      }
+      let started = false;
+      let retried = false;
+      const describe = () => ({
+        mimeType: "speechSynthesis/utterance",
+        bytes: text.length,
+        codec: "browser-tts",
+        sampleRate: "browser-managed",
+        channels: 1,
+        lang: utterance.lang,
+        volume: utterance.volume,
+        rate: utterance.rate,
+        audioContextState: heldAudio?.context.state ?? "none",
+        paused: window.speechSynthesis.paused,
+        speaking: window.speechSynthesis.speaking,
+        pending: window.speechSynthesis.pending,
+      });
+      logMobileAudio({ event: "speak", turnId: options.turnId ?? "", ...describe() });
+      utterance.onstart = () => {
+        if (stale()) return;
+        started = true;
+        logMobileAudio({ event: "playback-start", playRequested: true, playStarted: true, ...describe() });
+        options.onStart?.();
+      };
+      utterance.onend = () => {
+        logMobileAudio({ event: "playback-end", playStarted: started, stopped: stale(), ...describe() });
+        finish(stale() ? "stopped" : "played");
+      };
+      const queueUtterance = (next: SpeechSynthesisUtterance) => {
+        const context = getSessionAudioContext();
+        if (context?.state === "suspended") {
+          void context.resume().catch((error: unknown) => console.error("[AUDIO_ERROR] AudioContext.resume rejected", error));
+        }
+        try {
+          window.speechSynthesis.resume();
+        } catch (error) {
+          console.error("[AUDIO_ERROR] speechSynthesis.resume rejected", error);
+        }
+        logMobileAudio({ event: "play-requested", playRequested: true, playStarted: false, ...describe() });
+        window.speechSynthesis.speak(next);
+      };
       utterance.onerror = (event) => {
-        const err = (event as SpeechSynthesisErrorEvent).error;
+        if (stale()) {
+          finish("stopped");
+          return;
+        }
+        const err = (event as SpeechSynthesisErrorEvent).error || "unknown";
+        console.error("[AUDIO_ERROR] speechSynthesis", err);
+        logMobileAudio({ event: "playback-error", playRequested: true, playStarted: started, error: err, ...describe() });
         if (err === "interrupted" || err === "canceled") {
           finish("stopped");
+          return;
+        }
+        if (err === "not-allowed" && !retried) {
+          retried = true;
+          const again = new SpeechSynthesisUtterance(text);
+          again.lang = utterance.lang;
+          again.rate = utterance.rate;
+          again.pitch = utterance.pitch;
+          again.volume = 1;
+          again.voice = utterance.voice;
+          again.onstart = utterance.onstart;
+          again.onend = utterance.onend;
+          again.onerror = utterance.onerror;
+          active = again;
+          current = again;
+          logMobileAudio({ event: "retry-not-allowed", turnId: options.turnId ?? "" });
+          queueUtterance(again);
           return;
         }
         if (err === "not-allowed" || err === "synthesis-failed" || err === "synthesis-unavailable") {
@@ -167,13 +360,40 @@ export function createBrowserTts(): TtsEngine {
         clearKeepAlive();
         reject(new Error(err || "tts-error"));
       };
-      window.speechSynthesis.speak(utterance);
+      queueUtterance(utterance);
+      startWatch = window.setTimeout(() => {
+        if (started || settled) return;
+        const synth = window.speechSynthesis;
+        logMobileAudio({
+          event: "start-watch",
+          playRequested: true,
+          playStarted: false,
+          speaking: synth.speaking,
+          paused: synth.paused,
+          pending: synth.pending,
+          audioContextState: heldAudio?.context.state ?? "none",
+        });
+        try {
+          synth.resume();
+        } catch (error) {
+          console.error("[AUDIO_ERROR] resume during start watch", error);
+        }
+      }, 1200);
       keepAlive = window.setInterval(() => {
         const synth = window.speechSynthesis;
-        if (!synth.speaking || synth.paused) return;
+        if (!synth.speaking) return;
+        if (audioDevice().mobile) {
+          try {
+            synth.resume();
+          } catch (error) {
+            console.error("[AUDIO_ERROR] mobile resume", error);
+          }
+          return;
+        }
+        if (synth.paused) return;
         synth.pause();
         synth.resume();
-      }, 12000);
+      }, audioDevice().mobile ? 8000 : 12000);
     });
 
   return {

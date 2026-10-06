@@ -1,11 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { cms } from "@/lib/cms";
 import { cn } from "@/lib/utils";
 import { bulletMatchesLens } from "@/data/profile";
 import { useUIStore } from "@/store/ui-store";
+import { ViewSwitcher } from "@/components/ui/ViewSwitcher";
+import signature from "../../../content/brain/signature-products.json";
+
+const CASE_LINKS: Record<string, string> = {
+  oraczen: "agentic-ai-banking-platform",
+  emb: "enterprise-saas-category-turnaround",
+  filmboard: "b2b-marketplace-churn-reduction",
+  ibm: "credit-risk-analytics",
+};
 
 export function JourneySection() {
  const [active, setActive] = useState(cms.experience[0].id);
@@ -15,18 +25,20 @@ export function JourneySection() {
  const responsibilities = emphasized.length ? emphasized : job.responsibilities;
 
  return (
- <section id="journey" className="relative scroll-mt-24 py-24 md:py-32">
+ <div id="professional-work" className="relative scroll-mt-24">
+ <div id="journey" className="absolute -top-24" />
  <div id="timeline" className="absolute -top-24" />
- <div className="mx-auto max-w-7xl px-4 md:px-6">
+ <div>
  <p className="font-mono text-xs tracking-[0.3em] text-[var(--accent-violet)]">
- Experience
+ Professional product work
  </p>
- <h2 className="display mt-3 text-3xl md:text-5xl">
- Career <span className="neon-text">journey</span>
- </h2>
+ <h3 className="display mt-3 text-2xl md:text-4xl">
+ Roles and products on record
+ </h3>
         <p className="mt-4 max-w-xl text-slate-400">
-          The {lens} view emphasizes matching responsibilities. The full record stays on the resume.
+          The {lens} view emphasizes matching responsibilities. Dates, titles, and the full record stay here.
         </p>
+        <ViewSwitcher />
         <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-slate-400">
           <li className="list-disc list-inside">Responsibilities</li>
           <li className="list-disc list-inside">Impact</li>
@@ -83,7 +95,13 @@ export function JourneySection() {
  <p className="font-mono text-xs text-cyan-300/80">{job.period}</p>
  <h3 className="display mt-2 text-2xl md:text-3xl">{job.company}</h3>
  <p className="mt-1 text-slate-300">{job.role}</p>
+ <p className="text-xs tracking-[0.14em] text-[var(--accent-violet)]">Professional product work</p>
  <p className="text-sm text-slate-500">{job.location}</p>
+ {CASE_LINKS[job.id] ? (
+ <Link href={`/case-studies/${CASE_LINKS[job.id]}`} className="mt-3 inline-flex text-sm text-cyan-300">
+ Read the case study
+ </Link>
+ ) : null}
 
  <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
  {job.metrics.map((m) => (
@@ -122,6 +140,24 @@ export function JourneySection() {
  ))}
  </div>
 
+ {job.id === "oraczen" ? (
+ <div className="mt-6 space-y-3">
+ <p className="font-mono text-[11px] tracking-[0.2em] text-purple-300">
+ DOCUMENTED PRODUCTS
+ </p>
+ {signature.products.map((product) => (
+ <div key={product.id} className="rounded-xl border border-white/10 p-3">
+ <p className="text-sm text-slate-100">{product.name}</p>
+ <p className="text-xs text-slate-400">
+ {product.kind}
+ {product.client ? ` · ${product.client}` : ""}
+ </p>
+ <p className="mt-2 text-sm text-slate-300">{product.solution}</p>
+ </div>
+ ))}
+ </div>
+ ) : null}
+
  <div className="mt-6 rounded-2xl border border-[#8B5CF6]/25 bg-[#8B5CF6]/5 p-4">
  <p className="font-mono text-[10px] tracking-widest text-[#C4B5FD]">
  LESSON LEARNED
@@ -132,6 +168,6 @@ export function JourneySection() {
  </AnimatePresence>
  </div>
  </div>
- </section>
+ </div>
  );
 }

@@ -11,7 +11,7 @@ export function LearningSection() {
   return (
     <section id="learning" className="scroll-mt-24 py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">Maturity</p>
+        <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">11 · Failure, then learning</p>
         <h2 className="display mt-3 text-3xl text-[var(--text-primary)] md:text-5xl">Failure, then learning</h2>
         <p className="mt-4 max-w-2xl text-[var(--text-muted)]">{learningStory.source}</p>
         <ol className="mt-8 grid gap-4 md:grid-cols-5">

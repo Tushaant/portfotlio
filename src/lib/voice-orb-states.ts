@@ -41,6 +41,8 @@ export const VOICE_ORB_STATES: Record<VoiceOrbState, VoiceOrbPalette> = {
 };
 
 export function resolveOrbState(state: string): VoiceOrbState {
-  if (state === "listening" || state === "thinking" || state === "speaking") return state;
+  if (state === "listening" || state === "thinking" || state === "speaking" || state === "interrupted") {
+    return state === "interrupted" ? "listening" : state;
+  }
   return "idle";
 }

@@ -7,18 +7,18 @@ import { heroMetrics, positioning } from "@/data/profile";
 import { useUIStore } from "@/store/ui-store";
 
 export function HeroSection() {
-  const setVoiceOpen = useUIStore((state) => state.setVoiceAgentOpen);
+  const requestVoice = useUIStore((state) => state.requestVoice);
   const reduce = useReducedMotion();
 
   return (
-    <section id="top" className="relative overflow-hidden">
-      <div className="mx-auto grid min-h-[100svh] max-w-7xl items-center gap-10 px-4 pb-16 pt-28 md:grid-cols-[1.2fr_0.8fr] md:px-6 md:pt-32">
-        <div>
+    <section id="top" className="relative">
+      <div className="mx-auto grid min-h-[100svh] w-full min-w-0 max-w-7xl items-center gap-10 px-4 pb-28 pt-28 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] md:px-6 md:pb-16 md:pt-32">
+        <div className="min-w-0">
           <p className="text-xs tracking-[0.28em] text-[var(--accent-violet)]">{positioning.brand}</p>
           <motion.h1
             initial={reduce ? false : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="display mt-4 text-5xl leading-[1.02] text-[var(--text-primary)] md:text-7xl"
+            className="display mt-4 max-w-full break-words text-5xl leading-[1.02] text-[var(--text-primary)] md:text-7xl"
           >
             {positioning.name}
           </motion.h1>
@@ -28,12 +28,12 @@ export function HeroSection() {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <button
               type="button"
-              onClick={() => setVoiceOpen(true)}
+              onClick={() => requestVoice("talk")}
               className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--accent-violet)] px-6 text-sm font-medium text-white"
             >
               Talk to Tushant AI
             </button>
-            <Link href="/#journey" className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] px-5 text-sm text-[var(--text-secondary)]">
+            <Link href="/#professional-work" className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] px-5 text-sm text-[var(--text-secondary)]">
               View experience
             </Link>
             <Link href="/#case-studies" className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border)] px-5 text-sm text-[var(--text-secondary)]">
@@ -46,7 +46,7 @@ export function HeroSection() {
 
           <dl className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {heroMetrics.map((metric) => (
-              <div key={metric.label} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-3 py-3">
+              <div key={metric.label} className="min-w-0 rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-3 py-3">
                 <dt className="display text-xl text-[var(--text-primary)]">{metric.value}</dt>
                 <dd className="mt-1 text-xs text-[var(--text-muted)]">
                   {metric.label}
@@ -59,7 +59,13 @@ export function HeroSection() {
 
         <div className="flex flex-col items-center justify-center">
           <FluidVoiceOrb state="idle" label="Tushant AI, idle" />
-          <p className="mt-2 text-sm text-[var(--text-muted)]">Talk with Tushant</p>
+          <button
+            type="button"
+            onClick={() => requestVoice("talk")}
+            className="mt-2 text-sm text-[var(--text-muted)]"
+          >
+            Talk with Tushant
+          </button>
         </div>
       </div>
     </section>

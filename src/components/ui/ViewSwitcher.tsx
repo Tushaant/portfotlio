@@ -38,7 +38,7 @@ export function ViewSwitcher() {
                 setLens(item.id);
                 window.localStorage.setItem("portfolio-lens", item.id);
               }}
-              className={`min-h-11 flex-1 rounded-full px-3 text-xs tracking-[0.14em] uppercase ${
+              className={`min-h-11 min-w-0 flex-1 rounded-full px-2 text-[10px] tracking-[0.08em] uppercase sm:px-3 sm:text-xs sm:tracking-[0.14em] ${
                 selected ? "bg-[var(--accent-violet)] text-white" : "text-[var(--text-muted)]"
               }`}
             >

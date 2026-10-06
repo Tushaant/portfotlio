@@ -89,26 +89,37 @@ body.terminal-mode {
 
 /* Light: white + metallic gold circuit neural theme */
 body.hologram-light {
+ --bg-primary: #ffffff;
+ --bg-secondary: #f4f4f5;
  --bg: #ffffff;
- --navy: #fffaf0;
- /* Deep bronze accents - readable on white (not pale gold) */
- --cyan: #6b4e08;
- --blue: #5c4108;
- --purple: #7a5510;
- --magenta: #8a6014;
- --green: #5a4a12;
- --gold: #8a6412;
- --champagne: #f9e498;
- --ember: #6b4e08;
- --glass: rgba(255, 255, 255, 0.82);
- --glass-border: rgba(107, 78, 8, 0.28);
- --text: #1a1408;
- --muted: #4a3c22;
- --glow: 0 0 28px rgba(138, 100, 18, 0.25);
- --surface-soft: rgba(255, 255, 255, 0.78);
- --surface: #fff8e8;
- --surface-2: #fffaf0;
- --accent-rgb: 138, 100, 18;
+ --navy: #fafafa;
+ --surface: #f4f4f5;
+ --surface-elevated: #ffffff;
+ --border: rgba(9, 9, 11, 0.16);
+ --text-primary: #09090b;
+ --text-secondary: #27272a;
+ --text-muted: #3f3f46;
+ --accent-violet: #5b21b6;
+ --accent-indigo: #4338ca;
+ --accent-cyan: #0e7490;
+ --accent-teal: #0f766e;
+ --text: #09090b;
+ --muted: #3f3f46;
+ --cyan: #0e7490;
+ --blue: #1e3a8a;
+ --purple: #5b21b6;
+ --magenta: #9d174d;
+ --green: #14532d;
+ --gold: #854d0e;
+ --champagne: #fef9c3;
+ --ember: #854d0e;
+ --glass: rgba(255, 255, 255, 0.9);
+ --glass-border: rgba(9, 9, 11, 0.14);
+ --glow: none;
+ --surface-soft: rgba(255, 255, 255, 0.92);
+ --surface-2: #fafafa;
+ --accent-rgb: 91, 33, 182;
+ color: #09090b;
  color-scheme: light;
 }
 
@@ -324,8 +335,8 @@ body.hologram-light .neon-text {
 }
 
 .aurora-gold {
- mix-blend-mode: soft-light;
- opacity: 0.65;
+ mix-blend-mode: multiply;
+ opacity: 0.14;
  background: linear-gradient(
  125deg,
  rgba(255, 255, 255, 0.9),
@@ -375,10 +386,10 @@ body.hologram-light .neon-text {
  background: radial-gradient(circle, rgba(255, 255, 255, 0.22), transparent 70%);
 }
 .orb-gold {
- background: radial-gradient(circle, rgba(197, 160, 89, 0.5), transparent 70%);
+ background: radial-gradient(circle, rgba(133, 77, 14, 0.16), transparent 70%);
 }
 .orb-champagne {
- background: radial-gradient(circle, rgba(249, 228, 152, 0.7), transparent 70%);
+ background: radial-gradient(circle, rgba(254, 249, 195, 0.35), transparent 70%);
 }
 .orb-shine {
  background: radial-gradient(
@@ -415,6 +426,7 @@ body.hologram-light .neon-text {
 }
 
 .data-veil-gold {
+ opacity: 0.2;
  background-image: repeating-linear-gradient(
  180deg,
  transparent 0,
@@ -495,19 +507,23 @@ body.hologram-light .neon-text {
 
 /* - Light-mode contrast: force readable text (no pale cyan/gold washout) - */
 body.hologram-light {
- color: #1a1408;
+ color: #09090b;
 }
 
 body.hologram-light .text-slate-100,
 body.hologram-light .text-slate-200,
 body.hologram-light .text-slate-300,
 body.hologram-light .text-white {
- color: #1f1608 !important;
+ color: #09090b !important;
+}
+body.hologram-light button.text-white,
+body.hologram-light a.text-white {
+ color: #ffffff !important;
 }
 body.hologram-light .text-slate-400,
 body.hologram-light .text-slate-500,
 body.hologram-light .text-slate-600 {
- color: #4a3c22 !important;
+ color: #3f3f46 !important;
 }
 
 /* Former cyan accents → deep bronze for WCAG-friendly contrast on white */

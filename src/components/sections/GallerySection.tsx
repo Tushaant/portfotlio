@@ -11,10 +11,10 @@ export function GallerySection() {
     <section id="gallery" className="relative scroll-mt-24 py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <p className="font-mono text-xs tracking-[0.3em] text-cyan-300/70">
-          08 · DELIVERY GALLERY
+          10 · DELIVERY GALLERY
         </p>
         <h2 className="display mt-3 text-3xl md:text-5xl">
-          Shipped <span className="neon-text">interfaces</span>
+          Delivery <span className="neon-text">gallery</span>
         </h2>
         <p className="mt-4 max-w-xl text-slate-400">
           Screenshots of delivered products, sourced from the Notion delivery

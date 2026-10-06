@@ -1,9 +1,10 @@
 /**
- * Half-duplex turns. Speech recognition stays closed while a reply is playing,
- * so speaker audio cannot become the next user transcript.
+ * Turn gate for the voice session.
+ * Recognition stays open while a reply plays so the visitor can barge in.
+ * Echo of the spoken line is discarded before it can become the next turn.
  */
 
-export type HalfPhase = "idle" | "listening" | "thinking" | "speaking";
+export type HalfPhase = "idle" | "listening" | "thinking" | "speaking" | "interrupted";
 
 export function createTurnGate() {
   let serial = 0;
@@ -27,10 +28,11 @@ export function createTurnGate() {
 }
 
 export function acceptsUserAudio(phase: HalfPhase) {
-  return phase === "listening";
+  return phase === "listening" || phase === "interrupted";
 }
 
 export function voiceLog(event: string, turnId: string, detail?: string) {
+  if (process.env.NODE_ENV === "production") return;
   const stamp = new Date().toISOString();
   const body = detail ? `${turnId} "${detail}"` : turnId;
   console.info(`[${event}] ${body} ${stamp}`);
