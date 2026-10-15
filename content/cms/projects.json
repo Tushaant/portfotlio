@@ -913,5 +913,171 @@
     ],
     "roadmap": [],
     "businessValue": "Made enterprise R&D knowledge findable under controlled access."
+  },
+  {"slug": "Agentic AI",
+    "title": "NBFC Agentic Chat AI",
+    "status": "DELIVERED",
+    "category": "Enterprise SaaS AI",
+    "tagline": "Chat agent for consultants and Analyst",
+    "image": null,
+    "liveUrl": null,
+    "tech": [
+      "Web platform",
+      "Search",
+      "Access control"
+    ],
+    "highlights": [
+      {
+        "label": "Status",
+        "value": "Delivered"
+      }
+    ],
+    "overview": "Dairy Profit Intelligence (DPI) is an Agentic AI-powered analytics platform enabling dairy consultants to analyze profitability, benchmark farms, generate AI-driven insights, and improve advisory decisions.",
+    "problem": "Consultants relied on spreadsheets, disconnected reports and manual benchmarking to evaluate farm performance and to get revenue is a slow process",
+    "businessContext": "Farm Credit East needed an AI-powered platform to transform dairy farm data into actionable insights, improving consultant productivity and advisory decisions.",
+    "users": [
+      "Consultants",
+      "Farmers",
+      "Compliance / access admins"
+    ],
+     "objectives": [
+    "Automate profitability analysis",
+    "Improve consultant productivity",
+    "Enable AI-driven insights",
+    "Standardize advisory recommendations",
+    "Reduce manual reporting"
+  ],
+
+  "solution": [
+    "Interactive KPI dashboards",
+    "AI-powered dashboard summaries",
+    "Conversational AI",
+    "Peer benchmarking",
+    "Dynamic filtering",
+    "Chart exports",
+    "Dashboard sharing",
+    "Observability analytics"
+  ],
+
+  "agenticAI": {
+    "type": "Decision Intelligence Agent",
+    "capabilities": [
+      "Natural language interaction",
+      "Dashboard understanding",
+      "Context retrieval",
+      "Business reasoning",
+      "KPI summarization",
+      "Recommendation generation",
+      "Conversational analytics"
+    ]
+  },
+
+  "architecture": [
+    "Farm Data",
+    "SharePoint Data Sync",
+    "Financial Models",
+    "Dashboard Engine",
+    "Agentic AI Layer",
+    "Business Rules",
+    "Insights",
+    "Consultants"
+  ],
+
+  "coreModules": [
+    "Dashboard Workspace",
+    "AI Chat",
+    "Dashboard Summary",
+    "Profitability Analytics",
+    "Peer Benchmarking",
+    "Data Management",
+    "RBAC",
+    "Observability",
+    "Feature Analytics"
+  ],
+
+  "keyFeatures": [
+    "Dashboard Builder",
+    "AI Dashboard Summary",
+    "Farm Benchmarking",
+    "Natural Language Queries",
+    "Peer Filters",
+    "Chart Downloads",
+    "SharePoint Integration",
+    "Role-based Access",
+    "Alerts",
+    "Notifications"
+  ],
+
+  "integrations": [
+    "Power BI",
+    "OpenAI",
+    "SharePoint",
+    "Azure",
+    "REST APIs"
+  ],
+
+  "observability": [
+    "Login Activity",
+    "Feature Engagement",
+    "Dashboard Usage",
+    "AI Usage",
+    "Active Users",
+    "Platform Analytics"
+  ],
+
+  "evaluation": [
+    "LLM Response Quality",
+    "Dashboard Accuracy",
+    "Feature Adoption",
+    "User Engagement",
+    "Latency",
+    "AI Feedback",
+    "Observability Metrics"
+  ],
+
+  "myResponsibilities": [
+    "Product Strategy",
+    "Roadmap Planning",
+    "Stakeholder Management",
+    "Requirement Discovery",
+    "PRD Creation",
+    "Backlog Prioritization",
+    "Sprint Planning",
+    "Acceptance Criteria",
+    "UAT",
+    "Release Management",
+    "Client Demos",
+    "Observability Planning"
+  ],
+
+  "businessImpact": [
+    "Faster profitability analysis",
+    "Reduced manual effort",
+    "AI-assisted decision making",
+    "Improved consultant productivity",
+    "Centralized analytics",
+    "Enterprise scalability"
+  ],
+
+  "futureRoadmap": [
+    "Predictive Analytics",
+    "Financial Forecasting",
+    "Scenario Planning",
+    "AI Recommendations",
+    "Risk Prediction",
+    "Autonomous Decision Support"
+  ],
+
+  "techStack": [
+    "Power BI",
+    "OpenAI",
+    "Azure",
+    "SharePoint",
+    "React",
+    "Node.js",
+    "REST APIs",
+    "PostHog",
+    "Langfuse"
+  ]
   }
 ]
