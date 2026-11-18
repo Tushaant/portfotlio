@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import dynamic from "next/dynamic";
 import { ChevronRight, Mic } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
@@ -29,15 +27,6 @@ const HERO_HALO: Record<VoicePhase, string> = {
   speaking: "bg-[radial-gradient(ellipse_at_center,rgba(232,121,249,0.4),rgba(34,211,238,0.14)_42%,transparent_70%)]",
   error: "bg-[radial-gradient(ellipse_at_center,rgba(251,113,133,0.34),transparent_68%)]",
 };
-
-function canUseWebGL() {
-  try {
-    const canvas = document.createElement("canvas");
-    return Boolean(canvas.getContext("webgl2") || canvas.getContext("webgl"));
-  } catch {
-    return false;
-  }
-}
 
 function openHeroVoice() {
   const current = useUIStore.getState();
@@ -86,29 +75,15 @@ function HeroVoiceAffordance() {
 function AvatarPortrait() {
   const phase = useUIStore((state) => state.voicePhase);
   const level = useUIStore((state) => state.voiceLevel);
-  const [webgl, setWebgl] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    setWebgl(canUseWebGL());
-  }, []);
 
   return (
-    <div className="relative mx-auto w-full max-w-[520px]">
-      <div className="relative h-[280px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#07070d] sm:h-[340px] md:h-[min(520px,60vh)]">
-        <div className={`pointer-events-none absolute inset-0 ${HERO_HALO[phase]}`} />
-        {webgl === false ? (
-          <Image
-            src="/avatar/tushant-reference.jpg"
-            alt="Tushant Sharma"
-            fill
-            sizes="(max-width: 768px) 100vw, 520px"
-            className="object-cover object-[center_18%]"
-          />
-        ) : webgl ? (
-          <TushantAvatar state={phase} audioLevel={level} speaking={phase === "speaking"} />
-        ) : null}
+    <div className="relative mx-auto w-full max-w-[560px]">
+      <div className={`pointer-events-none absolute inset-x-[8%] top-[6%] h-[78%] rounded-full blur-2xl ${HERO_HALO[phase]}`} />
+      <div className="pointer-events-none absolute left-1/2 top-[8%] h-[62%] w-[78%] -translate-x-1/2 rounded-full border border-cyan-200/20 shadow-[0_0_60px_rgba(139,92,246,0.28)]" />
+      <div className="relative h-[300px] sm:h-[380px] md:h-[min(560px,64vh)]">
+        <TushantAvatar state={phase} audioLevel={level} speaking={phase === "speaking"} />
       </div>
-      <div className="relative z-10 -mt-7 flex justify-center px-3">
+      <div className="relative z-10 -mt-8 flex justify-center px-3">
         <HeroVoiceAffordance />
       </div>
     </div>
