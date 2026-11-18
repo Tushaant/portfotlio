@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
-import type { Group, Mesh, PointLight, SkinnedMesh } from "three";
+import { useGLTF, useTexture } from "@react-three/drei";
+import { ShaderMaterial, SRGBColorSpace, type Group, type SkinnedMesh } from "three";
 import type { VoicePhase } from "@/store/ui-store";
-import { avatarController, avatarPose, glowFor, stepAvatar } from "./avatar-controller";
+import { avatarController, avatarPose, stepAvatar } from "./avatar-controller";
 
 export type TushantAvatarProps = {
   state: VoicePhase;
@@ -15,18 +15,64 @@ export type TushantAvatarProps = {
 
 /**
  * Isolated avatar stage.
- * Set TUSHANT_MODEL_URL to "/avatar/tushant.glb" when a rigged model with
- * viseme or mouthOpen blendshapes is added. The same pose stream drives it.
+ * The live asset is a photorealistic cutout of Tushant's photograph, presented
+ * as a chest-up bust. Set TUSHANT_MODEL_URL to a rigged .glb with viseme,
+ * mouthOpen, and blink morphs to replace the portrait without changing the hero.
  */
 const TUSHANT_MODEL_URL: string | null = null;
+const PORTRAIT_URL = "/avatar/tushant-bust.png";
+
+const portraitVertex = /* glsl */ `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    vec3 displaced = position;
+    displaced.z += cos((uv.x - 0.5) * 3.14159) * 0.07;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(displaced, 1.0);
+  }
+`;
+
+const portraitFragment = /* glsl */ `
+  uniform sampler2D map;
+  uniform float mouthOpen;
+  uniform float blink;
+  varying vec2 vUv;
+
+  float eyeDisk(vec2 uv, vec2 center) {
+    vec2 delta = (uv - center) * vec2(1.05, 2.15);
+    return smoothstep(0.046, 0.014, length(delta));
+  }
+
+  void main() {
+    vec2 uv = vUv;
+    vec2 mouth = vec2(0.49, 0.455);
+    float mouthMask = smoothstep(0.16, 0.02, length((uv - mouth) * vec2(1.7, 3.1)));
+    uv.y -= mouthOpen * 0.024 * mouthMask;
+    vec4 color = texture2D(map, uv);
+    float gap = smoothstep(0.07, 0.0, length((vUv - mouth) * vec2(2.6, 5.2)));
+    color.rgb = mix(color.rgb, color.rgb * vec3(0.45, 0.32, 0.32), mouthOpen * gap);
+    float eyes = max(eyeDisk(uv, vec2(0.385, 0.635)), eyeDisk(uv, vec2(0.585, 0.632)));
+    vec3 lid = color.rgb * vec3(0.42, 0.32, 0.28);
+    color.rgb = mix(color.rgb, lid, blink * eyes);
+    if (color.a < 0.04) discard;
+    gl_FragColor = color;
+  }
+`;
 
 export function TushantAvatar({ state, audioLevel, speaking }: TushantAvatarProps) {
   const frame = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(true);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [webgl, setWebgl] = useState(true);
 
   useEffect(() => {
     setReduceMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    try {
+      const probe = document.createElement("canvas");
+      setWebgl(Boolean(probe.getContext("webgl2") || probe.getContext("webgl")));
+    } catch {
+      setWebgl(false);
+    }
     const node = frame.current;
     if (!node) return;
     const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.08 });
@@ -35,120 +81,144 @@ export function TushantAvatar({ state, audioLevel, speaking }: TushantAvatarProp
   }, []);
 
   return (
-    <div ref={frame} className="h-full w-full" data-avatar-state={state} data-avatar-model={TUSHANT_MODEL_URL ? "glb" : "placeholder"}>
-      <Canvas
-        dpr={[1, 1.5]}
-        camera={{ position: [0, 0.08, 1.85], fov: 26 }}
-        gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
-        frameloop={visible && !reduceMotion ? "always" : "demand"}
-      >
-        <PoseBridge state={state} audioLevel={audioLevel} speaking={speaking} />
-        <color attach="background" args={["#07070d"]} />
-        <ambientLight intensity={0.55} />
-        <directionalLight position={[1.2, 1.8, 2.2]} intensity={1.5} color="#f7f4ff" />
-        <RimLight />
-        {TUSHANT_MODEL_URL ? <RiggedAvatar url={TUSHANT_MODEL_URL} /> : <PlaceholderBust />}
-      </Canvas>
+    <div
+      ref={frame}
+      className="h-full w-full"
+      data-avatar-state={state}
+      data-avatar-model={TUSHANT_MODEL_URL ? "glb" : webgl ? "portrait" : "image"}
+    >
+      {webgl ? (
+        <Canvas
+          dpr={[1, 1.5]}
+          camera={{ position: [0, -0.08, 2.65], fov: 26 }}
+          gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
+          frameloop={visible && !reduceMotion ? "always" : "demand"}
+          onCreated={({ gl }) => gl.setClearColor(0x000000, 0)}
+        >
+          <PoseBridge state={state} audioLevel={audioLevel} speaking={speaking} host={frame} />
+          <ambientLight intensity={0.4} />
+          <Suspense fallback={null}>
+            {TUSHANT_MODEL_URL ? <RiggedAvatar url={TUSHANT_MODEL_URL} /> : <PortraitBust />}
+          </Suspense>
+        </Canvas>
+      ) : (
+        <PortraitFallback state={state} audioLevel={audioLevel} speaking={speaking} active={visible && !reduceMotion} />
+      )}
     </div>
   );
 }
 
-function PoseBridge({ state, audioLevel, speaking }: TushantAvatarProps) {
+function PoseBridge({
+  state,
+  audioLevel,
+  speaking,
+  host,
+}: TushantAvatarProps & { host: RefObject<HTMLDivElement | null> }) {
   const level = useRef(audioLevel);
   level.current = audioLevel;
   useEffect(() => {
     avatarController.setState(state);
   }, [state]);
   useFrame(({ camera, clock }, dt) => {
-    camera.lookAt(0, 0.05, 0);
+    camera.lookAt(0, -0.16, 0);
     if (!speaking) avatarController.setAudioLevel(level.current);
     stepAvatar(Math.min(0.05, dt), clock.elapsedTime);
+    const node = host.current;
+    if (node) {
+      node.dataset.mouth = avatarPose.mouthOpen.toFixed(2);
+      node.dataset.blink = avatarPose.blink.toFixed(2);
+    }
   });
   return null;
 }
 
-function RimLight() {
-  const light = useRef<PointLight>(null);
-  useFrame(() => {
-    if (!light.current) return;
-    light.current.color.set(glowFor(avatarPose.state));
-    light.current.intensity = 1.2 + avatarPose.drive * 3.4;
-  });
-  return <pointLight ref={light} position={[-0.8, 0.6, 1.6]} distance={5} />;
-}
-
-function PlaceholderBust() {
+function PortraitBust() {
+  const texture = useTexture(PORTRAIT_URL);
   const bust = useRef<Group>(null);
-  const head = useRef<Group>(null);
-  const mouth = useRef<Mesh>(null);
-  const lids = useRef<Group>(null);
+  const material = useMemo(() => {
+    texture.colorSpace = SRGBColorSpace;
+    texture.anisotropy = 4;
+    return new ShaderMaterial({
+      uniforms: {
+        map: { value: texture },
+        mouthOpen: { value: 0 },
+        blink: { value: 0 },
+      },
+      vertexShader: portraitVertex,
+      fragmentShader: portraitFragment,
+      transparent: true,
+      depthWrite: false,
+      toneMapped: false,
+    });
+  }, [texture]);
 
   useFrame(() => {
-    if (bust.current) bust.current.position.y = -0.15 + avatarPose.breath;
-    if (head.current) {
-      head.current.rotation.x = avatarPose.headX;
-      head.current.rotation.y = avatarPose.headY;
-    }
-    if (mouth.current) mouth.current.scale.y = 0.28 + avatarPose.mouthOpen * 1.6;
-    if (lids.current) lids.current.scale.y = Math.max(0.15, 1 - avatarPose.blink);
+    material.uniforms.mouthOpen.value = avatarPose.mouthOpen;
+    material.uniforms.blink.value = avatarPose.blink;
+    if (!bust.current) return;
+    bust.current.position.y = -0.22 + avatarPose.breath;
+    bust.current.rotation.y = -0.16 + avatarPose.headY;
+    bust.current.rotation.x = avatarPose.headX * 0.45;
   });
 
   return (
-    <group ref={bust} position={[0, -0.15, 0]}>
-      <mesh position={[0, -0.42, 0]}>
-        <capsuleGeometry args={[0.48, 0.42, 8, 20]} />
-        <meshStandardMaterial color="#1b2a4a" roughness={0.55} metalness={0.2} />
+    <group ref={bust}>
+      <mesh position={[0, -0.05, 0]} material={material}>
+        <planeGeometry args={[1.42, 1.42, 24, 24]} />
       </mesh>
-      <mesh position={[0, -0.05, 0.02]}>
-        <cylinderGeometry args={[0.1, 0.13, 0.16, 16]} />
-        <meshStandardMaterial color="#e0c2a4" roughness={0.68} />
-      </mesh>
-      <group ref={head} position={[0, 0.28, 0.02]}>
-        <mesh>
-          <sphereGeometry args={[0.3, 32, 24]} />
-          <meshStandardMaterial color="#e4c6a8" roughness={0.6} />
-        </mesh>
-        <mesh position={[0, 0.2, -0.02]} scale={[0.68, 0.3, 0.58]}>
-          <sphereGeometry args={[0.3, 24, 16]} />
-          <meshStandardMaterial color="#16110e" roughness={0.82} />
-        </mesh>
-        <mesh position={[-0.08, 0.02, 0.27]}>
-          <sphereGeometry args={[0.032, 16, 12]} />
-          <meshStandardMaterial color="#1c140f" roughness={0.25} />
-        </mesh>
-        <mesh position={[0.08, 0.02, 0.27]}>
-          <sphereGeometry args={[0.032, 16, 12]} />
-          <meshStandardMaterial color="#1c140f" roughness={0.25} />
-        </mesh>
-        <mesh position={[-0.08, 0.07, 0.24]} rotation={[0, 0, 0.2]}>
-          <boxGeometry args={[0.07, 0.012, 0.01]} />
-          <meshStandardMaterial color="#2a211c" />
-        </mesh>
-        <mesh position={[0.08, 0.07, 0.24]} rotation={[0, 0, -0.2]}>
-          <boxGeometry args={[0.07, 0.012, 0.01]} />
-          <meshStandardMaterial color="#2a211c" />
-        </mesh>
-        <mesh position={[0, -0.02, 0.28]} rotation={[1.2, 0, 0]}>
-          <coneGeometry args={[0.028, 0.07, 10]} />
-          <meshStandardMaterial color="#d2b193" roughness={0.7} />
-        </mesh>
-        <group ref={lids} position={[0, 0.055, 0.26]}>
-          <mesh position={[-0.09, 0, 0]}>
-            <boxGeometry args={[0.07, 0.012, 0.012]} />
-            <meshStandardMaterial color="#d2b193" />
-          </mesh>
-          <mesh position={[0.09, 0, 0]}>
-            <boxGeometry args={[0.07, 0.012, 0.012]} />
-            <meshStandardMaterial color="#d2b193" />
-          </mesh>
-        </group>
-        <mesh ref={mouth} position={[0, -0.11, 0.26]} scale={[1, 0.28, 0.45]}>
-          <sphereGeometry args={[0.05, 16, 12]} />
-          <meshStandardMaterial color="#7a3e3e" roughness={0.48} />
-        </mesh>
-      </group>
     </group>
   );
+}
+
+function PortraitFallback({ active, state, audioLevel, speaking }: TushantAvatarProps & { active: boolean }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const level = useRef(audioLevel);
+  level.current = audioLevel;
+
+  useEffect(() => {
+    avatarController.setState(state);
+  }, [state]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const context = canvas.getContext("2d");
+    if (!context) return;
+    const image = new Image();
+    image.src = PORTRAIT_URL;
+    let frame = 0;
+    let running = true;
+
+    const draw = (time: number) => {
+      if (!running) return;
+      if (!speaking) avatarController.setAudioLevel(level.current);
+      if (active) stepAvatar(1 / 60, time / 1000);
+      const width = canvas.width;
+      const height = canvas.height;
+      context.clearRect(0, 0, width, height);
+      if (image.complete && image.naturalWidth) {
+        const scale = Math.min(width / image.naturalWidth, height / image.naturalHeight);
+        const drawWidth = image.naturalWidth * scale;
+        const drawHeight = image.naturalHeight * scale;
+        const x = (width - drawWidth) / 2 + avatarPose.headY * 18;
+        const y = height - drawHeight + 8 + avatarPose.breath * 40;
+        context.drawImage(image, x, y, drawWidth, drawHeight);
+        const host = canvas.parentElement;
+        if (host) {
+          host.dataset.mouth = avatarPose.mouthOpen.toFixed(2);
+          host.dataset.blink = avatarPose.blink.toFixed(2);
+        }
+      }
+      frame = window.requestAnimationFrame(draw);
+    };
+    frame = window.requestAnimationFrame(draw);
+    return () => {
+      running = false;
+      window.cancelAnimationFrame(frame);
+    };
+  }, [active, speaking]);
+
+  return <canvas ref={canvasRef} width={768} height={768} className="h-full w-full" aria-label="Tushant Sharma" />;
 }
 
 function RiggedAvatar({ url }: { url: string }) {
