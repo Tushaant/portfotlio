@@ -38,7 +38,7 @@ export function TushantAvatar({ state, audioLevel, speaking }: TushantAvatarProp
     <div ref={frame} className="h-full w-full" data-avatar-state={state} data-avatar-model={TUSHANT_MODEL_URL ? "glb" : "placeholder"}>
       <Canvas
         dpr={[1, 1.5]}
-        camera={{ position: [0, 0.22, 2.35], fov: 28 }}
+        camera={{ position: [0, 0.08, 1.85], fov: 26 }}
         gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
         frameloop={visible && !reduceMotion ? "always" : "demand"}
       >
@@ -60,7 +60,7 @@ function PoseBridge({ state, audioLevel, speaking }: TushantAvatarProps) {
     avatarController.setState(state);
   }, [state]);
   useFrame(({ camera, clock }, dt) => {
-    camera.lookAt(0, 0.12, 0);
+    camera.lookAt(0, 0.05, 0);
     if (!speaking) avatarController.setAudioLevel(level.current);
     stepAvatar(Math.min(0.05, dt), clock.elapsedTime);
   });
@@ -108,17 +108,25 @@ function PlaceholderBust() {
           <sphereGeometry args={[0.3, 32, 24]} />
           <meshStandardMaterial color="#e4c6a8" roughness={0.6} />
         </mesh>
-        <mesh position={[0, 0.14, -0.04]} scale={[1, 0.42, 0.92]}>
+        <mesh position={[0, 0.2, -0.02]} scale={[0.68, 0.3, 0.58]}>
           <sphereGeometry args={[0.3, 24, 16]} />
           <meshStandardMaterial color="#16110e" roughness={0.82} />
         </mesh>
-        <mesh position={[-0.09, 0.03, 0.25]}>
-          <sphereGeometry args={[0.028, 16, 12]} />
+        <mesh position={[-0.08, 0.02, 0.27]}>
+          <sphereGeometry args={[0.032, 16, 12]} />
           <meshStandardMaterial color="#1c140f" roughness={0.25} />
         </mesh>
-        <mesh position={[0.09, 0.03, 0.25]}>
-          <sphereGeometry args={[0.028, 16, 12]} />
+        <mesh position={[0.08, 0.02, 0.27]}>
+          <sphereGeometry args={[0.032, 16, 12]} />
           <meshStandardMaterial color="#1c140f" roughness={0.25} />
+        </mesh>
+        <mesh position={[-0.08, 0.07, 0.24]} rotation={[0, 0, 0.2]}>
+          <boxGeometry args={[0.07, 0.012, 0.01]} />
+          <meshStandardMaterial color="#2a211c" />
+        </mesh>
+        <mesh position={[0.08, 0.07, 0.24]} rotation={[0, 0, -0.2]}>
+          <boxGeometry args={[0.07, 0.012, 0.01]} />
+          <meshStandardMaterial color="#2a211c" />
         </mesh>
         <mesh position={[0, -0.02, 0.28]} rotation={[1.2, 0, 0]}>
           <coneGeometry args={[0.028, 0.07, 10]} />
