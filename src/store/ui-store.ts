@@ -7,12 +7,16 @@ export type PortfolioLens = "executive" | "product" | "technical";
 
 export type VoiceCue = "talk" | "brief";
 
+export type VoicePhase = "idle" | "listening" | "thinking" | "speaking" | "error";
+
 type UIState = {
   preloaderDone: boolean;
   paletteOpen: boolean;
   agentOpen: boolean;
   voiceAgentOpen: boolean;
   voiceCue: VoiceCue | null;
+  voicePhase: VoicePhase;
+  voiceLevel: number;
   briefSpeaking: boolean;
   hologramMode: "dark" | "light";
   lens: PortfolioLens;
@@ -21,6 +25,7 @@ type UIState = {
   setAgentOpen: (v: boolean) => void;
   setVoiceAgentOpen: (v: boolean) => void;
   requestVoice: (cue: VoiceCue) => void;
+  setVoicePhase: (phase: VoicePhase) => void;
   setBriefSpeaking: (v: boolean) => void;
   setLens: (v: PortfolioLens) => void;
   toggleHologram: () => void;
@@ -32,6 +37,8 @@ export const useUIStore = create<UIState>((set) => ({
   agentOpen: false,
   voiceAgentOpen: false,
   voiceCue: null,
+  voicePhase: "idle",
+  voiceLevel: 0,
   briefSpeaking: false,
   hologramMode: "dark",
   lens: "executive",
@@ -40,12 +47,18 @@ export const useUIStore = create<UIState>((set) => ({
   setAgentOpen: (v) => set({ agentOpen: v }),
   setVoiceAgentOpen: (v) => {
     if (v) primeSpeechOutput();
-    set({ voiceAgentOpen: v, voiceCue: v ? "talk" : null, briefSpeaking: false });
+    set({
+      voiceAgentOpen: v,
+      voiceCue: v ? "talk" : null,
+      briefSpeaking: false,
+      ...(v ? {} : { voicePhase: "idle" as const, voiceLevel: 0 }),
+    });
   },
   requestVoice: (cue) => {
     primeSpeechOutput();
     set({ voiceAgentOpen: true, voiceCue: cue });
   },
+  setVoicePhase: (phase) => set({ voicePhase: phase, ...(phase === "listening" ? {} : { voiceLevel: 0 }) }),
   setBriefSpeaking: (v) => set({ briefSpeaking: v }),
   setLens: (v) => set({ lens: v }),
   toggleHologram: () =>

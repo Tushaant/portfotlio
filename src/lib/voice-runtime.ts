@@ -13,6 +13,7 @@ export type SpeakOptions = {
   voiceURI?: string;
   turnId?: string;
   onStart?: () => void;
+  onBoundary?: (event: { charIndex: number; char: string }) => void;
 };
 
 export type PlaybackResult = "played" | "ignored" | "stopped";
@@ -306,6 +307,11 @@ export function createBrowserTts(): TtsEngine {
         logMobileAudio({ event: "playback-start", playRequested: true, playStarted: true, ...describe() });
         options.onStart?.();
       };
+      utterance.onboundary = (event) => {
+        if (stale()) return;
+        const index = event.charIndex ?? 0;
+        options.onBoundary?.({ charIndex: index, char: text.charAt(index) });
+      };
       utterance.onend = () => {
         logMobileAudio({ event: "playback-end", playStarted: started, stopped: stale(), ...describe() });
         finish(stale() ? "stopped" : "played");
@@ -346,6 +352,7 @@ export function createBrowserTts(): TtsEngine {
           again.onstart = utterance.onstart;
           again.onend = utterance.onend;
           again.onerror = utterance.onerror;
+          again.onboundary = utterance.onboundary;
           active = again;
           current = again;
           logMobileAudio({ event: "retry-not-allowed", turnId: options.turnId ?? "" });
