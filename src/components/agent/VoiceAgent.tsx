@@ -11,6 +11,7 @@ import { trackEvent } from "@/lib/analytics";
 import { VOICE_CONFIG } from "@/lib/voice-config";
 import { acceptsUserAudio, createTurnGate, voiceLog, type HalfPhase } from "@/lib/half-duplex";
 import { classifyHeard } from "@/lib/duplex-turn";
+import { avatarController } from "@/components/avatar/avatar-controller";
 import { executiveBrief } from "@/data/profile";
 import {
   VOICE_GREETING,
@@ -105,12 +106,16 @@ export function VoiceAgent() {
   const listenRef = useRef<() => void>(() => undefined);
   const askRef = useRef<(text: string) => void>(() => undefined);
   const briefRef = useRef<() => void>(() => undefined);
+  const levelPublish = useRef(0);
 
   const setPhase = useCallback((next: VoiceState) => {
     if (phaseRef.current === next) return;
     phaseRef.current = next;
     setState(next);
     voiceLog("VOICE_STATE", next);
+    const mirrored = next === "interrupted" ? "listening" : next === "muted" ? "idle" : next;
+    useUIStore.getState().setVoicePhase(mirrored);
+    avatarController.setState(mirrored);
   }, []);
 
   const applyVoices = useCallback(() => {
@@ -338,7 +343,11 @@ export function VoiceAgent() {
       voiceLog("AUDIO_PLAYBACK", turnId, "start");
       let result: "played" | "ignored" | "stopped" = "stopped";
       try {
-        result = await tts.speak(line, { voiceURI: voiceUriRef.current, turnId });
+        result = await tts.speak(line, {
+          voiceURI: voiceUriRef.current,
+          turnId,
+          onBoundary: ({ char }) => avatarController.applySpeechSample(char),
+        });
       } catch {
         setError("I could not speak that answer aloud. You can still read it here.");
         result = "stopped";
@@ -515,7 +524,16 @@ export function VoiceAgent() {
         const tick = () => {
           if (!sessionRef.current || !analyserRef.current) return;
           const levelNow = speechLevel(analyserRef.current, freq);
-          setLevel(Math.min(1, levelNow * 3.2));
+          const nextLevel = Math.min(1, levelNow * 3.2);
+          setLevel(nextLevel);
+          const hearing = phaseRef.current === "listening" || phaseRef.current === "interrupted";
+          const now = performance.now();
+          if (hearing && now - levelPublish.current > 80) {
+            levelPublish.current = now;
+            avatarController.setAudioLevel(nextLevel);
+            const previous = useUIStore.getState().voiceLevel;
+            if (Math.abs(previous - nextLevel) > 0.04) useUIStore.setState({ voiceLevel: nextLevel });
+          }
           rafRef.current = requestAnimationFrame(tick);
         };
         tick();
