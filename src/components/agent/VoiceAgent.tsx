@@ -6,7 +6,7 @@ import { Mic, MicOff, X } from "lucide-react";
 import { useUIStore } from "@/store/ui-store";
 import { useConversationStore } from "@/store/conversation-store";
 import { AgentScroll } from "@/components/agent/AgentScroll";
-import { FluidVoiceOrb } from "@/components/agent/FluidVoiceOrb";
+import { HolographicSpectrum } from "@/components/agent/voice-visualizer/HolographicSpectrum";
 import { trackEvent } from "@/lib/analytics";
 import { VOICE_CONFIG } from "@/lib/voice-config";
 import { acceptsUserAudio, createTurnGate, voiceLog, type HalfPhase } from "@/lib/half-duplex";
@@ -35,7 +35,7 @@ import {
 type VoiceState = HalfPhase | "muted" | "error";
 
 const STATUS: Record<VoiceState, string> = {
-  idle: "Talk with Tushant",
+  idle: "Ready to chat",
   listening: "Listening...",
   thinking: "Thinking...",
   speaking: "Speaking...",
@@ -647,10 +647,7 @@ export function VoiceAgent() {
             </div>
 
             <div className="flex shrink-0 flex-col items-center px-4 pt-6">
-              <FluidVoiceOrb state={state} level={level} label={status} />
-              <p className="mt-4 text-sm text-amber-200/90" aria-live="polite" data-voice-status>
-                {status}
-              </p>
+              <HolographicSpectrum state={state} level={level} label={status} />
               {!fallback ? (
                 <button
                   type="button"
